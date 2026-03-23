@@ -1,0 +1,106 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String
+  password  String
+  role      String   @default("VIEWER")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Hospital {
+  id          String   @id @default(cuid())
+  name        String
+  location    String
+  description String?
+  imageUrl    String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  zones       Zone[]
+}
+
+model Zone {
+  id           String     @id @default(cuid())
+  name         String
+  description  String?
+  hospital   Hospital @relation(fields: [hospitalId], references: [id], onDelete: Cascade)
+  hospitalId String
+  devices      Device[]
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+}
+
+model Device {
+  id        String   @id @default(cuid())
+  name      String
+  type      String
+  status    String   @default("ONLINE")
+  zone      Zone     @relation(fields: [zoneId], references: [id], onDelete: Cascade)
+  zoneId    String
+  sensors   Sensor[]
+  lastSeen  DateTime @default(now())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Sensor {
+  id         String          @id @default(cuid())
+  name       String
+  type       String
+  unit       String
+  minValue   Float?
+  maxValue   Float?
+  device     Device          @relation(fields: [deviceId], references: [id], onDelete: Cascade)
+  deviceId   String
+  readings   SensorReading[]
+  alerts     Alert[]
+  alertRules AlertRule[]
+  createdAt  DateTime        @default(now())
+  updatedAt  DateTime        @updatedAt
+}
+
+model SensorReading {
+  id        String   @id @default(cuid())
+  value     Float
+  timestamp DateTime @default(now())
+  sensor    Sensor   @relation(fields: [sensorId], references: [id], onDelete: Cascade)
+  sensorId  String
+
+  @@index([sensorId, timestamp])
+}
+
+model AlertRule {
+  id        String   @id @default(cuid())
+  name      String
+  sensor    Sensor   @relation(fields: [sensorId], references: [id], onDelete: Cascade)
+  sensorId  String
+  condition String
+  threshold Float
+  severity  String   @default("MEDIUM")
+  enabled   Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Alert {
+  id           String   @id @default(cuid())
+  message      String
+  severity     String
+  value        Float
+  threshold    Float
+  acknowledged Boolean  @default(false)
+  sensor       Sensor   @relation(fields: [sensorId], references: [id], onDelete: Cascade)
+  sensorId     String
+  createdAt    DateTime @default(now())
+
+  @@index([acknowledged, createdAt])
+}
