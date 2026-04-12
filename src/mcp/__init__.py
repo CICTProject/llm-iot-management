@@ -11,7 +11,6 @@ mcp_server = FastMCP("Deployment Monitoring MCP")
 from .main import (
     DeploymentMonitoringTool,
     DeviceOrchestrationTool,
-    NetworkConfigurationTool,
     PlanValidationTool,
     EdgeAnomalyDetectionTool,
     get_mcp_tool,
@@ -21,7 +20,6 @@ __all__ = [
     "mcp_server",
     "DeploymentMonitoringTool",
     "DeviceOrchestrationTool",
-    "NetworkConfigurationTool",
     "PlanValidationTool",
     "EdgeAnomalyDetectionTool",
     "get_mcp_tool",

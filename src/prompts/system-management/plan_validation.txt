@@ -21,7 +21,6 @@ Deployment Requirements:
 System Integration Requirements:
 - Compatible with existing network infrastructure
 - Compatible with deployment monitoring system
-- Compatible with network auto-configuration
 - Data flow requirements are satisfied
 - Alert and notification systems are functional
 

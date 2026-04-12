@@ -21,6 +21,8 @@ fastapi = "^0.109.0"
 pandas = "^3.0.2"
 numpy = "^2.4.4"
 fastmcp = "^3.2.3"
+mealpy==3.0.3
+scipy
 
 [tool.pyright]
 # https://github.com/microsoft/pyright/blob/main/docs/configuration.md

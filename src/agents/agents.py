@@ -1,7 +1,7 @@
 """
 Agents module for managing different types of agents within the system.
 - Define Crew Captain who orients other agents towards the autonomated orchestration goal of IOT device deployment in Software-Defined Networks (SDN) control.
-    including security & credentials monitoring, deployment monitoring, plan validation, network auto-configuration, and device orchestration.
+    including deployment monitoring, plan validation, and device orchestration.
 
 """
 import os
@@ -13,7 +13,6 @@ from src.prompts import load_prompt
 from src.mcp import (
     DeploymentMonitoringTool,
     DeviceOrchestrationTool,
-    NetworkConfigurationTool,
     PlanValidationTool,
     EdgeAnomalyDetectionTool,
 )
@@ -38,25 +37,11 @@ class CustomAgent:
         # Create specialized MCP tools for each agent role
         self.deployment_tool = DeploymentMonitoringTool()
         self.orchestration_tool = DeviceOrchestrationTool()
-        self.network_tool = NetworkConfigurationTool()
         self.validation_tool = PlanValidationTool()
         self.edge_tool = EdgeAnomalyDetectionTool()
         
     
-    # 1.1 Define Cloud LLM Agent for sensor data collection in terms of patient fall detection
-    def device_monitoring(self):
-        return Agent(
-            role="Device Monitoring Agent",
-            backstory=dedent("""Monitors the camera-based IOT devices in the patient fall detection system."""),
-            goal = dedent("""
-            Monitor the camera-based IOT devices in the patient fall detection system, 
-            including collecting sensor data related to camera feeds to detect potential fall events, analyzing the data to identify such events, and reporting any issues for further action."""),
-            tools = [self.deployment_tool],
-            verbose = True,
-            llm=self.llm,
-        )
-
-    # 1.2 Define Edge LLM Agent for sensor data anomaly detection
+    # 1.1 Define Edge LLM Agent for sensor data anomaly detection
     def edge_anomaly_detection(self):
         """Define agent for anomaly detection in sensor data."""
         prompt = load_prompt("edge-detection", "edge_detection")
@@ -71,7 +56,7 @@ class CustomAgent:
             llm=self.llm,
         )
     
-    # 1.3 Define orchestration agent 
+    # 1.2 Define orchestration agent 
     def orchestration(self):
         """Define agent for IoT device orchestration."""
         prompt = load_prompt("system-management", "device_orchestration")
@@ -86,7 +71,7 @@ class CustomAgent:
             llm=self.llm,
         )
         
-    # 1.4 Define plan validation agent 
+    # 1.3 Define plan validation agent 
     def plan_validation(self):
         """Define agent for validating deployment plans."""
         prompt = load_prompt("system-management", "plan_validation")
@@ -100,23 +85,8 @@ class CustomAgent:
             verbose=True,
             llm=self.llm,
         )
-    
-    # 1.5 Define network auto-configuration agent 
-    def network_auto_configuration(self):
-        """Define agent for automatic network configuration."""
-        prompt = load_prompt("system-management", "network_configuration")
-        return Agent(
-            role="Network Auto-Configuration Agent",
-            backstory=prompt,
-            goal=dedent("""
-            Automatically configure Software-Defined Network flows for optimal IoT device communication,
-            ensuring secure and efficient connectivity according to deployment topology."""),
-            tools=[self.network_tool],
-            verbose=True,
-            llm=self.llm,
-        )
 
-    # 1.6 Define deployment monitoring agent (Data collection for diagnosis support)
+    # 1.4 Define deployment monitoring agent 
     def deployment_monitoring(self):
         """Define agent for monitoring IoT deployment status."""
         prompt = load_prompt("system-management", "deployment_monitoring")

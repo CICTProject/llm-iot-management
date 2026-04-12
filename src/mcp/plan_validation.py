@@ -1,408 +1,435 @@
 """
-MCP Server tools for energy-aware plan validation in IoT deployments.
+MCP Server tools for IoT sensor network plan validation.
 
-Implements 3 energy efficiency algorithms for validating deployment plans:
-- Algorithm 1.1: Energy-Aware Predictive Activation 
-- Algorithm 1.2: Cellulaire Sequential Activation with Load Balancing 
-
-Queries InfluxDB for IOT device timestamp, power consumption (kWh), voltage (V), current (A),
-                         power factor, grid frequency (Hz), reactive power (kVAR), active power (kW), demand response event, temperature (°C), 
-                         humidity (%), weather condition, solar power generation (kW), wind power generation (kW), 
-                         previous day consumption (kWh), peak load hour, energy source type, user type, normalized consumption, energy efficiency score.
+Implements 3 WSN sensor activation algorithms:
+- Algorithm 1.3.1: Naive Sensor Activation (Baseline) - All devices activated simultaneously
+- Algorithm 1.3.2: Cellulaire Sequential Clustering Zone-based Activation - Sequential zone-ordered activation
+- Algorithm 1.3.3: Probabilistic & Spatially Optimized Activation - Temporal + spatial risk zone + metaheuristic optimization
 """
 
-import json
 import logging
-import pandas as pd
-import numpy as np
-from datetime import datetime, timedelta
-from typing import Any, Dict, List, Optional
-from enum import Enum
+from datetime import datetime
+from typing import Any, Dict, List
 
 from . import mcp_server
-from src.utils.system import list_all_devices_from_registry
-from src.utils.energy import calculate_peak_hours_from_db, reset_peak_hours_cache
+from .algorithms import (
+    naive_sensor_activation,
+    sequential_zone_activation,
+    probabilistic_spatially_optimized_activation,
+)
 from src.db.database import get_db_client
+from src.utils.energy import (
+    SensorNode,
+    check_compliance,
+    parse_sensor_nodes_from_influxdb,
+    evaluate_algorithm,
+    select_best_algorithm,
+    find_least_violating,
+)
 
 logger = logging.getLogger(__name__)
 
 
-class GridState(Enum):
-    """Grid operational states based on load conditions."""
-    GREEN = "green"
-    YELLOW = "yellow"
-    RED = "red"
-
-
-# Algorithm 1.1: Energy-Aware Predictive Activation 
-@mcp_server.tool(name="validate_plan_predictive")
-async def validate_plan_predictive(
-    zone: Optional[str] = None,
-    device_type: Optional[str] = None,
-    current_hour: Optional[int] = None,
-    efficiency_threshold: float = 70.0
-) -> Dict[str, Any]:
+# 1.3.1 Naive Sensor Activation Tool
+@mcp_server.tool(name="execute_naive_activation")
+async def execute_naive_sensor_activation() -> Dict[str, Any]:
     """
-    Algorithm 1.1: Energy-Aware Predictive Activation
-    
-    Validates deployment plans based on predicted energy consumption and efficiency scores.
-    Prioritizes high-efficiency devices during peak load hours.
-    
-    Args:
-        zone: Physical location zone to validate (e.g., corridor, ward_a).
-        device_type: Device type to filter (e.g., medical_sensor, camera).
-        current_hour: Current hour (0-23) for peak hour prediction.
-        efficiency_threshold: Energy efficiency score threshold (0-100) for video activation.
+    Execute the naive sensor activation algorithm.
+    Activates all nodes simultaneously for continuous monitoring.
+    Baseline algorithm for comparison with optimized approaches.
     
     Returns:
-        Validation result with device activation predictions and energy savings estimate.
+        Validation report with activation plan and energy metrics
     """
-    
-    if current_hour is None:
-        current_hour = datetime.now().hour
-    
-    devices = list_all_devices_from_registry()
-    
-    # Filter by zone and device type
-    if zone:
-        devices = [d for d in devices if d.get("zone") == zone]
-    if device_type:
-        devices = [d for d in devices if d.get("device_type") == device_type]
-    
-    # Create device profiles with energy data
-    device_profiles = []
-    for device in devices:
-        device_id = device.get("id")
-        # Default values if not available
-        power_consumption = float(device.get("power_consumption_kWh", 0.5))
-        efficiency_score = float(device.get("energy_efficiency_score", 60.0))
-        normalized_consumption = float(device.get("normalized_consumption", 0.5))
+    try:
+        # Query IoT sensor data from InfluxDB
+        db_client = get_db_client()
+        query_api = db_client.get_query_client()
         
-        device_profiles.append({
-            "device_id": device_id,
-            "power_consumption_kWh": power_consumption,
-            "energy_efficiency_score": efficiency_score,
-            "normalized_consumption": normalized_consumption,
-            "zone": device.get("zone"),
-            "device_type": device.get("device_type"),
-        })
-    
-    # Sort by efficiency (high) and consumption (low)
-    sorted_devices = sorted(
-        device_profiles,
-        key=lambda d: (-d["energy_efficiency_score"], d["power_consumption_kWh"])
-    )
-    
-    peak_hours = calculate_peak_hours_from_db()
-    is_peak_hour = current_hour in peak_hours
-    
-    predicted_activations = {}
-    baseline_consumption = sum(d["power_consumption_kWh"] for d in device_profiles)
-    optimized_consumption = 0.0
-    critical_devices = []
-    deferred_devices = []
-    
-    for device in sorted_devices:
-        device_id = device["device_id"]
-        high_efficiency = device["energy_efficiency_score"] > efficiency_threshold
+        query = '''
+        from(bucket: "energy_consumption")
+          |> range(start: -7d)
+          |> filter(fn: (r) => r["_measurement"] == "iot_metrics")
+        '''
         
-        if is_peak_hour or high_efficiency:
-            predicted_activations[device_id] = {
-                "activation": "ACTIVE",
-                "mode": "VIDEO_READY" if high_efficiency else "MOTION_ONLY",
-                "efficiency_score": device["energy_efficiency_score"],
-                "power_kWh": device["power_consumption_kWh"],
+        result = query_api.query(query)
+        
+        # Parse results into SensorNode objects
+        nodes = parse_sensor_nodes_from_influxdb(result)
+        
+        if not nodes:
+            logger.warning("No sensor nodes found in InfluxDB")
+            return {
+                "algorithm": "naive_sensor_activation",
+                "error": "No sensor data available",
+                "metrics": {"total_nodes": 0, "activated_nodes": 0},
             }
-            optimized_consumption += device["power_consumption_kWh"]
-            
-            if high_efficiency:
-                critical_devices.append(device_id)
-        else:
-            predicted_activations[device_id] = {
-                "activation": "DEFERRED",
-                "reason": f"Low efficiency ({device['energy_efficiency_score']:.1f}%) "
-                         f"and off-peak hour ({current_hour}:00)",
-            }
-            deferred_devices.append(device_id)
-    
-    savings_ratio = (baseline_consumption - optimized_consumption) / baseline_consumption \
-        if baseline_consumption > 0 else 0.0
-    
-    return {
-        "algorithm": "1.1_predictive_activation",
-        "timestamp": datetime.now().isoformat(),
-        "current_hour": current_hour,
-        "is_peak_hour": is_peak_hour,
-        "total_devices": len(device_profiles),
-        "active_devices": len(critical_devices) + len([d for d in deferred_devices if predicted_activations[d]["activation"] == "ACTIVE"]),
-        "critical_devices": critical_devices,
-        "deferred_devices": deferred_devices,
-        "baseline_consumption_kWh": baseline_consumption,
-        "optimized_consumption_kWh": optimized_consumption,
-        "estimated_energy_savings_percent": savings_ratio * 100,
-        "predictions": predicted_activations,
-        "validation_status": "VALID" if savings_ratio >= 0.3 else "SUBOPTIMAL",
-    }
+        
+        # Run algorithm
+        result = naive_sensor_activation(nodes)
+        logger.info(f"Naive activation validation complete: {len(nodes)} nodes analyzed")
+        return result
+        
+    except Exception as e:
+        logger.error(f"Naive activation validation failed: {e}", exc_info=True)
+        return {
+            "algorithm": "naive_sensor_activation",
+            "error": str(e),
+            "metrics": {"total_nodes": 0, "activated_nodes": 0},
+        }
 
-
-# Algorithm 1.2: Cellulaire Sequential Activation with Load Balancing
-@mcp_server.tool(name="validate_plan_adaptive")
-async def validate_plan_adaptive(
-    zone: Optional[str] = None,
-    device_type: Optional[str] = None,
-    voltage_V: float = 230.0,
-    frequency_Hz: float = 50.0,
-    active_power_kW: float = 10.0,
-    peak_capacity_kW: float = 20.0,
-    demand_response_event: bool = False,
-    power_factor: float = 0.95,
-    load_balance_window_hours: Optional[int] = 4,
-    load_threshold_kW: float = 10.0
+# 1.3.2 Sequential Zone Activation Tool
+@mcp_server.tool(name="execute_sequential_zone_activation")
+async def execute_sequential_zone_activation(
+    activation_duration_seconds: int = 300,
+    zone_radius_meters: float = 10.0,
 ) -> Dict[str, Any]:
     """
-    Algorithm 1.2: Cellulaire Sequential Activation with Load Balancing
-    
-    Validates deployment plans based on real-time grid conditions and demand-response events.
-    Uses multi-factor priority scoring for optimal device activation sequencing.
+    Execute the sequential zone activation algorithm.
+    Activates nodes sequentially by spatial zones to reduce simultaneous energy use.
     
     Args:
-        zone: Physical location zone to validate.
-        device_type: Device type to filter.
-        voltage_V: Current grid voltage in volts.
-        frequency_Hz: Current grid frequency in Hz.
-        active_power_kW: Current active power in kW.
-        peak_capacity_kW: Peak grid capacity in kW.
-        demand_response_event: Whether demand-response event is active.
-        power_factor: Current power factor (0-1).
-        load_balance_window_hours: Hours to balance load across.
-        load_threshold_kW: Maximum load threshold for device activation.
-    
+        activation_duration_seconds: Duration each node stays active in a slot (default 300s)
+        zone_radius_meters: Spatial radius for zone clustering (default 10m)
+        
     Returns:
-        Validation result with grid-adaptive activation strategy and load balancing schedule.
+        Validation report with sequential schedule and zone analysis
     """
-    
-    # Ensure load_balance_window_hours has a valid value
-    if load_balance_window_hours is None:
-        load_balance_window_hours = 4
-    
-    devices = list_all_devices_from_registry()
-    
-    # Filter by zone and device type
-    if zone:
-        devices = [d for d in devices if d.get("zone") == zone]
-    if device_type:
-        devices = [d for d in devices if d.get("device_type") == device_type]
-    
-    # Determine grid state
-    load_ratio = active_power_kW / peak_capacity_kW if peak_capacity_kW > 0 else 0
-    
-    if demand_response_event:
-        grid_state = GridState.RED
-    elif load_ratio > 0.85:
-        grid_state = GridState.RED
-    elif load_ratio > 0.70:
-        grid_state = GridState.YELLOW
-    else:
-        grid_state = GridState.GREEN
-    
-    # Build device profiles with priorities
-    device_priorities = []
-    for device in devices:
-        device_id = device.get("id")
-        power_consumption = float(device.get("power_consumption_kWh", 0.5))
-        efficiency_score = float(device.get("energy_efficiency_score", 60.0))
-        normalized_consumption = float(device.get("normalized_consumption", 0.5))
+    try:
+        # Query IoT sensor data from InfluxDB
+        db_client = get_db_client()
+        query_api = db_client.get_query_client()
         
-        # Multi-factor priority score
-        load_score = 1.0 - normalized_consumption
-        efficiency_normalized = efficiency_score / 100.0
-        temp_impact = 0.2  # Simplified
-        humidity_impact = 0.1  # Simplified
+        query = '''
+        from(bucket: "energy_consumption")
+          |> range(start: -7d)
+          |> filter(fn: (r) => r["_measurement"] == "iot_metrics")
+        '''
         
-        priority_score = (
-            load_score * 0.4 +
-            efficiency_normalized * 0.35 +
-            (1.0 - temp_impact) * 0.15 +
-            (1.0 - humidity_impact) * 0.1
+        result = query_api.query(query)
+        
+        # Parse results into SensorNode objects
+        nodes = parse_sensor_nodes_from_influxdb(result)
+        
+        if not nodes:
+            logger.warning("No sensor nodes found in InfluxDB")
+            return {
+                "algorithm": "sequential_zone_activation",
+                "error": "No sensor data available",
+                "metrics": {"total_nodes": 0, "total_zones": 0},
+            }
+        
+        # Run algorithm
+        result = sequential_zone_activation(
+            nodes,
+            activation_duration_seconds=activation_duration_seconds,
+            zone_radius_meters=zone_radius_meters
         )
         
-        device_priorities.append({
-            "device_id": device_id,
-            "power_consumption_kWh": power_consumption,
-            "efficiency_score": efficiency_score,
-            "normalized_consumption": normalized_consumption,
-            "priority_score": priority_score,
-            "zone": device.get("zone"),
-            "device_type": device.get("device_type"),
-        })
-    
-    # Sort by priority
-    sorted_devices = sorted(
-        device_priorities,
-        key=lambda d: -d["priority_score"]
-    )
-    
-    predictions = {}
-    activation_schedule = {}
-    estimated_energy_savings = 0.0
-    
-    if grid_state == GridState.RED:
-        # Critical mode: activate only top 10% of devices
-        activation_count = max(1, len(sorted_devices) // 10)
-        strategy = "CRITICAL_MODE"
-        estimated_energy_savings = 60.0
+        logger.info(f"Sequential zone activation validation complete: {len(nodes)} nodes in {result['metrics']['total_zones']} zones")
+        return result
         
-        for i, device in enumerate(sorted_devices):
-            device_id = device["device_id"]
-            if i < activation_count:
-                predictions[device_id] = {
-                    "state": "ACTIVE",
-                    "mode": "CRITICAL_ALERT_ONLY",
-                    "priority": device["priority_score"],
-                }
-            else:
-                predictions[device_id] = {
-                    "state": "STANDBY",
-                    "mode": "LOW_POWER_MOTION_DETECT",
-                    "priority": device["priority_score"],
-                }
-    
-    elif grid_state == GridState.YELLOW:
-        # Balanced mode: stagger activations
-        devices_per_slot = max(1, len(sorted_devices) // (load_balance_window_hours * 3))
-        strategy = "BALANCED_MODE"
-        estimated_energy_savings = 45.0
-        
-        for i, device in enumerate(sorted_devices):
-            device_id = device["device_id"]
-            slot = i // devices_per_slot
-            delay_minutes = (slot * load_balance_window_hours * 60) // max(1, len(sorted_devices))
-            
-            predictions[device_id] = {
-                "state": "SCHEDULED",
-                "delay_minutes": delay_minutes,
-                "slot": slot,
-                "priority": device["priority_score"],
-            }
-            activation_schedule[device_id] = f"+{delay_minutes} minutes"
-    
-    else:  # GREEN
-        # Normal mode: activate respecting load threshold
-        cumulative_load = 0.0
-        strategy = "NORMAL_MODE"
-        estimated_energy_savings = 20.0
-        
-        for device in sorted_devices:
-            device_id = device["device_id"]
-            power = device["power_consumption_kWh"]
-            
-            if cumulative_load + power <= load_threshold_kW:
-                predictions[device_id] = {
-                    "state": "ACTIVE",
-                    "mode": "NORMAL",
-                    "priority": device["priority_score"],
-                }
-                cumulative_load += power
-            else:
-                predictions[device_id] = {
-                    "state": "DEFERRED",
-                    "reason": f"Load threshold ({load_threshold_kW} kW) would be exceeded",
-                    "priority": device["priority_score"],
-                }
-    
-    return {
-        "algorithm": "1.2_adaptive_activation",
-        "timestamp": datetime.now().isoformat(),
-        "grid_state": grid_state.value,
-        "grid_load_ratio": load_ratio,
-        "strategy": strategy,
-        "total_devices": len(sorted_devices),
-        "voltage_V": voltage_V,
-        "frequency_Hz": frequency_Hz,
-        "active_power_kW": active_power_kW,
-        "peak_capacity_kW": peak_capacity_kW,
-        "demand_response_event": demand_response_event,
-        "power_factor": power_factor,
-        "load_balance_window_hours": load_balance_window_hours,
-        "load_threshold_kW": load_threshold_kW,
-        "estimated_energy_savings_percent": estimated_energy_savings,
-        "activation_schedule": activation_schedule,
-        "predictions": predictions,
-        "validation_status": "VALID",
-    }
+    except Exception as e:
+        logger.error(f"Sequential zone activation validation failed: {e}", exc_info=True)
+        return {
+            "algorithm": "sequential_zone_activation",
+            "error": str(e),
+            "metrics": {"total_nodes": 0, "total_zones": 0},
+        }
 
-
-# Comparison Tool for all algorithms
-@mcp_server.tool(name="compare_validation_algorithms")
-async def compare_validation_algorithms(
-    zone: Optional[str] = None,
-    device_type: Optional[str] = None,
-    current_hour: Optional[int] = None,
-    voltage_V: float = 230.0,
-    frequency_Hz: float = 50.0,
-    active_power_kW: float = 10.0,
-    peak_capacity_kW: float = 20.0,
-    demand_response_event: bool = False,
+# 1.3.3 Probabilistic & Spatially Optimized Activation Tool
+@mcp_server.tool(name="execute_probabilistic_spatially_optimized_activation")
+async def execute_probabilistic_spatially_optimized_activation(
+    target_position: List[float] = None,
+    elapsed_time_t: float = 30.0,
+    t_base: float = 20.0,
+    r_min: float = 8.0,
+    r_max: float = 35.0,
+    sensing_radius: float = 12.0,
+    num_risk_points: int = 120,
+    epoch: int = 100,
+    pop_size: int = 30,
 ) -> Dict[str, Any]:
     """
-    Compare results from both validation algorithms on the same deployment plan.
+    Execute the probabilistic and spatially optimized activation algorithm.
+    Combines temporal probability models with spatial risk zone analysis and
+    metaheuristic optimization for minimal-cover sensor activation.
     
     Args:
-        zone: Physical location zone to validate.
-        device_type: Device type to filter.
-        current_hour: Current hour for predictive algorithm.
-        voltage_V: Current grid voltage in volts.
-        frequency_Hz: Current grid frequency in Hz.
-        active_power_kW: Current active power in kW.
-        peak_capacity_kW: Peak grid capacity in kW.
-        demand_response_event: Whether demand-response event is active.
-    
+        target_position: Event target coordinates [x, y, z] (default [50.0, 50.0, 25.0])
+        elapsed_time_t: Time elapsed since reference point in seconds (default 30.0)
+        t_base: Base activation duration in seconds (default 20.0)
+        r_min: Minimum risk zone radius in meters (default 8.0)
+        r_max: Maximum risk zone radius in meters (default 35.0)
+        sensing_radius: Node sensing range in meters (default 12.0)
+        num_risk_points: Number of sampled points for risk zone coverage (default 120)
+        epoch: Optimization iterations (default 100)
+        pop_size: Population size for whale optimization (default 30)
+        
     Returns:
-        Comparison of both algorithm results with recommendation.
+        Validation report with optimized sensor selection and activation plan
     """
+    try:
+        if target_position is None:
+            target_position = (50.0, 50.0, 25.0)
+        else:
+            target_position = tuple(target_position)
+        
+        # Query IoT sensor data from InfluxDB
+        db_client = get_db_client()
+        query_api = db_client.get_query_client()
+        
+        query = '''
+        from(bucket: "energy_consumption")
+          |> range(start: -7d)
+          |> filter(fn: (r) => r["_measurement"] == "iot_metrics")
+        '''
+        
+        result = query_api.query(query)
+        
+        # Parse results into SensorNode objects
+        nodes = parse_sensor_nodes_from_influxdb(result)
+        
+        if not nodes:
+            logger.warning("No sensor nodes found in InfluxDB")
+            return {
+                "algorithm": "probabilistic_spatially_optimized_activation",
+                "error": "No sensor data available",
+                "metrics": {"total_nodes": 0, "selected_nodes": 0},
+            }
+        
+        # Run algorithm
+        result = probabilistic_spatially_optimized_activation(
+            nodes,
+            target_position=target_position,
+            elapsed_time_t=elapsed_time_t,
+            t_base=t_base,
+            r_min=r_min,
+            r_max=r_max,
+            sensing_radius=sensing_radius,
+            num_risk_points=num_risk_points,
+            epoch=epoch,
+            pop_size=pop_size,
+        )
+        
+        logger.info(f"Probabilistic activation validation complete: {len(nodes)} nodes analyzed, {result['metrics']['selected_nodes']} selected")
+        return result
+        
+    except Exception as e:
+        logger.error(f"Probabilistic spatially optimized activation validation failed: {e}", exc_info=True)
+        return {
+            "algorithm": "probabilistic_spatially_optimized_activation",
+            "error": str(e),
+            "metrics": {"total_nodes": 0, "selected_nodes": 0},
+        }
+
+
+# Adaptive recommendation engine for algorithm selection based on user constraints
+@mcp_server.tool(name="recommend_activation_algorithm")
+async def recommend_activation_algorithm(
+    min_accuracy_percent: float = 80.0,
+    max_energy_percent: float = 100.0,
+    activation_duration_seconds: int = 300,
+    zone_radius_meters: float = 10.0,
+    target_position: List[float] = None,
+    elapsed_time_t: float = 30.0,
+    t_base: float = 20.0,
+    r_min: float = 8.0,
+    r_max: float = 35.0,
+) -> Dict[str, Any]:
+    """
+    Intelligent recommendation engine that adapts to user accuracy and energy constraints.
     
-    if current_hour is None:
-        current_hour = datetime.now().hour
+    Evaluates all 3 algorithms against user-defined constraints and recommends the
+    optimal algorithm that best balances accuracy requirements with energy budgets.
     
-    result_11 = await validate_plan_predictive(
-        zone=zone,
-        device_type=device_type,
-        current_hour=current_hour
-    )
-    
-    result_12 = await validate_plan_adaptive(
-        zone=zone,
-        device_type=device_type,
-        voltage_V=voltage_V,
-        frequency_Hz=frequency_Hz,
-        active_power_kW=active_power_kW,
-        peak_capacity_kW=peak_capacity_kW,
-        demand_response_event=demand_response_event,
-    )
-    
-    # Generate recommendation
-    if demand_response_event or active_power_kW > peak_capacity_kW * 0.8:
-        recommendation = "Use Algorithm 1.2 (adaptive) - Better for high load and demand-response scenarios"
-    elif result_11["estimated_energy_savings_percent"] > result_12["estimated_energy_savings_percent"]:
-        recommendation = "Use Algorithm 1.1 (predictive) - Higher energy savings in this scenario"
-    else:
-        recommendation = "Use Algorithm 1.2 (adaptive) - More robust to real-time grid conditions"
-    
-    return {
-        "comparison": {
-            "algorithm_1_1": {
-                "energy_savings_percent": result_11["estimated_energy_savings_percent"],
-                "status": result_11["validation_status"],
+    Args:
+        min_accuracy_percent: Minimum acceptable detection accuracy [0-100] (default 80%)
+        max_energy_percent: Maximum acceptable energy consumption level [0-100] (default 100%)
+        activation_duration_seconds: Duration for sequential activation (default 300s)
+        zone_radius_meters: Spatial clustering radius (default 10m)
+        target_position: Event target [x, y, z] for probabilistic algorithm
+        elapsed_time_t: Elapsed time for temporal model (default 30.0s)
+        t_base: Base activation duration (default 20.0s)
+        r_min: Minimum risk zone radius (default 8.0m)
+        r_max: Maximum risk zone radius (default 35.0m)
+        
+    Returns:
+        Recommendation report with:
+        - User constraints and their interpretation
+        - All 3 algorithms evaluated against constraints
+        - Optimal algorithm recommendation
+        - Trade-off analysis
+        - Compliance report showing which algorithms meet requirements
+    """
+    try:
+        logger.info(f"Starting adaptive recommendation: min_accuracy={min_accuracy_percent}%, max_energy={max_energy_percent}%")
+        
+        # Validate user inputs
+        min_accuracy_percent = max(0, min(100, min_accuracy_percent))
+        max_energy_percent = max(0, min(100, max_energy_percent))
+        
+        # Execute all 3 algorithms in parallel
+        naive_result = await execute_naive_sensor_activation()
+        sequential_result = await execute_sequential_zone_activation(
+            activation_duration_seconds, zone_radius_meters
+        )
+        probabilistic_result = await execute_probabilistic_spatially_optimized_activation(
+            target_position=target_position,
+            elapsed_time_t=elapsed_time_t,
+            t_base=t_base,
+            r_min=r_min,
+            r_max=r_max,
+        )
+        
+        # Extract and evaluate metrics for each algorithm
+        naive_eval = evaluate_algorithm(naive_result, "naive")
+        seq_eval = evaluate_algorithm(sequential_result, "sequential")
+        prob_eval = evaluate_algorithm(probabilistic_result, "probabilistic")
+        
+        # Check constraint compliance
+        naive_compliant = check_compliance(naive_eval, min_accuracy_percent, max_energy_percent)
+        seq_compliant = check_compliance(seq_eval, min_accuracy_percent, max_energy_percent)
+        prob_compliant = check_compliance(prob_eval, min_accuracy_percent, max_energy_percent)
+        
+        # Find best recommendation
+        compliant_algorithms = []
+        if naive_compliant["meets_requirements"]:
+            compliant_algorithms.append(("naive", naive_eval, naive_compliant))
+        if seq_compliant["meets_requirements"]:
+            compliant_algorithms.append(("sequential", seq_eval, seq_compliant))
+        if prob_compliant["meets_requirements"]:
+            compliant_algorithms.append(("probabilistic", prob_eval, prob_compliant))
+        
+        # Select best recommendation
+        if compliant_algorithms:
+            best_algo, best_eval, best_compliance = select_best_algorithm(compliant_algorithms)
+            recommendation_status = "OPTIMAL_FOUND"
+            recommendation_message = f"Recommended: {best_algo} - Meets all constraints with best overall balance"
+        else:
+            # Find least violating algorithm
+            best_algo, best_eval, best_compliance = find_least_violating([
+                ("naive", naive_eval, naive_compliant),
+                ("sequential", seq_eval, seq_compliant),
+                ("probabilistic", prob_eval, prob_compliant),
+            ])
+            recommendation_status = "COMPROMISED"
+            recommendation_message = f"Recommended: {best_algo} - No algorithm meets all constraints, this offers best compromise"
+        
+        # Build comprehensive recommendation report
+        recommendation = {
+            "timestamp": datetime.now().isoformat(),
+            "recommendation_type": "adaptive_accuracy_energy_aware",
+            
+            # User constraints summary
+            "user_constraints": {
+                "min_accuracy_percent": min_accuracy_percent,
+                "max_energy_percent": max_energy_percent,
+                "accuracy_interpretation": f"Accept at least {min_accuracy_percent}% detection accuracy",
+                "energy_interpretation": f"Allow up to {max_energy_percent}% of maximum energy consumption",
             },
-            "algorithm_1_2": {
-                "energy_savings_percent": result_12["estimated_energy_savings_percent"],
-                "strategy": result_12["strategy"],
+            
+            # Algorithm evaluations
+            "algorithms_evaluated": {
+                "naive": {
+                    "name": "Naive Sensor Activation (Baseline)",
+                    "accuracy_percent": round(naive_eval["accuracy_percent"], 2),
+                    "energy_percent": round(naive_eval["energy_percent"], 2),
+                    "activated_nodes": naive_eval.get("activated_nodes", 0),
+                    "compliance": {
+                        "meets_accuracy": naive_compliant["meets_accuracy"],
+                        "meets_energy": naive_compliant["meets_energy"],
+                        "meets_requirements": naive_compliant["meets_requirements"],
+                        "accuracy_margin": round(naive_compliant["accuracy_margin"], 2),
+                        "energy_margin": round(naive_compliant["energy_margin"], 2),
+                    },
+                    "tradeoff_score": round(naive_eval["tradeoff_score"], 2),
+                    "characteristics": {
+                        "coverage": "Continuous global coverage",
+                        "energy_strategy": "Maximum consumption - all nodes active",
+                        "best_for": "Unlimited energy budget, maximum coverage needed",
+                    }
+                },
+                "sequential": {
+                    "name": "Sequential Zone Activation",
+                    "accuracy_percent": round(seq_eval["accuracy_percent"], 2),
+                    "energy_percent": round(seq_eval["energy_percent"], 2),
+                    "zones_created": seq_eval.get("total_zones", 0),
+                    "energy_saved_percent": round(seq_eval.get("energy_saved_percent", 0), 2),
+                    "compliance": {
+                        "meets_accuracy": seq_compliant["meets_accuracy"],
+                        "meets_energy": seq_compliant["meets_energy"],
+                        "meets_requirements": seq_compliant["meets_requirements"],
+                        "accuracy_margin": round(seq_compliant["accuracy_margin"], 2),
+                        "energy_margin": round(seq_compliant["energy_margin"], 2),
+                    },
+                    "tradeoff_score": round(seq_eval["tradeoff_score"], 2),
+                    "characteristics": {
+                        "coverage": "Zone-by-zone sequential coverage",
+                        "energy_strategy": f"Moderate savings - sequential activation",
+                        "best_for": "Moderate energy constraints, reasonable coverage continuity",
+                    }
+                },
+                "probabilistic": {
+                    "name": "Probabilistic & Spatially Optimized Activation",
+                    "accuracy_percent": round(prob_eval["accuracy_percent"], 2),
+                    "energy_percent": round(prob_eval["energy_percent"], 2),
+                    "selected_nodes": prob_eval.get("selected_nodes", 0),
+                    "optimization_method": "Whale Optimization Algorithm",
+                    "compliance": {
+                        "meets_accuracy": prob_compliant["meets_accuracy"],
+                        "meets_energy": prob_compliant["meets_energy"],
+                        "meets_requirements": prob_compliant["meets_requirements"],
+                        "accuracy_margin": round(prob_compliant["accuracy_margin"], 2),
+                        "energy_margin": round(prob_compliant["energy_margin"], 2),
+                    },
+                    "tradeoff_score": round(prob_eval["tradeoff_score"], 2),
+                    "characteristics": {
+                        "coverage": "Risk-zone aware minimal coverage",
+                        "energy_strategy": "Optimized minimal selection - metaheuristic optimization",
+                        "best_for": "Strict energy constraints, specific event targets, high accuracy needs",
+                    }
+                },
             },
-            "savings_difference": abs(
-                result_11["estimated_energy_savings_percent"] - 
-                result_12["estimated_energy_savings_percent"]
-            ),
-            "recommendation": recommendation,
-        },
-        "timestamp": datetime.now().isoformat(),
-    }
+            
+            # Recommendation
+            "recommendation": {
+                "status": recommendation_status,
+                "recommended_algorithm": best_algo,
+                "message": recommendation_message,
+                "expected_accuracy": round(best_eval["accuracy_percent"], 2),
+                "expected_energy": round(best_eval["energy_percent"], 2),
+                "tradeoff_balance": round(best_eval["tradeoff_score"], 2),
+            },
+            
+            # Compliance report
+            "compliance_summary": {
+                "algorithms_meeting_requirements": len([a for a in [naive_compliant, seq_compliant, prob_compliant] if a["meets_requirements"]]),
+                "total_algorithms": 3,
+                "compliant_algorithms": [
+                    name for name, _, comp in compliant_algorithms if comp["meets_requirements"]
+                ],
+            },
+            
+            # Decision guidance
+            "decision_guidance": {
+                "if_no_energy_constraint": "Use naive for maximum coverage",
+                "if_moderate_energy_budget": "Use sequential for balanced approach",
+                "if_strict_energy_budget": "Use probabilistic for optimized minimal coverage",
+                "if_specific_event_location": "Use probabilistic with target_position parameter",
+                "if_uncertain_about_constraints": f"Consider sequential as middle-ground option",
+            },
+        }
+        
+        logger.info(f"Recommendation complete: {best_algo} recommended with status={recommendation_status}")
+        return recommendation
+        
+    except Exception as e:
+        logger.error(f"Recommendation generation failed: {e}", exc_info=True)
+        return {
+            "error": str(e),
+            "recommendation_type": "adaptive_accuracy_energy_aware",
+            "status": "FAILED",
+        }
+
+

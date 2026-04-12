@@ -11,14 +11,12 @@ Modern medical research laboratories increasingly integrate smart workspace envi
 ### Scenario 1: Real-Time Physiological Monitoring
 Wearable and implantable sensors continuously monitor vital signs (blood pressure, heart rate) with anomaly detection and immediate caregiver alerts.
 
-**Key QoS Metric:** *Ultra-low Latency* — Immediate response is essential for medical emergencies; periodic data redundancy tolerates minor packet loss.
-
-**Research Direction:** Edge-based lightweight patient prediction models running directly on sensor devices.
+**Research Direction:** Edge-based lightweight patient prediction models (distillation) running directly on sensor devices.
 
 ### Scenario 2: Smart Hospital BioIOT Management 
 Camera-based monitoring systems detect resident falls, autonomous medical IOT sensors/actuators management, enhancing safety, performance, energy-awareness while reducing staff workload.
 
-**Key QoS Metrics:** *Bandwidth & Jitter* — High bandwidth ensures video quality; low jitter maintains interpretable video streams.
+**Research Direction:** Generative AI multi-agent for task orchestration, deployment, auto-configuration, plan validation and execution.
 
 ---
 
@@ -68,7 +66,7 @@ llm-intent-orchestration/
 ├── docs/                    # Documentation
 ├── tools/                   # Tools
 ├── data/                    # Data
-└── .env                     # Environment variables (GEMINI_API_KEY)
+└── .env                     # Environment variables
 ```
 
 ### Running the Application

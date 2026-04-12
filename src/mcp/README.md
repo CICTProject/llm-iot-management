@@ -1,89 +1,86 @@
-# MCP Agent Tools for ESP-32 Cam-based in Medical IoT Environments
+# MCP Agent Tools for Patient Health Monitoring in Medical IoT Environments
 
-## 1.1 Device Monitoring Agent
-
----
-
-## 1.2 Edge Anomaly Detection Agent
+## 1.1 Edge Anomaly Detection Agent
 
 ---
 
-## 1.3 Device Orchestration Agent
+## 1.2 Device Orchestration Agent
 
 ---
 
-## 1.4 Plan Validation 
-### 1.4.1 Naive Sensor Activation (Baseline)
+## 1.3 Plan Validation 
+### 1.3.1 Naive Sensor Activation (Baseline)
 
-- Objective: continuous corridor monitoring by keeping all sensing devices and services active at all times, without any prioritization, sequencing, or contextual awareness. This baseline serves as a reference for evaluating more intelligent activation strategies.
+- Objective: Ensure continuous monitoring of the environment by keeping all sensor nodes fully active, without prioritization or contextual awareness. This baseline is used as a reference for evaluating optimized strategies.
 - Assumptions: Linear corridor deployment; each device has a motion sensor and ESP32 camera; fixed local coverage; no prediction/optimization.
 - Algorithm:
-  - All devices in the corridor are activated simultaneously.
+  - All devices in a 3D space are activated simultaneously.
   - Motion sensors continuously monitor their respective areas.
-  - When motion is detected by any device, its ESP32 camera immediately streams video.
+  - Each device is a sensor node (no camera), capable of motion/activity/environmental sensing (signal, noise, camera, etc.)
   - Devices and services remain active indefinitely, regardless of activity level.
 
 Pseudocode
 
 ```text
 INPUT:
-- D = {d1, d2, ..., dn}  // all corridor devices
+- S = dataset records
+- D(t) = set of nodes available at timestamp t
 
-INITIALIZATION:
-  FOR each device di in D:
-      activate(di)
-      enable_motion_sensor(di)
-      enable_camera(di)
-
-LOOP:
-  WHILE system is running:
-      FOR each device di in D:
-          IF motion_detected(di):
-              request_video(di)
+FOR each timestamp t in S:
+    FOR each node di in D(t):
+        activate(di)
+        enable_monitoring(di)
+        request_service(di)     // simulated continuous sensor service activation
 ```
 
 Limitations:
 - Extremely high energy consumption due to permanent activation of all sensors and cameras
-- Redundant video streaming, especially in low-activity periods
+- Redundant data transmission in low-activity regions
 - No adaptation to patient behavior or environmental context
-- Poor scalability as the number of devices increases
+- Poor scalability as the number of devices increases (WSN deployments)
 
-### 3.1 Cellulaire Sequential Corridor Activation 
+### 1.3.2 Cellulaire Sequential Clustering Zone-based Activation
 
-- Objective: Ensure corridor monitoring by activating devices sequentially from the nearest patient room, requesting video only when motion is detected.
-- Assumptions: Linear corridor deployment; each device has a motion sensor and ESP32 camera; fixed local coverage; no prediction/optimization; 20s per device.
+<iframe src="https://www.slideserve.com/embed/6152355" width="600" height="497" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" style="border:1px solid #CCC;border-width:1px 1px;margin-bottom:5px;max-width: 100%;" allowfullscreen webkitallowfullscreen mozallowfullscreen> </iframe>
+
+- Objective: Ensure monitoring coverage by activating nodes sequentially across space, reducing simultaneous energy usage.
+- Assumptions: Nodes are distributed in 3D space and ordered spatially (clustering in zone-based environment), each has sensing capability, communication module and fixed activation time window with no prediction or learning.
 - Algorithm:
-  - Identify the device nearest to the patient room.
-  - Activate devices one-by-one along the corridor.
-  - For each device, keep it active for 20 seconds.
-  - During activation: if motion is detected, request video stream from the ESP32 camera; otherwise, do nothing.
-  - Deactivate device and move to the next; repeat indefinitely.
+  -Partition space or order nodes (clusters in zone)
+  - Activate nodes cluster-by-cluster
+  - Each node senses for a fixed duration, transmits only if event detected then deactivate and move to next.
 
 Pseudocode:
 
 ```text
 INPUT:
-- D = {d1, d2, ..., dn}  // devices ordered along corridor from nearest room
-- T_active = 20 seconds
+- D = {d1, d2, ..., dn}  // sensor nodes
+- T_active = fixed activation duration
+
+// Preprocessing: spatial ordering
+L = spatial_ordering(D)  // zone scan
 
 LOOP:
-  FOR each device di in D:
+  FOR each node di in L:
       activate(di)
       start timer T_active
 
       WHILE timer not expired:
-          IF motion_detected(di):
-              request_video(di)
+          data = sense(di)
+
+          IF event_detected(data):
+              transmit(di, data)
 
       deactivate(di)
 ```
 
 Limitations:
-- High energy consumption; activates devices even during low-probability periods
-- No awareness of patient behavior patterns
-- Poor scalability; fixed 20s window irrespective of context
+- High energy consumption (nodes activated even when unnecessary)
+- No awareness of patient behavior patterns or event probability.
+- Fixed activation time (not adaptive)
+- Poor scalability in dense or large-scale 3D deployments
 
-### 1.4.2 Probabilistic & Spatially Optimized Activation (Energy-Efficient)
+### 1.3.3 Probabilistic & Spatially Optimized Activation (Energy-Efficient)
 
 - Objective: Minimize energy by activating only necessary devices using the probability γ of patient egress [1] and spatial coverage (x, y, z, r) [7] using Python library.
 - Concepts:
@@ -98,34 +95,56 @@ Pseudocode:
 
 ```text
 INPUT:
-- D = {d1, d2, ..., dn}  // all devices
-- Patient room position P(xp, yp, zp)
-- γ in [0,1]
-- T_base = base activation time
+- D = {d1, d2, ..., dn}              // all sensor nodes
+- Target position P(xp, yp, zp)
+- Gamma parameters k, θ
+- Current time t
 - R_min, R_max
+- T_base
 
-// Step 1: Compute risk zone
-R = R_min + γ * (R_max - R_min)
+// Step 0: Compute temporal probability using Gamma distribution
+γ(t) = GammaCDF(t; k, θ)
+
+// Step 1: Compute dynamic risk zone
+R = R_min + γ(t) * (R_max - R_min)
 RiskZone = sphere(center = P, radius = R)
 
-// Step 2: Candidate devices
+// Step 2: Candidate selection (spatial filtering)
 C = {}
-FOR each di in D:
-    IF intersects(coverage(di), RiskZone):
+FOR each sensor di in D:
+    IF distance(di, P) <= R:
         add di to C
 
-// Step 3: Coverage optimization (approximate set/disk cover)
-A = minimal_cover(C, RiskZone)
+// Step 3: Compute heuristic score for each candidate
+FOR each sensor di in C:
+    score(di) = α * Energy(di)
+              + β * Accuracy(di)
+              + γs * Signal(di)
+              - δ * Noise(di)
 
-// Step 4: Activation
-FOR each di in A:
+// Step 4: Heuristic coverage optimization
+A = {}
+U = uncovered area of RiskZone
+
+WHILE U is not empty:
+    select sensor dj in C \ A with highest utility
+        utility(dj) = coverage_gain(dj, U) * score(dj)
+    add dj to A
+    update U by removing area covered by dj
+
+// Step 5: Activation
+FOR each sensor di in A:
     activate(di)
-    IF motion_detected(di):
-        request_video(di)
+    data = sense(di)
 
-// Step 5: Dynamic deactivation
-wait(T_base * γ)
-FOR each di in A:
+    IF event_detected(data):
+        transmit(di, data)
+
+// Step 6: Adaptive duration
+wait(T_base * γ(t))
+
+// Step 7: Deactivation
+FOR each sensor di in A:
     deactivate(di)
 ```
 
@@ -142,11 +161,7 @@ Further Explanation (Principal Concept):
 
 ---
 
-## 1.5 Network Auto-Configuration Agent
-
----
-
-## 1.6 Deployment Monitoring Agent
+## 1.4 Deployment Monitoring Agent
 
 ---
 
@@ -165,3 +180,5 @@ Further Explanation (Principal Concept):
 [6] Camera Planning for Physical Safety of Outdoor Electronic Devices: Perspective and Analysis. IEEE/CAA Journal of Automatica Sinica. Available: https://ieeexplore.ieee.org/abstract/document/10916675
 
 [7] Meta-heuristic ALgorithms in Python: https://mealpy.readthedocs.io/en/latest/pages/general/introduction.html
+
+[8] Energy consumption in Wireless Sensor Environment: https://www.kaggle.com/datasets/ziya07/wireless-sensor-network-dataset

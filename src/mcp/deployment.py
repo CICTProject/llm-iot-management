@@ -21,7 +21,6 @@ logger = logging.getLogger(__name__)
 
 
 # Deployment status and topology
-
 @mcp_server.tool(name="get_deployment_status")
 async def get_deployment_status() -> Dict[str, Any]:
     """
@@ -48,6 +47,7 @@ async def get_deployment_status() -> Dict[str, Any]:
     }
 
 
+# Network topology and device registry
 @mcp_server.tool(name="get_network_topology")
 async def get_network_topology() -> Dict[str, Any]:
     """
@@ -74,7 +74,6 @@ async def get_network_topology() -> Dict[str, Any]:
 
 
 # Device discovery and querying
-
 @mcp_server.tool(name="list_medical_devices")
 async def list_medical_devices(
     zone: Optional[str] = None,
@@ -105,7 +104,7 @@ async def list_medical_devices(
     
     return devices
 
-
+# Device discovery by capability
 @mcp_server.tool(name="find_available_devices")
 async def find_available_devices(zone: str, required_service: str) -> List[Dict[str, Any]]:
     """
@@ -123,6 +122,7 @@ async def find_available_devices(zone: str, required_service: str) -> List[Dict[
     return await list_medical_devices(zone=zone, status="online")
 
 
+# Device details and querying
 @mcp_server.tool(name="get_device_details")
 async def get_device_details(device_id: str) -> Dict[str, Any]:
     """
@@ -143,6 +143,7 @@ async def get_device_details(device_id: str) -> Dict[str, Any]:
     return device
 
 
+# Device querying by capability
 @mcp_server.tool(name="query_devices_by_capability")
 async def query_devices_by_capability(service_name: str) -> List[Dict[str, Any]]:
     """
@@ -158,7 +159,6 @@ async def query_devices_by_capability(service_name: str) -> List[Dict[str, Any]]
 
 
 # Medical metric retrieval
-
 @mcp_server.tool(name="read_medical_metric")
 async def read_medical_metric(device_id: str, metric: str) -> Dict[str, Any]:
     """
@@ -197,6 +197,7 @@ async def read_medical_metric(device_id: str, metric: str) -> Dict[str, Any]:
     }
 
 
+# Batch metric retrieval for multiple devices and metrics
 @mcp_server.tool(name="read_multiple_medical_metrics")
 async def read_multiple_medical_metrics(
     requests: List[Dict[str, str]],
@@ -232,7 +233,6 @@ async def read_multiple_medical_metrics(
 
 
 # Metric history and aggregation
-
 @mcp_server.tool(name="get_metric_history")
 async def get_metric_history(
     device_id: str,
@@ -303,7 +303,6 @@ async def get_metric_history(
 
 
 # Alarm management: Future development
-
 @mcp_server.tool(name="get_active_deployment_alarms")
 async def get_active_deployment_alarms(priority: Optional[str] = None) -> List[Dict[str, Any]]:
     """
@@ -318,6 +317,7 @@ async def get_active_deployment_alarms(priority: Optional[str] = None) -> List[D
     return []
 
 
+# Acknowledge and dismiss alarms: Future development
 @mcp_server.tool(name="acknowledge_deployment_alarm")
 async def acknowledge_deployment_alarm(alarm_id: str) -> bool:
     """
@@ -333,7 +333,6 @@ async def acknowledge_deployment_alarm(alarm_id: str) -> bool:
 
 
 # Device control: Future development 
-
 @mcp_server.tool(name="execute_device_command")
 async def execute_device_command(
     device_id: str,

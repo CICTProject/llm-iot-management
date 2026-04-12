@@ -120,24 +120,6 @@ class DeviceOrchestrationTool(BaseMCPTool):
         "execute": (execute_device_command, ["device_id", "command", "parameters"]),
     }
 
-
-# Network Configuration Task Tool
-class NetworkConfigurationTool(BaseMCPTool):
-    """Unified tool for network configuration agent.
-    
-    Sub-tasks for SDN network configuration and device connectivity.
-    """
-    
-    name: str = "network_config"
-    description: str = "Configure SDN networks and device connectivity"
-    
-    operations: Dict[str, Tuple[Any, Optional[List[str]]]] = {
-        "topology": (get_network_topology, []),
-        "status": (get_deployment_status, []),
-        "list": (list_medical_devices, ["zone", "device_type"]),
-        "details": (get_device_details, ["device_id"]),
-    }
-
 # Plan Validation Task Tool
 class PlanValidationTool(BaseMCPTool):
     """Unified tool for plan validation agent.
@@ -181,7 +163,6 @@ def get_mcp_tool(tool_type: str = "deployment") -> BaseMCPTool:
     tools = {
         "deployment": DeploymentMonitoringTool(),
         "orchestration": DeviceOrchestrationTool(),
-        "network": NetworkConfigurationTool(),
         "validation": PlanValidationTool(),
         "edge": EdgeAnomalyDetectionTool(),
     }

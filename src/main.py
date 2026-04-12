@@ -42,7 +42,6 @@ class ChatCompletionRequest(BaseModel):
 class AgentType(str, Enum):
     """Available agent types."""
     ALL = "all"
-    DEVICE_MONITORING = "device_monitoring"
     EDGE_ANOMALY_DETECTION = "edge_anomaly_detection"
     ORCHESTRATION = "orchestration"
     PLAN_VALIDATION = "plan_validation"
@@ -130,8 +129,6 @@ async def execute_crew(request: CrewExecutionRequest, background_tasks: Backgrou
         # Execute appropriate agent based on request
         if request.agent_type == AgentType.ALL:
             result = CREW.run_all()
-        elif request.agent_type == AgentType.DEVICE_MONITORING:
-            result = CREW.run_device_monitoring()
         elif request.agent_type == AgentType.EDGE_ANOMALY_DETECTION:
             result = CREW.run_edge_anomaly_detection()
         elif request.agent_type == AgentType.ORCHESTRATION:
@@ -244,7 +241,7 @@ async def chat_completions(req: ChatCompletionRequest):
     Process chat completions using crew agents.
     
     Args:
-    
+
         req: Chat completion request
     
     Returns:
@@ -271,9 +268,7 @@ async def chat_completions(req: ChatCompletionRequest):
         # Determine which agent to use based on message content
         user_lower = user_text.lower()
         
-        if any(keyword in user_lower for keyword in ["device", "camera", "sensor", "monitor", "collect"]):
-            result = CREW.run_device_monitoring()
-        elif any(keyword in user_lower for keyword in ["anomaly", "detect", "fall", "abnormal"]):
+        if any(keyword in user_lower for keyword in ["anomaly", "detect", "fall", "abnormal"]):
             result = CREW.run_edge_anomaly_detection()
         elif any(keyword in user_lower for keyword in ["orchestrat", "deploy", "configure"]):
             result = CREW.run_orchestration()
@@ -359,7 +354,6 @@ async def get_status():
         "crew_initialized": CREW is not None,
         "total_executions": len(execution_history),
         "available_agents": [
-            AgentType.DEVICE_MONITORING.value,
             AgentType.EDGE_ANOMALY_DETECTION.value,
             AgentType.ORCHESTRATION.value,
             AgentType.PLAN_VALIDATION.value,

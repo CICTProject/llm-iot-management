@@ -351,19 +351,19 @@ def seed_historical_data(devices: Dict[str, MedicalDevice]) -> None:
 
 def seed_energy_consumption_data(csv_path: str = "data/sensor_energy_consumption.csv") -> int:
     """
-    Seed energy consumption data from CSV to InfluxDB.
+    Seed IoT sensor energy consumption data from CSV to InfluxDB.
     
-    Loads historical sensor energy consumption data from CSV and writes to InfluxDB
-    bucket 'energy_consumption' with measurement 'grid_metrics'.
+    Loads historical IoT sensor network data from CSV and writes to InfluxDB
+    bucket 'energy_consumption' with measurement 'iot_metrics'.
     
     Args:
-        csv_path: Path to CSV file with energy consumption data
+        csv_path: Path to CSV file with IoT sensor data
     
     Returns:
         Number of records written to InfluxDB
     """
     try:
-        logger.info(f"Loading energy consumption data from {csv_path}...")
+        logger.info(f"Loading IoT sensor data from {csv_path}...")
         
         # Read CSV data
         df = pd.read_csv(csv_path)
@@ -379,27 +379,31 @@ def seed_energy_consumption_data(csv_path: str = "data/sensor_energy_consumption
         points = []
         for idx, row in df.iterrows():
             point = (
-                Point("grid_metrics")
+                Point("iot_metrics")
                 .time(row['Timestamp'])
-                .field("power_consumption_kWh", float(row['Power_Consumption_kWh']))
-                .field("voltage_V", float(row['Voltage_V']))
-                .field("current_A", float(row['Current_A']))
-                .field("power_factor", float(row['Power_Factor']))
-                .field("grid_frequency_Hz", float(row['Grid_Frequency_Hz']))
-                .field("reactive_power_kVAR", float(row['Reactive_Power_kVAR']))
-                .field("active_power_kW", float(row['Active_Power_kW']))
-                .field("demand_response_event", int(row['Demand_Response_Event']))
-                .field("temperature_C", float(row['Temperature_C']))
-                .field("humidity_percent", float(row['Humidity_%']))
-                .field("solar_power_generation_kW", float(row['Solar_Power_Generation_kW']))
-                .field("wind_power_generation_kW", float(row['Wind_Power_Generation_kW']))
-                .field("previous_day_consumption_kWh", float(row['Previous_Day_Consumption_kWh']))
-                .field("peak_load_hour", int(row['Peak_Load_Hour']))
-                .field("normalized_consumption", float(row['Normalized_Consumption']))
-                .field("energy_efficiency_score", float(row['Energy_Efficiency_Score']))
-                .tag("energy_source_type", str(int(row['Energy_Source_Type'])))
-                .tag("user_type", str(int(row['User_Type'])))
-                .tag("weather_condition", str(row['Weather_Condition']))
+                # Location fields
+                .field("x_coordinate", float(row['X_Coordinate']))
+                .field("y_coordinate", float(row['Y_Coordinate']))
+                .field("z_coordinate", float(row['Z_Coordinate']))
+                # Energy fields
+                .field("initial_energy_j", float(row['Initial_Energy']))
+                .field("residual_energy_j", float(row['Residual_Energy']))
+                .field("energy_consumption_j", float(row['Energy_Consumption']))
+                .field("transmission_power_w", float(row['Transmission_Power']))
+                # Network fields
+                .field("signal_strength_dbm", float(row['Signal_Strength']))
+                .field("noise_level_db", float(row['Noise_Level']))
+                .field("packet_loss_rate_percent", float(row['Packet_Loss_Rate']))
+                .field("network_lifetime_seconds", int(row['Network_Lifetime']))
+                # Environmental fields
+                .field("temperature_c", float(row['Temperature']))
+                .field("humidity_percent", float(row['Humidity']))
+                # Performance fields
+                .field("adaptive_learning_rate", float(row['Adaptive_Learning_Rate']))
+                .field("detection_accuracy_percent", float(row['Detection_Accuracy']))
+                # Tags for querying
+                .tag("node_id", str(row['Node_ID']))
+                .tag("optimization_algorithm", str(row['Optimization_Algorithm']))
             )
             points.append(point)
         
@@ -412,7 +416,7 @@ def seed_energy_consumption_data(csv_path: str = "data/sensor_energy_consumption
             write_api.write(bucket=db_client.bucket, org=db_client.org, record=batch)
             written_count += len(batch)
         
-        logger.info(f"Successfully wrote {written_count} energy consumption records to InfluxDB")
+        logger.info(f"Successfully wrote {written_count} IoT sensor records to InfluxDB")
         return written_count
     
     except FileNotFoundError:
@@ -420,7 +424,7 @@ def seed_energy_consumption_data(csv_path: str = "data/sensor_energy_consumption
         return 0
     
     except Exception as e:
-        logger.error(f"Failed to seed energy consumption data: {e}", exc_info=True)
+        logger.error(f"Failed to seed IoT sensor data: {e}", exc_info=True)
         raise
 
 
