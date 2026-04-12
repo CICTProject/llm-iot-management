@@ -1,6 +1,6 @@
 # Bio AIoT Monitor
 
-A real-time dashboard with chatbot for monitoring hospital  environments through IoT sensors. Track temperature, humidity, soil moisture, light levels, and CO2 across multiple hospital departments, zones, and devices — with configurable alert rules and analytics.
+A real-time dashboard with chatbot for monitoring hospital  environments through IoT sensors. Track medical sensors across multiple hospital departments, zones, and wireless devices — with configurable alert rules and analytics.
 
 ## Features
 
