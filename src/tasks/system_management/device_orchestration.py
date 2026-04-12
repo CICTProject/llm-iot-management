@@ -1,7 +1,5 @@
 """Device orchestration task."""
 from crewai import Task
-
-
 from typing import Optional
 
 # 4.3 Device Orchestration

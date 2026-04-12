@@ -39,7 +39,7 @@ Camera-based monitoring systems detect resident falls, autonomous medical IOT se
 poetry --version
 
 # Install dependencies
-poetry install --no-root
+python -m poetry install (--verbose)
 
 # Check virtual environment
 poetry env list
@@ -49,9 +49,6 @@ source $(poetry env info --path)/bin/activate
 
 # Or for Poetry 1.x
 poetry shell
-
-# Install FastMCP protocol
-pip install fastmcp
 
 ```
 
@@ -78,8 +75,8 @@ llm-intent-orchestration/
 ### Running the Application
 
 ```bash
-# CLI Menu
-python src/main.py
+# Uvicorn App
+python -m poetry run uvicorn src.main:app --host 0.0.0.0 --port 8001
 ```
 
 ---
