@@ -43,7 +43,7 @@ class CustomAgent:
         self.edge_tool = EdgeAnomalyDetectionTool()
         
     
-    # 4.1 Define Cloud LLM Agent for sensor data collection in terms of patient fall detection
+    # 1.1 Define Cloud LLM Agent for sensor data collection in terms of patient fall detection
     def device_monitoring(self):
         return Agent(
             role="Device Monitoring Agent",
@@ -56,7 +56,7 @@ class CustomAgent:
             llm=self.llm,
         )
 
-    # 4.2 Define Edge LLM Agent for sensor data anomaly detection
+    # 1.2 Define Edge LLM Agent for sensor data anomaly detection
     def edge_anomaly_detection(self):
         """Define agent for anomaly detection in sensor data."""
         prompt = load_prompt("edge-detection", "edge_detection")
@@ -71,7 +71,7 @@ class CustomAgent:
             llm=self.llm,
         )
     
-    # 4.3 Define orchestration agent 
+    # 1.3 Define orchestration agent 
     def orchestration(self):
         """Define agent for IoT device orchestration."""
         prompt = load_prompt("system-management", "device_orchestration")
@@ -86,7 +86,7 @@ class CustomAgent:
             llm=self.llm,
         )
         
-    # 4.4 Define plan validation agent 
+    # 1.4 Define plan validation agent 
     def plan_validation(self):
         """Define agent for validating deployment plans."""
         prompt = load_prompt("system-management", "plan_validation")
@@ -101,7 +101,7 @@ class CustomAgent:
             llm=self.llm,
         )
     
-    # 4.5 Define network auto-configuration agent 
+    # 1.5 Define network auto-configuration agent 
     def network_auto_configuration(self):
         """Define agent for automatic network configuration."""
         prompt = load_prompt("system-management", "network_configuration")
@@ -116,7 +116,7 @@ class CustomAgent:
             llm=self.llm,
         )
 
-    # 4.6 Define deployment monitoring agent (Data collection for diagnosis support)
+    # 1.6 Define deployment monitoring agent (Data collection for diagnosis support)
     def deployment_monitoring(self):
         """Define agent for monitoring IoT deployment status."""
         prompt = load_prompt("system-management", "deployment_monitoring")

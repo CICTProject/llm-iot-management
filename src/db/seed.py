@@ -6,6 +6,7 @@ Generates and writes device registry and sensor data to InfluxDB.
 import logging
 import math
 import random
+import pandas as pd
 from datetime import datetime, timedelta
 from typing import Any, Dict, List
 
@@ -348,6 +349,81 @@ def seed_historical_data(devices: Dict[str, MedicalDevice]) -> None:
     logger.info("Seeded %d historical data points to InfluxDB", total_points)
 
 
+def seed_energy_consumption_data(csv_path: str = "data/sensor_energy_consumption.csv") -> int:
+    """
+    Seed energy consumption data from CSV to InfluxDB.
+    
+    Loads historical sensor energy consumption data from CSV and writes to InfluxDB
+    bucket 'energy_consumption' with measurement 'grid_metrics'.
+    
+    Args:
+        csv_path: Path to CSV file with energy consumption data
+    
+    Returns:
+        Number of records written to InfluxDB
+    """
+    try:
+        logger.info(f"Loading energy consumption data from {csv_path}...")
+        
+        # Read CSV data
+        df = pd.read_csv(csv_path)
+        df['Timestamp'] = pd.to_datetime(df['Timestamp'])
+        
+        logger.info(f"Loaded {len(df)} records from {csv_path}")
+        
+        # Get InfluxDB write client
+        db_client = get_db_client()
+        write_api = db_client.get_write_client()
+        
+        # Prepare records for writing to InfluxDB
+        points = []
+        for idx, row in df.iterrows():
+            point = (
+                Point("grid_metrics")
+                .time(row['Timestamp'])
+                .field("power_consumption_kWh", float(row['Power_Consumption_kWh']))
+                .field("voltage_V", float(row['Voltage_V']))
+                .field("current_A", float(row['Current_A']))
+                .field("power_factor", float(row['Power_Factor']))
+                .field("grid_frequency_Hz", float(row['Grid_Frequency_Hz']))
+                .field("reactive_power_kVAR", float(row['Reactive_Power_kVAR']))
+                .field("active_power_kW", float(row['Active_Power_kW']))
+                .field("demand_response_event", int(row['Demand_Response_Event']))
+                .field("temperature_C", float(row['Temperature_C']))
+                .field("humidity_percent", float(row['Humidity_%']))
+                .field("solar_power_generation_kW", float(row['Solar_Power_Generation_kW']))
+                .field("wind_power_generation_kW", float(row['Wind_Power_Generation_kW']))
+                .field("previous_day_consumption_kWh", float(row['Previous_Day_Consumption_kWh']))
+                .field("peak_load_hour", int(row['Peak_Load_Hour']))
+                .field("normalized_consumption", float(row['Normalized_Consumption']))
+                .field("energy_efficiency_score", float(row['Energy_Efficiency_Score']))
+                .tag("energy_source_type", str(int(row['Energy_Source_Type'])))
+                .tag("user_type", str(int(row['User_Type'])))
+                .tag("weather_condition", str(row['Weather_Condition']))
+            )
+            points.append(point)
+        
+        # Write points to InfluxDB in batches
+        batch_size = 100
+        written_count = 0
+        
+        for i in range(0, len(points), batch_size):
+            batch = points[i:i+batch_size]
+            write_api.write(bucket=db_client.bucket, org=db_client.org, record=batch)
+            written_count += len(batch)
+        
+        logger.info(f"Successfully wrote {written_count} energy consumption records to InfluxDB")
+        return written_count
+    
+    except FileNotFoundError:
+        logger.error(f"CSV file not found: {csv_path}")
+        return 0
+    
+    except Exception as e:
+        logger.error(f"Failed to seed energy consumption data: {e}", exc_info=True)
+        raise
+
+
 def initialize_database() -> Dict[str, MedicalDevice]:
     """Initialize the database with device registry and historical data."""
     try:
@@ -356,9 +432,15 @@ def initialize_database() -> Dict[str, MedicalDevice]:
         # Create devices
         devices = create_devices()
         
-        # Seed to InfluxDB
+        # Seed medical device data to InfluxDB
         seed_device_registry(devices)
         seed_historical_data(devices)
+        
+        # Seed energy consumption data from CSV
+        try:
+            seed_energy_consumption_data()
+        except FileNotFoundError:
+            logger.warning("Energy consumption CSV not found - skipping energy data seeding")
         
         logger.info("Database initialization complete")
         return devices

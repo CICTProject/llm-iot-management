@@ -6,7 +6,7 @@ authors = ["Huyen-Trang Le", "Nguyen-Huong-Giang Le", "Massinissa Hamidi"]
 package-mode = false
 
 [tool.poetry.dependencies]
-python = ">=3.10.0,<3.13"
+python = ">=3.11.0,<3.13"
 crewai = ">=0.40.0,<1.0.0"
 langchain-google-genai = ">=1.0.0,<2.0.0"
 google-generativeai = ">=0.5.0"
@@ -18,10 +18,10 @@ uvicorn = ">=0.35"
 pydantic = "^2.0.0"
 influxdb-client = "^1.18.0"
 fastapi = "^0.109.0"
-
-
-# syntax error check 
+pandas = "^3.0.2"
+numpy = "^2.4.4"
 fastmcp = "^3.2.3"
+
 [tool.pyright]
 # https://github.com/microsoft/pyright/blob/main/docs/configuration.md
 useLibraryCodeForTypes = true

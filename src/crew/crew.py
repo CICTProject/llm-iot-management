@@ -45,36 +45,42 @@ class CustomCrew:
         )
         return crew.kickoff()
     
+    # 1.1 Run device monitoring agent 
     def run_device_monitoring(self):
         """Run device monitoring agent only."""
         agent = self.agents.device_monitoring()
         task = device_monitoring_router(agent)
         return Crew(agents=[agent], tasks=[task], verbose=True).kickoff()
     
+    # 1.2 Run edge anomaly detection agent
     def run_edge_anomaly_detection(self):
         """Run edge anomaly detection agent only."""
         agent = self.agents.edge_anomaly_detection()
         task = edge_router(agent)
         return Crew(agents=[agent], tasks=[task], verbose=True).kickoff()
     
+    # 1.3 Run device orchestration agent
     def run_orchestration(self):
         """Run device orchestration agent only."""
         agent = self.agents.orchestration()
         task = device_router(agent)
         return Crew(agents=[agent], tasks=[task], verbose=True).kickoff()
     
+    # 1.4 Run plan validation agent
     def run_plan_validation(self):
         """Run plan validation agent only."""
         agent = self.agents.plan_validation()
         task = validation_router(agent)
         return Crew(agents=[agent], tasks=[task], verbose=True).kickoff()
     
+    # 1.5 Run network auto-configuration agent
     def run_network_auto_configuration(self):
         """Run network auto-configuration agent only."""
         agent = self.agents.network_auto_configuration()
         task = network_config_router(agent)
         return Crew(agents=[agent], tasks=[task], verbose=True).kickoff()
     
+    # 1.6 Run deployment monitoring agent
     def run_deployment_monitoring(self):
         """Run deployment monitoring agent only."""
         agent = self.agents.deployment_monitoring()

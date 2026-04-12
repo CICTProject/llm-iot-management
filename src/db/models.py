@@ -78,3 +78,28 @@ class MedicalDevice:
     services: List[Dict[str, Any]]
     battery_level: int
     metadata: Optional[Dict[str, Any]] = None
+
+
+@dataclass
+class EnergyConsumption:
+    """Represents energy consumption metrics from grid/sensors."""
+    timestamp: datetime
+    power_consumption_kWh: float
+    voltage_V: float
+    current_A: float
+    power_factor: float
+    grid_frequency_Hz: float
+    reactive_power_kVAR: float
+    active_power_kW: float
+    demand_response_event: bool
+    temperature_C: float
+    humidity_percent: float
+    weather_condition: str
+    solar_power_generation_kW: float
+    wind_power_generation_kW: float
+    previous_day_consumption_kWh: float
+    peak_load_hour: bool
+    energy_source_type: int
+    user_type: int
+    normalized_consumption: float
+    energy_efficiency_score: float

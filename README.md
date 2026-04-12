@@ -8,19 +8,14 @@ Modern medical research laboratories increasingly integrate smart workspace envi
 
 ## Application Scenarios
 
-### Scenario 1: In-Hospital Clinical Decision Support
-AI-assisted diagnostic recommendations leveraging historical and real-time patient records from sensor/actuator data collection systems. Healthcare professionals retain final decision authority to validate and correct potential errors.
-
-**Key QoS Metric:** *Reliability* — Minimal packet loss is critical to prevent misdiagnosis; moderate latency is acceptable for non-real-time consultation workflows.
-
-### Scenario 2: Real-Time Physiological Monitoring
+### Scenario 1: Real-Time Physiological Monitoring
 Wearable and implantable sensors continuously monitor vital signs (blood pressure, heart rate) with anomaly detection and immediate caregiver alerts.
 
 **Key QoS Metric:** *Ultra-low Latency* — Immediate response is essential for medical emergencies; periodic data redundancy tolerates minor packet loss.
 
 **Research Direction:** Edge-based lightweight patient prediction models running directly on sensor devices.
 
-### Scenario 3: Smart Hospital BioIOT Management 
+### Scenario 2: Smart Hospital BioIOT Management 
 Camera-based monitoring systems detect resident falls, autonomous medical IOT sensors/actuators management, enhancing safety, performance, energy-awareness while reducing staff workload.
 
 **Key QoS Metrics:** *Bandwidth & Jitter* — High bandwidth ensures video quality; low jitter maintains interpretable video streams.
@@ -63,7 +58,11 @@ llm-intent-orchestration/
 │   ├── crew.py              # Multi-agent orchestration
 │   ├── agents/
 │   │   └── agents.py        # LLM Agent logic (Gemini LLM)
-│   └── tasks/               # Task router 
+│   ├── tasks/               # Task router 
+│   ├── mcp/                 # MCP Server tools
+│   ├── prompts/             # System prompts
+│   ├── utils/               # External task tools
+│   └── db/                  # Database
 ├── configs/                 # Configuration files
 ├── tests/                   # Unit tests
 ├── docs/                    # Documentation
@@ -75,6 +74,9 @@ llm-intent-orchestration/
 ### Running the Application
 
 ```bash
+# Seed database mitigation (Future replacement with real-time iot device data)
+python -m poetry run python src.db.main 
+
 # Uvicorn App
 python -m poetry run uvicorn src.main:app --host 0.0.0.0 --port 8001
 ```
@@ -90,9 +92,3 @@ python -m poetry run uvicorn src.main:app --host 0.0.0.0 --port 8001
 5. CrewAI + FastMCP: [github.com/ashishpatel26/Crewai-MCP-Course](https://github.com/ashishpatel26/Crewai-MCP-Course)
 6. Integration with FastMCP via [langchain-mcp-adapters](https://github.com/langchain-ai/langchain-mcp-adapters)
 7. ONOS MCP Server (Code inspiration):[onos-mcp-server](https://github.com/MCP-Mirror/davidlin2k_onos-mcp-server)
-## Future Work
-1. Giang task
-- Edge AI deployment for resource-constrained devices [Edge AI and IoT in 2025](https://www.youtube.com/watch?v=P54zzvqnVLk&t=874s)
-
-2. Trang task 
-- Data field (data files) & LLM Agent Workflow discussion with professor Hamidi.

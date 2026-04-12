@@ -111,7 +111,9 @@ async def execute_crew(request: CrewExecutionRequest, background_tasks: Backgrou
     Execute crew agents for IoT orchestration.
     
     Args:
+
         request: Crew execution request with agent type and context
+
         background_tasks: FastAPI background tasks
     
     Returns:
@@ -176,6 +178,7 @@ async def get_execution_status(execution_id: str):
     Get status and results of a crew execution.
     
     Args:
+
         execution_id: The execution ID to query
     
     Returns:
@@ -193,6 +196,7 @@ async def list_executions(limit: int = 10):
     List recent crew executions.
     
     Args:
+
         limit: Maximum number of executions to return
     
     Returns:
@@ -240,6 +244,7 @@ async def chat_completions(req: ChatCompletionRequest):
     Process chat completions using crew agents.
     
     Args:
+    
         req: Chat completion request
     
     Returns:
