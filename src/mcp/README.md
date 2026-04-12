@@ -41,7 +41,7 @@ Limitations:
 
 ### 1.3.2 Cellulaire Sequential Clustering Zone-based Activation
 
-<iframe src="https://www.slideserve.com/embed/6152355" width="600" height="497" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" style="border:1px solid #CCC;border-width:1px 1px;margin-bottom:5px;max-width: 100%;" allowfullscreen webkitallowfullscreen mozallowfullscreen> </iframe>
+[Cellular Networks](https://www.slideserve.com/embed/6152355)
 
 - Objective: Ensure monitoring coverage by activating nodes sequentially across space, reducing simultaneous energy usage.
 - Assumptions: Nodes are distributed in 3D space and ordered spatially (clustering in zone-based environment), each has sensing capability, communication module and fixed activation time window with no prediction or learning.
@@ -81,6 +81,8 @@ Limitations:
 - Poor scalability in dense or large-scale 3D deployments
 
 ### 1.3.3 Probabilistic & Spatially Optimized Activation (Energy-Efficient)
+
+![3D Space in Camera Motions](docs/algorithms/space.png)
 
 - Objective: Minimize energy by activating only necessary devices using the probability γ of patient egress [1] and spatial coverage (x, y, z, r) [7] using Python library.
 - Concepts:
@@ -155,7 +157,7 @@ Notes:
 
 Further Explanation (Principal Concept):
 
-- Time Optimization (Gamma Distribution): In the base of Poisson distribution inspiration of patient movements in hospital corridors (leaving and returning to rooms) are random and independent events but in total the distribution is possibly calculated and predicted thanks to probabilistic distribution. However, Poisson models **event counts** (\(N(t)\): number of movements in time interval \(t\)), not **event timing**, it assumes a constant average movement rate \(\lambda\), which totally unsuitable for **real-time sensor activation** (for example, patient motion detection in 8 AM equal to 9PM). In a Poisson process, inter-event time follows an **exponential distribution**. However, exponential distributions are memoryless, too simplistic for human behavior. To better model patient behavior, we use a **Gamma distribution** for the waiting time \(T\) until patient exits the room, meaning motion occurs \(T \sim \text{Gamma}(k, \theta)\), Where \(k\) (shape) is the regularity of behavior and \(\theta\) (scale) is the average waiting duration. \[f_T(t) = \frac{1}{\Gamma(k)\theta^k} t^{k-1} e^{-t/\theta}, \quad t \ge 0\]. The motion probability increases over time and is used to decide **when and how many devices to activate**. \[\gamma(t) = P(T \le t) = F(t)\]
+- Time Optimization (Gamma Distribution): In the base of Poisson distribution inspiration of patient movements in hospital corridors (leaving and returning to rooms) are random and independent events but in total the distribution is possibly calculated and predicted thanks to probabilistic distribution. However, Poisson models **event counts** (\(N(t)\): number of movements in time interval \(t\)), not **event timing**, it assumes a constant average movement rate \(\lambda\), which totally unsuitable for **real-time sensor activation** (for example, patient motion detection in 8 AM equal to 9PM). In a Poisson process, inter-event time follows an **exponential distribution**. However, exponential distributions are memoryless, too simplistic for human behavior. To better model patient behavior, we use a **Gamma distribution** for the waiting time \(T\) until patient exits the room, meaning motion occurs \(T \sim \text{Gamma}(k, \theta)\), Where \(k\) (shape) is the regularity of behavior and \(\theta\) (scale) is the average waiting duration. The motion probability increases over time and is used to decide **when and how many devices to activate**. 
 
 - Space Optimization (Heuristic algorithm): In the context of spatial 3-D space coverage motion device for activity maximization under Smart Cities environment[2], heuristic algorithms have demonstrated the ability to maximize coverage while adhering to resource constraints, such as budget limits. Translating this principle to our motion-sensing and camera-based monitoring system, the “budget” corresponds to energy consumption, which must be minimized while ensuring adequate coverage of potential patient movements. By leveraging camera coverage and strategic placement, we can implement a collaboration-based local search algorithm, which combines local search optimization with coordinated allocation among multiple devices. This approach allows the system to dynamically select the minimal subset of devices that collectively cover the predicted “risk zone” of patient activity. Consequently, the algorithm reduces redundant activations, ensures all critical areas are monitored, and optimizes energy usage by activating only those devices that are necessary at a given moment, thereby balancing coverage effectiveness and energy efficiency. 
 
