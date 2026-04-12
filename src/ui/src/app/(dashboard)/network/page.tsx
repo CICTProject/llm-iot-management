@@ -3,7 +3,6 @@
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
-import dynamic from "next/dynamic";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -24,12 +23,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Network, Lock, Users, Zap, AlertCircle, MessageCircle, X } from "lucide-react";
-
-// Dynamically import ChatBot with SSR disabled to prevent "location is not defined" errors on Vercel
-const ChatBot = dynamic(() => import("react-chatbotify"), {
-  ssr: false,
-  loading: () => <div>Loading chatbot...</div>,
-});
+import ChatBot from "react-chatbotify";
 
 interface NetworkPolicy {
   id: string;
