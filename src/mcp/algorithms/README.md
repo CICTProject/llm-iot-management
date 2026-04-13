@@ -31,9 +31,7 @@ Limitations:
 
 ## Cellulaire Sequential Clustering Zone-based Activation (Section 1.3.2)
 
-[![Cellular Networks - Presentation Slides](https://via.placeholder.com/320x180/1F77D4/ffffff?text=📊+Cellular+Networks+Slides)](https://www.slideserve.com/embed/6152355)
-
-- Objective: Ensure monitoring coverage by activating nodes sequentially across space, reducing simultaneous energy usage.
+- Objective: Ensure monitoring coverage by activating nodes sequentially across space, reducing simultaneous energy usage [9].
 - Assumptions: Nodes are distributed in 3D space and ordered spatially (clustering in zone-based environment), each has sensing capability, communication module and fixed activation time window with no prediction or learning.
 - Algorithm:
   -Partition space or order nodes (clusters in zone)
@@ -170,3 +168,5 @@ Further Explanation (Principal Concept):
 [7] Meta-heuristic ALgorithms in Python: https://mealpy.readthedocs.io/en/latest/pages/general/introduction.html
 
 [8] Energy consumption in Wireless Sensor Environment: https://www.kaggle.com/datasets/ziya07/wireless-sensor-network-dataset
+
+[9] Cellular Networks - Introduction to Wireless Networks. Available: https://www.slideserve.com/zeph-hill/introduction-to-wireless-networks
