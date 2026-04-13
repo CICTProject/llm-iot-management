@@ -31,7 +31,7 @@ Limitations:
 
 ## Cellulaire Sequential Clustering Zone-based Activation (Section 1.3.2)
 
-<iframe src="https://www.slideserve.com/embed/6152355" width="100%" height="450" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" style="border:1px solid #CCC; border-width:1px; margin-bottom:5px; max-width: 100%;" allowfullscreen></iframe>
+[![Cellular Networks - Presentation Slides](https://via.placeholder.com/320x180/1F77D4/ffffff?text=📊+Cellular+Networks+Slides)](https://www.slideserve.com/embed/6152355)
 
 - Objective: Ensure monitoring coverage by activating nodes sequentially across space, reducing simultaneous energy usage.
 - Assumptions: Nodes are distributed in 3D space and ordered spatially (clustering in zone-based environment), each has sensing capability, communication module and fixed activation time window with no prediction or learning.
