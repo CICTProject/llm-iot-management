@@ -31,7 +31,7 @@ Limitations:
 
 ## Cellulaire Sequential Clustering Zone-based Activation (Section 1.3.2)
 
-[Cellular Networks](https://www.slideserve.com/embed/6152355)
+<iframe src="https://www.slideserve.com/embed/6152355" width="100%" height="450" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" style="border:1px solid #CCC; border-width:1px; margin-bottom:5px; max-width: 100%;" allowfullscreen></iframe>
 
 - Objective: Ensure monitoring coverage by activating nodes sequentially across space, reducing simultaneous energy usage.
 - Assumptions: Nodes are distributed in 3D space and ordered spatially (clustering in zone-based environment), each has sensing capability, communication module and fixed activation time window with no prediction or learning.
@@ -72,7 +72,7 @@ Limitations:
 
 ## Probabilistic & Spatially Optimized Activation (Energy efficiency - Section 1.3.3)
 
-![3D Space in Camera Motions](llm-iot-management\docs\algorithms\space.png)
+![3D Space in Camera Motions](../../../docs/algorithms/space.png)
 
 - Objective: Minimize energy by activating only necessary devices using the probability γ of patient egress [1] and spatial coverage (x, y, z, r) [7] using Python library.
 - Concepts:
