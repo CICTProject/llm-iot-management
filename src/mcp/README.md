@@ -2,7 +2,7 @@
 
 ## Tools Structure
 
-The MCP (Model Context Protocol) module provides agents and algorithms for intelligent intent management in medical IoT environments. Here's the folder organization:
+The MCP (Model Context Protocol) module provides agents and relevant algorithms for intelligent intent management in medical IoT environments. 
 
 ```
 mcp/
@@ -19,18 +19,6 @@ mcp/
 │   └── README.md                       # Algorithm details 
 └── README.md                            # All agent tool explanations
 ```
-
-### Component Overview
-
-**Core Modules:**
-- `main.py` - Orchestrates MCP integration with agent framework
-- `deployment.py` - Tools for deployment monitoring and device management
-- `plan_validation.py` - Tools for plan validation against requirements
-
-**Algorithms Subfolder:**
-- `naive.py` - Baseline sensor activation (all sensors active, used as reference)
-- `cellulaire.py` - Zone-based sequential clustering for balanced coverage and energy
-- `probabilistic.py` - Advanced energy-efficient activation using probability distribution and spatial coverage modeling
 
 ## 1.1 Edge Anomaly Detection Agent
 

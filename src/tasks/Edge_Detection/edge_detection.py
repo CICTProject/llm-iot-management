@@ -2,14 +2,10 @@
 from typing import Optional
 from crewai import Task
 
-# 4.6 Edge LLM Anomaly Detection
+# 4.6 Edge LLM Anomaly Detection (Giang's Task)
 def edge_router(agent, sensor_id: Optional[str] = None, threshold: Optional[float] = None):
-    """Edge LLM anomaly detection task.
-    
-    Args:
-        agent: The CrewAI agent to execute this task
-        sensor_id: Sensor identifier
-        threshold: Anomaly detection threshold
+    """
+    Edge LLM anomaly detection task.
     """
     return Task(
         description=f"Detect anomalies in sensor {sensor_id} data with threshold {threshold}.",

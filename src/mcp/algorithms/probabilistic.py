@@ -425,7 +425,7 @@ def probabilistic_spatially_optimized_activation(
     gamma_t = compute_gamma_t(elapsed_time_t, gamma_shape_k, gamma_scale_theta)
     logger.info(f"Temporal probability gamma(t): {gamma_t:.4f}")
     
-    # Step 1: Compute risk zone
+    # Compute risk zone
     risk_radius = compute_risk_radius(r_min, r_max, gamma_t)
     risk_zone = {
         "center": target_position,
