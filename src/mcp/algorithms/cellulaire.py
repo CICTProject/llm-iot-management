@@ -47,27 +47,32 @@ def sequential_zone_activation(
     # Phase 2: Sequential Activation Schedule
     activation_schedule = []
     total_energy_saved = 0.0
+    total_initial_energy = 0.0
     total_time_slots = len(zones)
     total_activation_events = 0
     total_transmission_events = 0.0
+    total_sequential_energy = 0.0
+    zone_accuracy_averages = []  # Track average detection accuracy per zone
     
     for zone_idx, (zone_center, zone_nodes) in enumerate(zones.items()):
         slot_start = zone_idx * activation_duration_seconds
         
+        
         for node in zone_nodes:
-            if node.is_active:
-                # Calculate energy cost: activation + transmission if event detected
-                activation_cost = node.transmission_power * activation_duration_seconds / 3600.0  # Wh
+            node.status = "active"  # Mark node as scheduled for activation
+            if node.status == "active":
+                # Sequential energy: node active for only 1 out of total_time_slots
+                sequential_energy_j = node.energy_consumption * activation_duration_seconds / 3600.0  
                 
-                # Simulated event probability based on detection accuracy
-                event_probability = node.detection_accuracy / 100.0
-                transmission_cost = activation_cost * event_probability if event_probability > 0 else 0
+                # Continuous energy: if node were active for entire cycle
+                continuous_energy_j = node.energy_consumption * total_time_slots / 3600.0
                 
-                # Energy saved by not being active continuously
-                continuous_energy = node.energy_consumption
-                sequential_energy = min(activation_cost + transmission_cost, continuous_energy)
-                energy_saved = max(0, continuous_energy - sequential_energy)
+                # Energy saved by sequential activation vs continuous
+                energy_saved = max(0, continuous_energy_j - sequential_energy_j)
                 
+                # Detection accuracy is assumed to be proportional to signal quality and active time
+                detection_accuracy = node.detection_accuracy * (activation_duration_seconds / (total_time_slots * activation_duration_seconds))
+
                 activation_schedule.append({
                     "node_id": node.node_id,
                     "zone_center": zone_center,
@@ -76,29 +81,46 @@ def sequential_zone_activation(
                     "slot_start_seconds": slot_start,
                     "slot_end_seconds": slot_start + activation_duration_seconds,
                     "activation_duration_seconds": activation_duration_seconds,
-                    "status": "SCHEDULED",
                     "coordinates": [node.x_coord, node.y_coord, node.z_coord],
                     "transmission_power_w": node.transmission_power,
-                    "activation_energy_wh": activation_cost,
-                    "transmission_probability": event_probability,
-                    "sequential_energy_j": sequential_energy,
-                    "continuous_energy_j": continuous_energy,
+                    "activation_energy_wh": sequential_energy_j / 3600.0,
+                    "sequential_energy_j": sequential_energy_j,
+                    "continuous_energy_j": continuous_energy_j,
                     "energy_saved_j": energy_saved,
                     "signal_quality_dbm": node.signal_quality,
-                    "detection_accuracy_percent": node.detection_accuracy,
+                    "detection_accuracy_percent": detection_accuracy,
                     "energy_remaining_percent": node.energy_remaining_percent,
                 })
                 total_energy_saved += energy_saved
                 total_activation_events += 1
-                if event_probability > 0:
-                    total_transmission_events += event_probability
+                total_sequential_energy += sequential_energy_j
+                if detection_accuracy > 0:
+                    total_transmission_events += 1
+                total_initial_energy += node.initial_energy
+ 
+        
+        # Detection accuracy reduced by off time fraction
+        time_active_fraction = activation_duration_seconds / total_time_slots if total_time_slots > 0 else 0
+        avg_detection_accuracy_zones = np.mean([n.detection_accuracy * time_active_fraction for n in zone_nodes]) if zone_nodes else 0.0        
+        zone_accuracy_averages.append(avg_detection_accuracy_zones)  # Collect zone average        
+        logger.info(f"Zone {zone_idx}: {len(zone_nodes)} nodes, Avg detection accuracy: {avg_detection_accuracy_zones:.2f}%, Energy saved: {energy_saved:.6f} J")
     
     # Calculate statistics
-    total_nodes_energy = sum(n.energy_consumption for n in nodes)
-    energy_efficiency = (total_energy_saved / total_nodes_energy * 100) if total_nodes_energy > 0 else 0.0
     avg_zone_size = len(nodes) / len(zones) if zones else 0
-    total_cycle_time = total_time_slots * activation_duration_seconds
     
+    # Calculate total continuous energy baseline (if all nodes active entire cycle)
+    total_continuous_energy = sum(n.energy_consumption * total_time_slots / 3600.0 for n in nodes)
+    
+    # Calculate total sequential energy (if each node active for only 1 slot)
+    total_sequential_energy = total_continuous_energy * activation_duration_seconds / 3600.0 if total_time_slots > 0 else 0
+    
+    # Energy efficiency: savings vs continuous baseline
+    energy_efficiency = (total_energy_saved / total_continuous_energy * 100) if total_continuous_energy > 0 else 0.0
+    
+    # Average detection accuracy across all zones (reduced by off time)
+    avg_detection_accuracy_percent = np.mean(zone_accuracy_averages) if zone_accuracy_averages else 0.0
+    
+
     metrics = {
         "algorithm": "sequential_zone_activation",
         "timestamp": datetime.now().isoformat(),
@@ -107,12 +129,13 @@ def sequential_zone_activation(
         "avg_nodes_per_zone": avg_zone_size,
         "activation_duration_seconds": activation_duration_seconds,
         "zone_radius_meters": zone_radius_meters,
-        "total_nodes_energy_j": total_nodes_energy,
-        "total_cycle_time_seconds": total_cycle_time,
-        "total_activation_events": total_activation_events,
+        "total_nodes_energy_j": total_continuous_energy,
+        "total_continuous_energy_j": total_continuous_energy,
+        "total_sequential_energy_j": total_sequential_energy,
         "total_transmission_events": round(total_transmission_events, 2),
         "total_energy_saved_j": total_energy_saved,
         "energy_efficiency_percent": energy_efficiency,
+        "avg_detection_accuracy_percent": avg_detection_accuracy_percent,
         "coverage_type": "zone_by_zone_sequential",
         "spatial_awareness": "3d_clustering",
     }

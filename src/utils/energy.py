@@ -30,7 +30,7 @@ class SensorNode:
     transmission_power: float
     signal_strength: float
     noise_level: float
-    energy_consumption: float
+    energy_consumption: float 
     packet_loss_rate: float
     network_lifetime: int
     optimization_algorithm: str

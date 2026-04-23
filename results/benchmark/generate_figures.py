@@ -39,22 +39,25 @@ def extract_metrics(results: Dict[str, Dict[str, Any]]) -> pd.DataFrame:
         else:
             active_nodes = 0
 
-        # Energy in Joules
+        # Energy Consumption (J) and Efficiency (%)
         if algo_name == "naive":
             energy_j = metrics.get("total_energy_consumed_j", 0)
             # Convert string efficiency to numeric
-            eff_str = metrics.get("energy_efficiency", "low")
+            eff_str = metrics.get("energy_efficiency_percent", 0)
             efficiency = 100.0 if isinstance(eff_str, str) else float(eff_str)
         elif algo_name == "cellulaire":
-            energy_j = metrics.get("total_nodes_energy_j", 0) - metrics.get("total_energy_saved_j", 0)
-            efficiency = metrics.get("energy_efficiency_percent", 0)
+            energy_j = metrics.get("total_continuous_energy_j", 0) - metrics.get("total_energy_saved_j", 0)
+            efficiency = metrics.get("energy_efficiency_percent", 0) 
         elif algo_name == "probabilistic":
             # Original metric is in Wh -> convert to J
             energy_j = metrics.get("total_activation_energy_wh", 0) * 3600
-            efficiency = metrics.get("coverage_selection_efficiency", 0)
+            efficiency = metrics.get("energy_efficiency_percent", 0)
         else:
             energy_j = 0
             efficiency = 0.0
+
+        # Detection Accuracy
+        avg_detection_accuracy_percent = metrics.get("avg_detection_accuracy_percent", 0.0)
 
         data.append({
             "Algorithm": algo_name.capitalize(),
@@ -62,6 +65,7 @@ def extract_metrics(results: Dict[str, Dict[str, Any]]) -> pd.DataFrame:
             "Total Nodes": metrics.get("total_nodes", 10000),
             "Energy (J)": energy_j,
             "Efficiency (%)": efficiency,
+            "Detection Accuracy (%)": avg_detection_accuracy_percent
         })
 
     df = pd.DataFrame(data)
@@ -213,6 +217,21 @@ def create_visualizations(
     ax.legend(frameon=False, loc="upper right")
     fig.tight_layout()
     fig.savefig(output_dir / "active_nodes.png", dpi=300, bbox_inches="tight")
+    plt.close(fig)
+
+    # Chart 4: Detection Accuracy
+    fig, ax = plt.subplots(figsize=(9, 6))
+    bars = ax.bar(
+        df["Algorithm"], df["Detection Accuracy (%)"],
+        color=colors, edgecolor="#2F2F2F", linewidth=1.1, width=0.65
+    )
+    ax.set_title("Detection Accuracy Comparison", pad=12)
+    ax.set_ylabel("Detection Accuracy (%)")
+    ax.set_ylim(0, 100)
+    style_axis(ax)
+    add_bar_labels(ax, bars, fmt="{:.2f}", suffix="%")
+    fig.tight_layout()
+    fig.savefig(output_dir / "detection_accuracy.png", dpi=300, bbox_inches="tight")
     plt.close(fig)
 
     return df

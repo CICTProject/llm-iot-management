@@ -4,16 +4,18 @@
   "description": "Temporal probability + spatial risk zone + metaheuristic optimization for minimal energy, maximal detection accuracy",
   "metrics": {
     "algorithm": "probabilistic_spatially_optimized_activation",
-    "timestamp": "2026-04-23T12:49:23.675814",
+    "timestamp": "2026-04-23T23:30:19.876003",
     "temporal_probability_gamma_t": 0.8008517265285442,
     "risk_zone_radius_meters": 0.3402555179585633,
     "total_nodes": 10000,
-    "candidate_nodes": 772,
-    "selected_nodes": 84,
-    "coverage_selection_efficiency": 10.880829015544041,
+    "candidate_nodes": 749,
+    "selected_nodes": 81,
+    "coverage_selection_efficiency": 10.814419225634179,
     "activation_duration_seconds": 16.017034530570882,
-    "total_activation_energy_wh": 0.48534536976176723,
-    "best_optimization_fitness": 121.68026523881338,
+    "avg_detection_accuracy_percent": 78.27740729076132,
+    "energy_efficiency_percent": 99.99480652489024,
+    "total_activation_energy_wh": 0.5333878253852437,
+    "best_optimization_fitness": 115.4454331858367,
     "optimization_method": "whale_optimization_algorithm",
     "awareness_types": [
       "temporal",
@@ -24,212 +26,180 @@
   },
   "activation_plan": [
     {
-      "node_id": "49",
+      "node_id": "98",
       "coordinates": [
-        0.09371880036131208,
-        0.5143383877410233,
-        0.03217927889906491
+        -0.14468980455192682,
+        0.44165293034315334,
+        0.19450490825982647
       ],
       "status": "ACTIVE_OPTIMIZED",
       "activation_duration_seconds": 16.017034530570882,
-      "transmission_power_w": 1.8049003215503965,
-      "energy_for_activation_wh": 0.008030319659586442,
-      "detection_accuracy_percent": 79.71745471634199,
-      "signal_quality_dbm": -22.37110854968101,
-      "energy_remaining_percent": 76.56324672433638,
-      "quality_score": 0.4529985314926706
+      "transmission_power_w": 2.186694692525272,
+      "energy_for_activation_wh": 0.00972899011055371,
+      "detection_accuracy_percent": 75.94035930111525,
+      "signal_quality_dbm": -49.594556940975274,
+      "energy_remaining_percent": 7.58951104074382,
+      "quality_score": 0.11473191035478703
     },
     {
-      "node_id": "66",
+      "node_id": "329",
       "coordinates": [
-        0.08568804725926871,
-        0.3076490131584817,
-        -0.1462850485015189
+        -0.16057638645640404,
+        -0.017388440950115713,
+        0.19117759109519028
       ],
       "status": "ACTIVE_OPTIMIZED",
       "activation_duration_seconds": 16.017034530570882,
-      "transmission_power_w": 0.5200593349546084,
-      "energy_for_activation_wh": 0.0023138356460871367,
-      "detection_accuracy_percent": 74.43591525615807,
-      "signal_quality_dbm": -49.27034234868316,
-      "energy_remaining_percent": 165.98628070767293,
-      "quality_score": 0.21981404280007452
+      "transmission_power_w": 0.1996140157022052,
+      "energy_for_activation_wh": 0.0008881179395244831,
+      "detection_accuracy_percent": 77.94572542912772,
+      "signal_quality_dbm": -53.42858644558498,
+      "energy_remaining_percent": 58.855009123891755,
+      "quality_score": 0.2567035426229981
     },
     {
-      "node_id": "120",
+      "node_id": "393",
       "coordinates": [
-        0.078978392394071,
-        0.5086005567539229,
-        -0.28529369765330104
+        -0.2557683224877926,
+        0.2927890976967271,
+        -0.45551249795279247
       ],
       "status": "ACTIVE_OPTIMIZED",
       "activation_duration_seconds": 16.017034530570882,
-      "transmission_power_w": 0.6166871907898184,
-      "energy_for_activation_wh": 0.0027437500081781314,
-      "detection_accuracy_percent": 69.54780274381062,
-      "signal_quality_dbm": -61.47955916105095,
-      "energy_remaining_percent": 142.32756677506293,
-      "quality_score": 0.17999144609960246
+      "transmission_power_w": 0.1785898108560342,
+      "energy_for_activation_wh": 0.0007945775464692284,
+      "detection_accuracy_percent": 82.73988431558406,
+      "signal_quality_dbm": -29.079400101502006,
+      "energy_remaining_percent": 22.93122163799613,
+      "quality_score": 0.2868446454759444
     },
     {
-      "node_id": "427",
+      "node_id": "551",
       "coordinates": [
-        -0.11670261136584326,
-        -0.3529458398921841,
-        0.029932662769164953
+        0.0406096318495337,
+        -0.12933390331630323,
+        0.12284972235918046
       ],
       "status": "ACTIVE_OPTIMIZED",
       "activation_duration_seconds": 16.017034530570882,
-      "transmission_power_w": 1.4523409963554377,
-      "energy_for_activation_wh": 0.006461721080219101,
-      "detection_accuracy_percent": 81.87121642914383,
-      "signal_quality_dbm": -41.904573543727366,
-      "energy_remaining_percent": 8.137835202982979,
-      "quality_score": 0.23629589216880265
+      "transmission_power_w": 0.5313018907263046,
+      "energy_for_activation_wh": 0.0023638557583113384,
+      "detection_accuracy_percent": 87.13863263694793,
+      "signal_quality_dbm": -29.345483268991927,
+      "energy_remaining_percent": 17.447415311845692,
+      "quality_score": 0.3303132306513004
     },
     {
-      "node_id": "433",
+      "node_id": "554",
       "coordinates": [
-        0.23677642173583946,
-        0.28353427763533245,
-        -0.06283559469875022
+        0.1221825519917743,
+        0.1667287273234379,
+        0.12397742700839864
       ],
       "status": "ACTIVE_OPTIMIZED",
       "activation_duration_seconds": 16.017034530570882,
-      "transmission_power_w": 2.421008727896377,
-      "energy_for_activation_wh": 0.010771494553758264,
-      "detection_accuracy_percent": 68.08288694084487,
-      "signal_quality_dbm": -56.4153031930061,
-      "energy_remaining_percent": 85.6069337345053,
-      "quality_score": 0.07055643646743222
+      "transmission_power_w": 1.5289569923841593,
+      "energy_for_activation_wh": 0.0068025991507708,
+      "detection_accuracy_percent": 74.31013734658595,
+      "signal_quality_dbm": -65.09254455276057,
+      "energy_remaining_percent": 32.61562982257406,
+      "quality_score": 0.1928594421636288
     },
     {
-      "node_id": "475",
+      "node_id": "818",
       "coordinates": [
-        0.05568928063385892,
-        0.4278462497396802,
-        -0.1235122862535345
+        -0.20178321679211142,
+        0.4006234486665907,
+        -0.39649232901425424
       ],
       "status": "ACTIVE_OPTIMIZED",
       "activation_duration_seconds": 16.017034530570882,
-      "transmission_power_w": 2.01666102826728,
-      "energy_for_activation_wh": 0.008972480368392668,
-      "detection_accuracy_percent": 73.49381282821331,
-      "signal_quality_dbm": -35.01314119090316,
-      "energy_remaining_percent": 76.82093085578951,
-      "quality_score": 0.2511507575886837
+      "transmission_power_w": 1.569983421234414,
+      "energy_for_activation_wh": 0.006985132963982061,
+      "detection_accuracy_percent": 76.0118635306138,
+      "signal_quality_dbm": -59.82034018328516,
+      "energy_remaining_percent": 64.12771015847963,
+      "quality_score": 0.21496370394585262
     },
     {
-      "node_id": "497",
+      "node_id": "964",
       "coordinates": [
-        0.1676321930660123,
-        0.05719042432666832,
-        -0.19008550979648542
+        -0.221203105147332,
+        -0.29233900984042815,
+        0.015001815893751047
       ],
       "status": "ACTIVE_OPTIMIZED",
       "activation_duration_seconds": 16.017034530570882,
-      "transmission_power_w": 0.504374411980935,
-      "energy_for_activation_wh": 0.0022440506591763945,
-      "detection_accuracy_percent": 69.97105899446314,
-      "signal_quality_dbm": -54.09925418940443,
-      "energy_remaining_percent": 66.82931146802903,
-      "quality_score": 0.2091918308119053
+      "transmission_power_w": 0.1169142700024251,
+      "energy_for_activation_wh": 0.0005201721943737028,
+      "detection_accuracy_percent": 71.52284610267162,
+      "signal_quality_dbm": -62.234118095129276,
+      "energy_remaining_percent": 16.94424285630332,
+      "quality_score": 0.0
     },
     {
-      "node_id": "512",
+      "node_id": "1070",
       "coordinates": [
-        -0.16329123679213953,
-        0.11205819931476957,
-        0.31452357959841315
+        -0.42537636899574127,
+        0.06462793749148132,
+        0.22331952537731992
       ],
       "status": "ACTIVE_OPTIMIZED",
       "activation_duration_seconds": 16.017034530570882,
-      "transmission_power_w": 1.479794893391473,
-      "energy_for_activation_wh": 0.006583868307114911,
-      "detection_accuracy_percent": 79.74748257636192,
-      "signal_quality_dbm": -33.36292791616078,
-      "energy_remaining_percent": 48.03106442333871,
-      "quality_score": 0.27444833013668185
+      "transmission_power_w": 1.1810661663418882,
+      "energy_for_activation_wh": 0.005254771546996388,
+      "detection_accuracy_percent": 70.05900991846133,
+      "signal_quality_dbm": -66.93496679051752,
+      "energy_remaining_percent": 87.37246333355579,
+      "quality_score": 0.19916938859801067
     },
     {
-      "node_id": "658",
+      "node_id": "1194",
       "coordinates": [
-        -0.27364515637644393,
-        0.07757423150316756,
-        -0.02629411412569005
+        0.24217291699994803,
+        0.24323323801247176,
+        0.12345581493801938
       ],
       "status": "ACTIVE_OPTIMIZED",
       "activation_duration_seconds": 16.017034530570882,
-      "transmission_power_w": 1.0053449556592704,
-      "energy_for_activation_wh": 0.00447295690831383,
-      "detection_accuracy_percent": 77.00829390975319,
-      "signal_quality_dbm": -51.352136581361286,
-      "energy_remaining_percent": 130.50189888364625,
-      "quality_score": 0.384908659724044
+      "transmission_power_w": 1.1691440449373345,
+      "energy_for_activation_wh": 0.005201727927492389,
+      "detection_accuracy_percent": 78.9867558221364,
+      "signal_quality_dbm": -40.089459946357174,
+      "energy_remaining_percent": 75.51908639194038,
+      "quality_score": 0.5052949944422592
     },
     {
-      "node_id": "769",
+      "node_id": "1299",
       "coordinates": [
-        -0.31565860207612473,
-        -0.03518782651819774,
-        0.27664284506967785
+        0.2732115047011108,
+        0.328682567520604,
+        -0.13251204008825823
       ],
       "status": "ACTIVE_OPTIMIZED",
       "activation_duration_seconds": 16.017034530570882,
-      "transmission_power_w": 0.8857335351008031,
-      "energy_for_activation_wh": 0.003940784615720606,
-      "detection_accuracy_percent": 72.10800209270018,
-      "signal_quality_dbm": -46.37725715302939,
-      "energy_remaining_percent": 90.59157255196551,
-      "quality_score": 0.2125122634206423
+      "transmission_power_w": 2.3760635356202733,
+      "energy_for_activation_wh": 0.01057152547135007,
+      "detection_accuracy_percent": 71.69342196705252,
+      "signal_quality_dbm": -55.64925754871469,
+      "energy_remaining_percent": 4.474026671835413,
+      "quality_score": 0.0
     },
     {
-      "node_id": "809",
+      "node_id": "1437",
       "coordinates": [
-        -0.09807939679681643,
-        0.552828929561797,
-        -0.044189614003617095
+        -0.38398230086043617,
+        -0.00840446675262796,
+        0.0891597260973811
       ],
       "status": "ACTIVE_OPTIMIZED",
       "activation_duration_seconds": 16.017034530570882,
-      "transmission_power_w": 0.5457723373011465,
-      "energy_for_activation_wh": 0.0024282373256619004,
-      "detection_accuracy_percent": 84.79351344321108,
-      "signal_quality_dbm": -38.10968839520516,
-      "energy_remaining_percent": 72.76366420313896,
-      "quality_score": 0.5208487220329479
-    },
-    {
-      "node_id": "825",
-      "coordinates": [
-        0.07508396962837716,
-        0.39493194970132617,
-        0.2379789092292992
-      ],
-      "status": "ACTIVE_OPTIMIZED",
-      "activation_duration_seconds": 16.017034530570882,
-      "transmission_power_w": 2.232918077555889,
-      "energy_for_activation_wh": 0.009934646097819062,
-      "detection_accuracy_percent": 70.72676311633357,
-      "signal_quality_dbm": -44.92496440563273,
-      "energy_remaining_percent": 76.71165639035851,
-      "quality_score": 0.24644593554491512
-    },
-    {
-      "node_id": "1644",
-      "coordinates": [
-        0.2475148277864565,
-        0.45460826940081644,
-        -0.005688330955299081
-      ],
-      "status": "ACTIVE_OPTIMIZED",
-      "activation_duration_seconds": 16.017034530570882,
-      "transmission_power_w": 2.2892773325898954,
-      "energy_for_activation_wh": 0.010185398357262654,
-      "detection_accuracy_percent": 76.92690884812393,
-      "signal_quality_dbm": -53.268980922443944,
-      "energy_remaining_percent": 62.02379100470255,
-      "quality_score": 0.350251998384783
+      "transmission_power_w": 2.4512263996966945,
+      "energy_for_activation_wh": 0.010905938301719138,
+      "detection_accuracy_percent": 72.97675596934863,
+      "signal_quality_dbm": -53.71460755080567,
+      "energy_remaining_percent": 45.64743654598354,
+      "quality_score": 0.035058068504840785
     },
     {
       "node_id": "1678",
@@ -245,103 +215,103 @@
       "detection_accuracy_percent": 82.88052995938321,
       "signal_quality_dbm": -42.415266171011126,
       "energy_remaining_percent": 60.85334386144595,
-      "quality_score": 0.40265268809825433
+      "quality_score": 0.40026584697648565
     },
     {
-      "node_id": "1692",
+      "node_id": "1920",
       "coordinates": [
-        0.005404433580624035,
-        0.14143785544173682,
-        0.48131012133394235
+        -0.17453693347764998,
+        0.684576048896743,
+        -0.11603546453794411
       ],
       "status": "ACTIVE_OPTIMIZED",
       "activation_duration_seconds": 16.017034530570882,
-      "transmission_power_w": 0.7948331100424167,
-      "energy_for_activation_wh": 0.00353635260266401,
-      "detection_accuracy_percent": 82.71224574177641,
-      "signal_quality_dbm": -21.119233545011713,
-      "energy_remaining_percent": 7.183585375962904,
-      "quality_score": 0.21215309722064823
+      "transmission_power_w": 2.237659917328997,
+      "energy_for_activation_wh": 0.009955743378759149,
+      "detection_accuracy_percent": 79.7306904716566,
+      "signal_quality_dbm": -37.053931094511015,
+      "energy_remaining_percent": 9.969411398364187,
+      "quality_score": 0.1828281555748205
     },
     {
-      "node_id": "1709",
+      "node_id": "1929",
       "coordinates": [
-        0.2395170105264839,
-        -0.24965845630203565,
-        -0.06891923152548529
+        0.2850055244116547,
+        -0.06835587531482401,
+        -0.033751883200201616
       ],
       "status": "ACTIVE_OPTIMIZED",
       "activation_duration_seconds": 16.017034530570882,
-      "transmission_power_w": 1.6009375123010343,
-      "energy_for_activation_wh": 0.007122853171058864,
-      "detection_accuracy_percent": 72.59118487601745,
-      "signal_quality_dbm": -35.668124296547845,
-      "energy_remaining_percent": 22.131499718996306,
-      "quality_score": 0.13233135007070074
+      "transmission_power_w": 2.0337758838260376,
+      "energy_for_activation_wh": 0.009048627377412211,
+      "detection_accuracy_percent": 76.09576367251091,
+      "signal_quality_dbm": -51.65484513580754,
+      "energy_remaining_percent": 12.638405064422544,
+      "quality_score": 0.0804000493462636
     },
     {
-      "node_id": "1790",
+      "node_id": "2005",
       "coordinates": [
-        0.03709764112600222,
-        0.283123964314256,
-        -0.16222651863973347
+        -0.4559638915997276,
+        0.05730248271145544,
+        0.26017862485337484
       ],
       "status": "ACTIVE_OPTIMIZED",
       "activation_duration_seconds": 16.017034530570882,
-      "transmission_power_w": 0.6227468545025818,
-      "energy_for_activation_wh": 0.002770710520103404,
-      "detection_accuracy_percent": 72.61951635294452,
-      "signal_quality_dbm": -59.25224326635164,
-      "energy_remaining_percent": 0.4691058332911511,
-      "quality_score": 0.0
+      "transmission_power_w": 1.3804868882453194,
+      "energy_for_activation_wh": 0.006142029488340452,
+      "detection_accuracy_percent": 77.93664185570721,
+      "signal_quality_dbm": -50.21379921460391,
+      "energy_remaining_percent": 69.86579165456031,
+      "quality_score": 0.40564275581676723
     },
     {
-      "node_id": "2025",
+      "node_id": "2062",
       "coordinates": [
-        -0.1621903476060519,
-        -0.12112575861004815,
-        -0.40757855151441313
+        0.02528342185100141,
+        0.5860412307756686,
+        -0.24310869749421615
       ],
       "status": "ACTIVE_OPTIMIZED",
       "activation_duration_seconds": 16.017034530570882,
-      "transmission_power_w": 0.9098100161014956,
-      "energy_for_activation_wh": 0.004047905123376918,
-      "detection_accuracy_percent": 86.8443994924927,
-      "signal_quality_dbm": -27.260251016276886,
-      "energy_remaining_percent": 125.07814249448785,
-      "quality_score": 0.551333916657626
+      "transmission_power_w": 2.18515341001216,
+      "energy_for_activation_wh": 0.009722132672988744,
+      "detection_accuracy_percent": 84.6020558869943,
+      "signal_quality_dbm": -33.275425290534955,
+      "energy_remaining_percent": 60.16406279599582,
+      "quality_score": 0.3803265572244428
     },
     {
-      "node_id": "2151",
+      "node_id": "2262",
       "coordinates": [
-        -0.3294100471611956,
-        -0.1410171697710545,
-        0.2602354916603402
+        0.20417757432850125,
+        -0.17803890899055508,
+        0.1748490091011201
       ],
       "status": "ACTIVE_OPTIMIZED",
       "activation_duration_seconds": 16.017034530570882,
-      "transmission_power_w": 0.6993538826786918,
-      "energy_for_activation_wh": 0.0031115486910981735,
-      "detection_accuracy_percent": 75.16243129011178,
-      "signal_quality_dbm": -29.649558292419023,
-      "energy_remaining_percent": 77.59563747606805,
-      "quality_score": 0.267284242989408
+      "transmission_power_w": 1.1966351702835074,
+      "energy_for_activation_wh": 0.005324040789701807,
+      "detection_accuracy_percent": 77.68586059418729,
+      "signal_quality_dbm": -36.293905329837095,
+      "energy_remaining_percent": 149.43194517521553,
+      "quality_score": 0.47539779566578916
     },
     {
-      "node_id": "2393",
+      "node_id": "2387",
       "coordinates": [
-        -0.1387114069260612,
-        0.32691021781166274,
-        -0.02382768724655626
+        -0.2574601445285968,
+        0.5114564008450417,
+        0.3215561553814479
       ],
       "status": "ACTIVE_OPTIMIZED",
       "activation_duration_seconds": 16.017034530570882,
-      "transmission_power_w": 1.4322696910060848,
-      "energy_for_activation_wh": 0.006372420304981819,
-      "detection_accuracy_percent": 80.24416050294431,
-      "signal_quality_dbm": -53.600244680523474,
-      "energy_remaining_percent": 64.68838819479465,
-      "quality_score": 0.3269152948029824
+      "transmission_power_w": 2.412951468633908,
+      "energy_for_activation_wh": 0.010735646387139176,
+      "detection_accuracy_percent": 68.37319832831638,
+      "signal_quality_dbm": -51.49622187514628,
+      "energy_remaining_percent": 34.15453852168018,
+      "quality_score": 0.10173062986658164
     },
     {
       "node_id": "2403",
@@ -357,7 +327,23 @@
       "detection_accuracy_percent": 83.84644096551916,
       "signal_quality_dbm": -33.931306184796355,
       "energy_remaining_percent": 83.27446913604952,
-      "quality_score": 0.4296785546968036
+      "quality_score": 0.42693412683400034
+    },
+    {
+      "node_id": "2420",
+      "coordinates": [
+        -0.22382158306916322,
+        -0.26681036052945206,
+        0.030614652171332413
+      ],
+      "status": "ACTIVE_OPTIMIZED",
+      "activation_duration_seconds": 16.017034530570882,
+      "transmission_power_w": 0.4898486801463587,
+      "energy_for_activation_wh": 0.002179423117960777,
+      "detection_accuracy_percent": 72.54331000120827,
+      "signal_quality_dbm": -36.63797424835654,
+      "energy_remaining_percent": 42.26694104700672,
+      "quality_score": 0.09409910710420763
     },
     {
       "node_id": "2485",
@@ -373,135 +359,151 @@
       "detection_accuracy_percent": 71.89544031292353,
       "signal_quality_dbm": -60.86934031327634,
       "energy_remaining_percent": 153.61160149227712,
-      "quality_score": 0.22672116131556072
+      "quality_score": 0.22612175538618198
     },
     {
-      "node_id": "2578",
+      "node_id": "2549",
       "coordinates": [
-        0.20731782749843086,
-        0.08321982762945379,
-        0.39758081217513697
+        -0.18557088047891435,
+        0.2858464236146572,
+        0.3128245518568529
       ],
       "status": "ACTIVE_OPTIMIZED",
       "activation_duration_seconds": 16.017034530570882,
-      "transmission_power_w": 2.393367253202503,
-      "energy_for_activation_wh": 0.010648512760800576,
-      "detection_accuracy_percent": 82.51457326748113,
-      "signal_quality_dbm": -52.108093947881834,
-      "energy_remaining_percent": 100.36782272451387,
-      "quality_score": 0.4638609577057502
+      "transmission_power_w": 1.8609261152147776,
+      "energy_for_activation_wh": 0.008279588290621172,
+      "detection_accuracy_percent": 79.9247059363915,
+      "signal_quality_dbm": -60.08406952752221,
+      "energy_remaining_percent": 49.15666304000938,
+      "quality_score": 0.132934229520313
     },
     {
-      "node_id": "2629",
+      "node_id": "2883",
       "coordinates": [
-        -0.012104785468160184,
-        0.15017754148178364,
-        0.3806263906703846
+        -0.5857498775143849,
+        0.10589326504413865,
+        0.02968184705173793
       ],
       "status": "ACTIVE_OPTIMIZED",
       "activation_duration_seconds": 16.017034530570882,
-      "transmission_power_w": 2.0090707481437784,
-      "energy_for_activation_wh": 0.008938709874271882,
-      "detection_accuracy_percent": 76.89623331598283,
-      "signal_quality_dbm": -46.36082905223059,
-      "energy_remaining_percent": 138.1445339392016,
-      "quality_score": 0.381639098996404
+      "transmission_power_w": 1.3051312335506968,
+      "energy_for_activation_wh": 0.0058067588985300225,
+      "detection_accuracy_percent": 78.61283921414115,
+      "signal_quality_dbm": -44.121078844939795,
+      "energy_remaining_percent": 37.41813891240858,
+      "quality_score": 0.24317713193004065
     },
     {
-      "node_id": "2769",
+      "node_id": "2916",
       "coordinates": [
-        0.0014782688219934226,
-        -0.40204759621299146,
-        0.08934215675224544
+        0.32646104253305963,
+        -0.0004381579688211845,
+        0.20495156826219985
       ],
       "status": "ACTIVE_OPTIMIZED",
       "activation_duration_seconds": 16.017034530570882,
-      "transmission_power_w": 0.9095681073644376,
-      "energy_for_activation_wh": 0.004046828828767278,
-      "detection_accuracy_percent": 68.17919276705356,
-      "signal_quality_dbm": -51.67332903275052,
-      "energy_remaining_percent": 34.68681377324801,
-      "quality_score": 0.0
+      "transmission_power_w": 2.1984581700616825,
+      "energy_for_activation_wh": 0.009781327895526012,
+      "detection_accuracy_percent": 86.70381038581368,
+      "signal_quality_dbm": -41.53380234388945,
+      "energy_remaining_percent": 82.33478652967959,
+      "quality_score": 0.43915018927215915
     },
     {
-      "node_id": "2809",
+      "node_id": "2947",
       "coordinates": [
-        -0.045942600459888294,
-        -0.037470541848753425,
-        -0.3896187632110133
+        0.027987847720875703,
+        0.05575006965711693,
+        0.26785799400514154
       ],
       "status": "ACTIVE_OPTIMIZED",
       "activation_duration_seconds": 16.017034530570882,
-      "transmission_power_w": 1.85854634901207,
-      "energy_for_activation_wh": 0.008269000291331324,
-      "detection_accuracy_percent": 76.02418167651231,
-      "signal_quality_dbm": -48.81740860516033,
-      "energy_remaining_percent": 126.25439882819676,
-      "quality_score": 0.27442851710410926
+      "transmission_power_w": 2.2109740317421784,
+      "energy_for_activation_wh": 0.009837013170169441,
+      "detection_accuracy_percent": 75.32885186882176,
+      "signal_quality_dbm": -28.24952667259652,
+      "energy_remaining_percent": 15.950756347081926,
+      "quality_score": 0.12982851339874452
     },
     {
-      "node_id": "3195",
+      "node_id": "3106",
       "coordinates": [
-        -0.29096494293750885,
-        0.11730763949408263,
-        -0.20187636904011075
+        -0.13096116756550735,
+        0.2698833207251745,
+        0.3121130425002894
       ],
       "status": "ACTIVE_OPTIMIZED",
       "activation_duration_seconds": 16.017034530570882,
-      "transmission_power_w": 1.4763321278841526,
-      "energy_for_activation_wh": 0.006568461853031017,
-      "detection_accuracy_percent": 80.86112241726268,
-      "signal_quality_dbm": -40.426475331820555,
-      "energy_remaining_percent": 78.70528993639788,
-      "quality_score": 0.31856564807777715
+      "transmission_power_w": 1.913603091048903,
+      "energy_for_activation_wh": 0.008513957440871515,
+      "detection_accuracy_percent": 77.279428222289,
+      "signal_quality_dbm": -39.534197702375835,
+      "energy_remaining_percent": 70.35992062393923,
+      "quality_score": 0.2979678007893113
     },
     {
-      "node_id": "3250",
+      "node_id": "3150",
       "coordinates": [
-        0.2631859009093698,
-        -0.03272930313097688,
-        -0.3547771823779924
+        -0.09106523157545632,
+        0.5239789617812165,
+        0.21562907599812675
       ],
       "status": "ACTIVE_OPTIMIZED",
       "activation_duration_seconds": 16.017034530570882,
-      "transmission_power_w": 1.8954092556922524,
-      "energy_for_activation_wh": 0.008433009860551795,
-      "detection_accuracy_percent": 77.82534469167939,
-      "signal_quality_dbm": -53.85471869272834,
-      "energy_remaining_percent": 41.97170936792611,
-      "quality_score": 0.21572084299181588
+      "transmission_power_w": 0.1329534197783003,
+      "energy_for_activation_wh": 0.0005915331987629227,
+      "detection_accuracy_percent": 84.39014071297946,
+      "signal_quality_dbm": -34.530155549734395,
+      "energy_remaining_percent": 82.57763466993569,
+      "quality_score": 0.43514654205231207
     },
     {
-      "node_id": "3354",
+      "node_id": "3221",
       "coordinates": [
-        0.01439421678105357,
-        0.28846741942153353,
-        -0.4267807834669872
+        0.03014625362202894,
+        -0.14631247553740867,
+        -0.1557289018260004
       ],
       "status": "ACTIVE_OPTIMIZED",
       "activation_duration_seconds": 16.017034530570882,
-      "transmission_power_w": 1.5684311406363285,
-      "energy_for_activation_wh": 0.006978226593998541,
-      "detection_accuracy_percent": 72.96377181068111,
-      "signal_quality_dbm": -44.47624879747544,
-      "energy_remaining_percent": 156.40152785104883,
-      "quality_score": 0.3037589406721579
+      "transmission_power_w": 0.2897641610892626,
+      "energy_for_activation_wh": 0.0012892118260801732,
+      "detection_accuracy_percent": 78.33226677463797,
+      "signal_quality_dbm": -21.916150736887353,
+      "energy_remaining_percent": 66.03018919512814,
+      "quality_score": 0.31521364900661053
     },
     {
-      "node_id": "3448",
+      "node_id": "3263",
       "coordinates": [
-        0.4305975936271753,
-        0.15241175154609876,
-        -0.18746815340271317
+        -0.16123338211134786,
+        0.33646983233802286,
+        -0.07606419726371272
       ],
       "status": "ACTIVE_OPTIMIZED",
       "activation_duration_seconds": 16.017034530570882,
-      "transmission_power_w": 0.8570305628339642,
-      "energy_for_activation_wh": 0.003813080032962834,
-      "detection_accuracy_percent": 81.95321468022897,
-      "signal_quality_dbm": -28.977662898988335,
-      "energy_remaining_percent": 91.09364581464018,
-      "quality_score": 0.4517746543155579
+      "transmission_power_w": 1.008608156829899,
+      "energy_for_activation_wh": 0.0044874754654888735,
+      "detection_accuracy_percent": 79.88379377615618,
+      "signal_quality_dbm": -28.62654867412061,
+      "energy_remaining_percent": 141.8036653653292,
+      "quality_score": 0.42146958704091464
+    },
+    {
+      "node_id": "3321",
+      "coordinates": [
+        0.09713757264920253,
+        0.3630719949159933,
+        0.24186589810867343
+      ],
+      "status": "ACTIVE_OPTIMIZED",
+      "activation_duration_seconds": 16.017034530570882,
+      "transmission_power_w": 0.4871010509786639,
+      "energy_for_activation_wh": 0.0021671984315007296,
+      "detection_accuracy_percent": 78.22401576171464,
+      "signal_quality_dbm": -28.602316684006485,
+      "energy_remaining_percent": 47.52396278955026,
+      "quality_score": 0.2933451432662525
     },
     {
       "node_id": "3565",
@@ -517,311 +519,375 @@
       "detection_accuracy_percent": 76.24267814902046,
       "signal_quality_dbm": -33.70983183544973,
       "energy_remaining_percent": 15.060132984964397,
-      "quality_score": 0.1529544988208327
+      "quality_score": 0.15117769266149964
     },
     {
-      "node_id": "3721",
+      "node_id": "3768",
       "coordinates": [
-        -0.31304792771498036,
-        -0.07102218668995497,
-        0.28899815260388606
+        -0.13208028884677459,
+        0.18485136533274682,
+        -0.22587151198878763
       ],
       "status": "ACTIVE_OPTIMIZED",
       "activation_duration_seconds": 16.017034530570882,
-      "transmission_power_w": 0.1285872980204015,
-      "energy_for_activation_wh": 0.0005721075534959943,
-      "detection_accuracy_percent": 77.82982747646739,
-      "signal_quality_dbm": -65.9446918907106,
-      "energy_remaining_percent": 72.67069857931632,
-      "quality_score": 0.18633724531181767
+      "transmission_power_w": 1.9462839544984545,
+      "energy_for_activation_wh": 0.008659360362638277,
+      "detection_accuracy_percent": 76.18432189080248,
+      "signal_quality_dbm": -41.600045919826755,
+      "energy_remaining_percent": 20.937634788160317,
+      "quality_score": 0.060716856940204664
     },
     {
-      "node_id": "3807",
+      "node_id": "3992",
       "coordinates": [
-        -0.13730192993543344,
-        -0.20824888464386992,
-        0.15964870807400922
+        -0.5776472289535448,
+        0.18647980339479386,
+        -0.181921628275176
       ],
       "status": "ACTIVE_OPTIMIZED",
       "activation_duration_seconds": 16.017034530570882,
-      "transmission_power_w": 1.5879097177807533,
-      "energy_for_activation_wh": 0.007064890216978719,
-      "detection_accuracy_percent": 73.05141812477493,
-      "signal_quality_dbm": -51.71196403395652,
-      "energy_remaining_percent": 50.01972700173955,
-      "quality_score": 0.1377445958324519
+      "transmission_power_w": 1.369213723592937,
+      "energy_for_activation_wh": 0.006091873191811002,
+      "detection_accuracy_percent": 89.8762688736239,
+      "signal_quality_dbm": -27.283722939047806,
+      "energy_remaining_percent": 54.42543746205486,
+      "quality_score": 0.5109288131085872
     },
     {
-      "node_id": "4206",
+      "node_id": "4102",
       "coordinates": [
-        -0.042759737542390264,
-        0.2854182170473454,
-        0.2228238000437015
+        -0.14697579966026175,
+        0.4702586098444741,
+        0.24268067723575903
       ],
       "status": "ACTIVE_OPTIMIZED",
       "activation_duration_seconds": 16.017034530570882,
-      "transmission_power_w": 1.2722078288074583,
-      "energy_for_activation_wh": 0.005660276867797686,
-      "detection_accuracy_percent": 76.49058877596647,
-      "signal_quality_dbm": -62.261564286680276,
-      "energy_remaining_percent": 89.481590114713,
-      "quality_score": 0.2631444355063003
+      "transmission_power_w": 2.2623560886905545,
+      "energy_for_activation_wh": 0.010065620998056636,
+      "detection_accuracy_percent": 80.37999553246652,
+      "signal_quality_dbm": -45.14665106439455,
+      "energy_remaining_percent": 84.02748773685241,
+      "quality_score": 0.41551519216532695
     },
     {
-      "node_id": "4227",
+      "node_id": "4146",
       "coordinates": [
-        -0.2701637853691806,
-        0.03540698971388845,
-        0.3377017889295859
+        0.29993495480709287,
+        0.2726771904791667,
+        -0.1999893350922518
       ],
       "status": "ACTIVE_OPTIMIZED",
       "activation_duration_seconds": 16.017034530570882,
-      "transmission_power_w": 1.0666136673665814,
-      "energy_for_activation_wh": 0.004745552205830382,
-      "detection_accuracy_percent": 81.84603514776616,
-      "signal_quality_dbm": -41.299983387269826,
-      "energy_remaining_percent": 41.68081842421867,
-      "quality_score": 0.3834455106037701
+      "transmission_power_w": 0.2564818897522113,
+      "energy_for_activation_wh": 0.0011411331346186785,
+      "detection_accuracy_percent": 71.7444697751407,
+      "signal_quality_dbm": -41.75646760686441,
+      "energy_remaining_percent": 51.74169451703982,
+      "quality_score": 0.037616843274496374
     },
     {
-      "node_id": "4350",
+      "node_id": "4280",
       "coordinates": [
-        0.26326566708684074,
-        -0.27238522751039684,
-        0.1531434352122365
+        -0.21630799313240878,
+        0.13788961304896263,
+        -0.2649089041192496
       ],
       "status": "ACTIVE_OPTIMIZED",
       "activation_duration_seconds": 16.017034530570882,
-      "transmission_power_w": 1.8025154310710745,
-      "energy_for_activation_wh": 0.008019708861486738,
-      "detection_accuracy_percent": 80.93316795214938,
-      "signal_quality_dbm": -40.49284545343582,
-      "energy_remaining_percent": 37.2945991272075,
-      "quality_score": 0.21984631028765697
+      "transmission_power_w": 2.094052460469959,
+      "energy_for_activation_wh": 0.009316808491159513,
+      "detection_accuracy_percent": 71.32765555436815,
+      "signal_quality_dbm": -41.16906116214528,
+      "energy_remaining_percent": 54.75573197321382,
+      "quality_score": 0.20247811763496723
     },
     {
-      "node_id": "4476",
+      "node_id": "4409",
       "coordinates": [
-        -0.0321336743823355,
-        0.048073518777757895,
-        -0.1182217538762198
+        -0.23551959206167417,
+        0.6122836756385333,
+        -0.17969957169288497
       ],
       "status": "ACTIVE_OPTIMIZED",
       "activation_duration_seconds": 16.017034530570882,
-      "transmission_power_w": 0.9653470369337124,
-      "energy_for_activation_wh": 0.004294999117930988,
-      "detection_accuracy_percent": 73.42124021534474,
-      "signal_quality_dbm": -63.211876657438225,
-      "energy_remaining_percent": 125.51167827721397,
-      "quality_score": 0.2474960633900229
+      "transmission_power_w": 0.3255076585782734,
+      "energy_for_activation_wh": 0.0014482409465037451,
+      "detection_accuracy_percent": 80.72330749804266,
+      "signal_quality_dbm": -58.294071916806544,
+      "energy_remaining_percent": 5.593563290979275,
+      "quality_score": 0.13192665927693245
     },
     {
-      "node_id": "4837",
+      "node_id": "4417",
       "coordinates": [
-        -0.24507499705440206,
-        -0.16464853195286822,
-        0.3155714924335329
+        -0.168892954878477,
+        0.4682404518611294,
+        0.016107900431472144
       ],
       "status": "ACTIVE_OPTIMIZED",
       "activation_duration_seconds": 16.017034530570882,
-      "transmission_power_w": 2.0297004278840083,
-      "energy_for_activation_wh": 0.009030494955592404,
-      "detection_accuracy_percent": 73.63924999093716,
-      "signal_quality_dbm": -48.00876100599273,
-      "energy_remaining_percent": 3.43221272075014,
-      "quality_score": 0.03856315016623507
+      "transmission_power_w": 1.7487090070479157,
+      "energy_for_activation_wh": 0.007780314597168552,
+      "detection_accuracy_percent": 80.14622119740827,
+      "signal_quality_dbm": -44.84048579026491,
+      "energy_remaining_percent": 87.73104130099512,
+      "quality_score": 0.3768330703207864
     },
     {
-      "node_id": "4879",
+      "node_id": "4462",
       "coordinates": [
-        -0.274806121389669,
-        0.37247074382734824,
-        0.12481482995229487
+        0.03950565670540662,
+        0.5468812287420086,
+        0.25776840603184215
       ],
       "status": "ACTIVE_OPTIMIZED",
       "activation_duration_seconds": 16.017034530570882,
-      "transmission_power_w": 2.287640893808778,
-      "energy_for_activation_wh": 0.010178117552689232,
-      "detection_accuracy_percent": 86.14335645002923,
-      "signal_quality_dbm": -36.4814714834424,
-      "energy_remaining_percent": 15.707501647436631,
-      "quality_score": 0.2897431814665885
+      "transmission_power_w": 2.033114803780757,
+      "energy_for_activation_wh": 0.009045686115769785,
+      "detection_accuracy_percent": 69.56250455680302,
+      "signal_quality_dbm": -61.29746133418541,
+      "energy_remaining_percent": 19.232324171366603,
+      "quality_score": 0.01846137145825251
     },
     {
-      "node_id": "5120",
+      "node_id": "4531",
       "coordinates": [
-        -0.43602077015320484,
-        0.1938905205644561,
-        -0.24594078919148366
+        -0.4622699675399419,
+        0.04731711407364769,
+        -0.07576660133738422
       ],
       "status": "ACTIVE_OPTIMIZED",
       "activation_duration_seconds": 16.017034530570882,
-      "transmission_power_w": 1.4664412583791933,
-      "energy_for_activation_wh": 0.00652445563125371,
-      "detection_accuracy_percent": 80.90647851912183,
-      "signal_quality_dbm": -23.472148761856122,
-      "energy_remaining_percent": 119.56103496024863,
-      "quality_score": 0.3960314176626954
+      "transmission_power_w": 0.953319791678194,
+      "energy_for_activation_wh": 0.004241487783885076,
+      "detection_accuracy_percent": 79.90348069688322,
+      "signal_quality_dbm": -41.451544409116586,
+      "energy_remaining_percent": 47.002845742614376,
+      "quality_score": 0.4183086765948967
     },
     {
-      "node_id": "5155",
+      "node_id": "4658",
       "coordinates": [
-        0.3531712485176215,
-        0.0077772554980672925,
-        0.07715313622038789
+        0.09811879838477955,
+        0.36909226278891616,
+        -0.1562986350242418
       ],
       "status": "ACTIVE_OPTIMIZED",
       "activation_duration_seconds": 16.017034530570882,
-      "transmission_power_w": 1.2348504113782182,
-      "energy_for_activation_wh": 0.005494067133092939,
-      "detection_accuracy_percent": 72.36651701290394,
-      "signal_quality_dbm": -55.54158445575719,
-      "energy_remaining_percent": 48.59398909604677,
-      "quality_score": 0.0762175524844442
+      "transmission_power_w": 2.4133010875882315,
+      "energy_for_activation_wh": 0.01073720190349027,
+      "detection_accuracy_percent": 77.22105481739429,
+      "signal_quality_dbm": -43.39981629818976,
+      "energy_remaining_percent": 13.40073783818411,
+      "quality_score": 0.20313926567776583
     },
     {
-      "node_id": "5163",
+      "node_id": "4773",
       "coordinates": [
-        -0.3474909487348258,
-        -0.10137444006690077,
-        -0.19735248521950444
+        -0.530376374809941,
+        -0.05593993145388976,
+        0.031335458051191756
       ],
       "status": "ACTIVE_OPTIMIZED",
       "activation_duration_seconds": 16.017034530570882,
-      "transmission_power_w": 0.3827393547693888,
-      "energy_for_activation_wh": 0.0017028748504304778,
-      "detection_accuracy_percent": 77.06878399523467,
-      "signal_quality_dbm": -47.03995847546236,
-      "energy_remaining_percent": 13.49461498576178,
-      "quality_score": 0.20582804060474616
+      "transmission_power_w": 2.2899436537929008,
+      "energy_for_activation_wh": 0.010188362937739595,
+      "detection_accuracy_percent": 73.19283017811695,
+      "signal_quality_dbm": -67.26420794100514,
+      "energy_remaining_percent": 101.27795742515822,
+      "quality_score": 0.30638419850253734
     },
     {
-      "node_id": "5433",
+      "node_id": "4970",
       "coordinates": [
-        0.35411934105543774,
-        0.19096710936284156,
-        -0.04699074709617679
+        -0.14556200694223576,
+        0.20565482281902314,
+        -0.3918796897662131
       ],
       "status": "ACTIVE_OPTIMIZED",
       "activation_duration_seconds": 16.017034530570882,
-      "transmission_power_w": 1.9487294966724928,
-      "energy_for_activation_wh": 0.008670241010818149,
-      "detection_accuracy_percent": 82.77377565882419,
-      "signal_quality_dbm": -42.67952674847566,
-      "energy_remaining_percent": 31.366735081921338,
-      "quality_score": 0.3570966635336875
+      "transmission_power_w": 1.7508734597869664,
+      "energy_for_activation_wh": 0.007789944628907764,
+      "detection_accuracy_percent": 80.78107978291182,
+      "signal_quality_dbm": -54.58558579443326,
+      "energy_remaining_percent": 25.25564308951383,
+      "quality_score": 0.28368943402438
     },
     {
-      "node_id": "5505",
+      "node_id": "5208",
       "coordinates": [
-        -0.3793702607913335,
-        0.32559943922735757,
-        0.15548478022845003
+        -0.13070580390265862,
+        0.5272489525517761,
+        -0.327895257168083
       ],
       "status": "ACTIVE_OPTIMIZED",
       "activation_duration_seconds": 16.017034530570882,
-      "transmission_power_w": 1.0368972460166457,
-      "energy_for_activation_wh": 0.004613338609472907,
-      "detection_accuracy_percent": 84.70462065749125,
-      "signal_quality_dbm": -21.83091182597917,
-      "energy_remaining_percent": 43.803369801810646,
-      "quality_score": 0.3256917160197468
+      "transmission_power_w": 1.1097944856668986,
+      "energy_for_activation_wh": 0.004937671277434408,
+      "detection_accuracy_percent": 82.89353570390834,
+      "signal_quality_dbm": -30.871055139028506,
+      "energy_remaining_percent": 24.083334718276834,
+      "quality_score": 0.33534751596997936
     },
     {
-      "node_id": "5610",
+      "node_id": "5234",
       "coordinates": [
-        -0.08114578534963268,
-        0.10521109777878568,
-        0.5063247627514016
+        -0.17831863986884045,
+        -0.07263601776604667,
+        -0.149643631187112
       ],
       "status": "ACTIVE_OPTIMIZED",
       "activation_duration_seconds": 16.017034530570882,
-      "transmission_power_w": 1.0937065285015708,
-      "energy_for_activation_wh": 0.004866093120366796,
-      "detection_accuracy_percent": 80.58520677021409,
-      "signal_quality_dbm": -41.02750130603384,
-      "energy_remaining_percent": 58.51341262883467,
-      "quality_score": 0.34183335235627027
+      "transmission_power_w": 1.7423832672047337,
+      "energy_for_activation_wh": 0.0077521702656408705,
+      "detection_accuracy_percent": 71.92331112648681,
+      "signal_quality_dbm": -49.93530085577896,
+      "energy_remaining_percent": 33.91806664144789,
+      "quality_score": 0.05736944895900274
     },
     {
-      "node_id": "5698",
+      "node_id": "5261",
       "coordinates": [
-        -0.18884146749589736,
-        0.41509108989869326,
-        0.07282418650353173
+        -0.591914100761443,
+        0.33789941487972674,
+        0.055283696636977187
       ],
       "status": "ACTIVE_OPTIMIZED",
       "activation_duration_seconds": 16.017034530570882,
-      "transmission_power_w": 0.3113897748626335,
-      "energy_for_activation_wh": 0.0013854279934559703,
-      "detection_accuracy_percent": 68.65693487918392,
-      "signal_quality_dbm": -55.775134934301256,
-      "energy_remaining_percent": 9.879961509317758,
+      "transmission_power_w": 1.703950243462605,
+      "energy_for_activation_wh": 0.007581174968865335,
+      "detection_accuracy_percent": 74.85807789840615,
+      "signal_quality_dbm": -29.400446675860668,
+      "energy_remaining_percent": 36.184578436430904,
+      "quality_score": 0.20960398988525195
+    },
+    {
+      "node_id": "5530",
+      "coordinates": [
+        -0.41454097177980365,
+        0.02903037294532651,
+        0.2593404967710684
+      ],
+      "status": "ACTIVE_OPTIMIZED",
+      "activation_duration_seconds": 16.017034530570882,
+      "transmission_power_w": 1.415563859852884,
+      "energy_for_activation_wh": 0.006298093117636623,
+      "detection_accuracy_percent": 84.24870447502775,
+      "signal_quality_dbm": -44.68587576882228,
+      "energy_remaining_percent": 14.68302675039408,
+      "quality_score": 0.22645887370575252
+    },
+    {
+      "node_id": "5706",
+      "coordinates": [
+        -0.4684958980514917,
+        -0.13514729786975976,
+        0.07510080248174988
+      ],
+      "status": "ACTIVE_OPTIMIZED",
+      "activation_duration_seconds": 16.017034530570882,
+      "transmission_power_w": 1.352439039730881,
+      "energy_for_activation_wh": 0.006017239666628234,
+      "detection_accuracy_percent": 76.14385177021984,
+      "signal_quality_dbm": -23.375503818712943,
+      "energy_remaining_percent": 50.198014349104426,
+      "quality_score": 0.19681979313394507
+    },
+    {
+      "node_id": "5958",
+      "coordinates": [
+        -0.26235611969021155,
+        -0.031238905837935094,
+        0.02976185538301257
+      ],
+      "status": "ACTIVE_OPTIMIZED",
+      "activation_duration_seconds": 16.017034530570882,
+      "transmission_power_w": 0.951122474784087,
+      "energy_for_activation_wh": 0.004231711533727432,
+      "detection_accuracy_percent": 77.61442059762716,
+      "signal_quality_dbm": -52.229053838854185,
+      "energy_remaining_percent": 61.90813444330801,
+      "quality_score": 0.3211571493486931
+    },
+    {
+      "node_id": "6275",
+      "coordinates": [
+        0.18205674441680553,
+        0.579748279221256,
+        -0.048556203286623245
+      ],
+      "status": "ACTIVE_OPTIMIZED",
+      "activation_duration_seconds": 16.017034530570882,
+      "transmission_power_w": 1.893314096873337,
+      "energy_for_activation_wh": 0.008423688129676907,
+      "detection_accuracy_percent": 68.91001691012498,
+      "signal_quality_dbm": -60.762065869292236,
+      "energy_remaining_percent": 18.156885062631577,
       "quality_score": 0.0
     },
     {
-      "node_id": "6339",
+      "node_id": "6369",
       "coordinates": [
-        -0.07832799075619057,
-        0.08596247080230168,
-        0.19936264258329084
+        0.0077118281187402715,
+        -0.13613909577209582,
+        -0.3706599969449009
       ],
       "status": "ACTIVE_OPTIMIZED",
       "activation_duration_seconds": 16.017034530570882,
-      "transmission_power_w": 1.4877124228554772,
-      "energy_for_activation_wh": 0.006619094791232069,
-      "detection_accuracy_percent": 72.38485570763102,
-      "signal_quality_dbm": -52.55641901028004,
-      "energy_remaining_percent": 21.808647817916693,
-      "quality_score": 0.0
+      "transmission_power_w": 0.4183585298175094,
+      "energy_for_activation_wh": 0.0018613508384016434,
+      "detection_accuracy_percent": 82.461430817527,
+      "signal_quality_dbm": -60.44779233822001,
+      "energy_remaining_percent": 93.45948077807694,
+      "quality_score": 0.348717451868702
     },
     {
-      "node_id": "6568",
+      "node_id": "6458",
       "coordinates": [
-        0.12053809153168582,
-        0.21594418821518135,
-        -0.17089722219494152
+        -0.1883558290358437,
+        0.5069349232120934,
+        -0.32249896434270353
       ],
       "status": "ACTIVE_OPTIMIZED",
       "activation_duration_seconds": 16.017034530570882,
-      "transmission_power_w": 1.8491873219118116,
-      "energy_for_activation_wh": 0.008227360330154273,
-      "detection_accuracy_percent": 82.68244389830728,
-      "signal_quality_dbm": -52.748289862626315,
-      "energy_remaining_percent": 16.350846232891143,
-      "quality_score": 0.1983340100989927
+      "transmission_power_w": 2.3729945152458405,
+      "energy_for_activation_wh": 0.010557870858763318,
+      "detection_accuracy_percent": 81.6213095830732,
+      "signal_quality_dbm": -31.17839740179594,
+      "energy_remaining_percent": 1.2858785228947183,
+      "quality_score": 0.2294928056777752
     },
     {
-      "node_id": "6580",
+      "node_id": "6479",
       "coordinates": [
-        0.138154115634749,
-        0.009841558746771728,
-        -0.08720874690311153
+        0.056642785601014545,
+        -0.15136429281321429,
+        -0.007028378206678454
       ],
       "status": "ACTIVE_OPTIMIZED",
       "activation_duration_seconds": 16.017034530570882,
-      "transmission_power_w": 1.3256050190980682,
-      "energy_for_activation_wh": 0.005897850379108842,
-      "detection_accuracy_percent": 74.96377634352208,
-      "signal_quality_dbm": -55.990218950029494,
-      "energy_remaining_percent": 36.92961767589864,
-      "quality_score": 0.1646844966984564
+      "transmission_power_w": 1.1711192259100616,
+      "energy_for_activation_wh": 0.0052105158557824716,
+      "detection_accuracy_percent": 75.23032017781944,
+      "signal_quality_dbm": -50.56038195063662,
+      "energy_remaining_percent": 63.79821824370173,
+      "quality_score": 0.33269875834266677
     },
     {
-      "node_id": "6782",
+      "node_id": "6689",
       "coordinates": [
-        -0.0359395386611302,
-        -0.12931743131250883,
-        0.04890871934621277
+        0.08726520173144658,
+        0.08931441836963194,
+        -0.06932835338458976
       ],
       "status": "ACTIVE_OPTIMIZED",
       "activation_duration_seconds": 16.017034530570882,
-      "transmission_power_w": 1.8797027698859292,
-      "energy_for_activation_wh": 0.008363128936797961,
-      "detection_accuracy_percent": 70.71818686425739,
-      "signal_quality_dbm": -63.3068472858385,
-      "energy_remaining_percent": 93.29154948724182,
-      "quality_score": 0.21362853629289186
+      "transmission_power_w": 1.0244470963711072,
+      "energy_for_activation_wh": 0.004557945699255306,
+      "detection_accuracy_percent": 73.9293673806131,
+      "signal_quality_dbm": -61.30232556627774,
+      "energy_remaining_percent": 52.46750475997387,
+      "quality_score": 0.13675968732503926
     },
     {
       "node_id": "6962",
@@ -837,311 +903,247 @@
       "detection_accuracy_percent": 82.60259663075743,
       "signal_quality_dbm": -27.578957965049113,
       "energy_remaining_percent": 84.16703146280472,
-      "quality_score": 0.5964099128850182
+      "quality_score": 0.5939305861782811
     },
     {
-      "node_id": "6997",
+      "node_id": "7157",
       "coordinates": [
-        0.33444271948240556,
-        0.0720469182486656,
-        -0.04031467026681579
+        0.03692939385702654,
+        0.6631625536008334,
+        0.08641936518520632
       ],
       "status": "ACTIVE_OPTIMIZED",
       "activation_duration_seconds": 16.017034530570882,
-      "transmission_power_w": 0.7565667122615773,
-      "energy_for_activation_wh": 0.0033660986541594914,
-      "detection_accuracy_percent": 78.27584326636305,
-      "signal_quality_dbm": -45.09390030419902,
-      "energy_remaining_percent": 122.25245833341177,
-      "quality_score": 0.3250553268689008
+      "transmission_power_w": 2.0417041336764004,
+      "energy_for_activation_wh": 0.009083901558417836,
+      "detection_accuracy_percent": 83.46487026464992,
+      "signal_quality_dbm": -52.4590453166678,
+      "energy_remaining_percent": 65.22656643122751,
+      "quality_score": 0.44649254522357207
     },
     {
-      "node_id": "7222",
+      "node_id": "7474",
       "coordinates": [
-        -0.5104481660869663,
-        0.0745553118510931,
-        -0.0008784346743888616
+        0.02577806930548987,
+        -0.22320727512440286,
+        0.1542110221800721
       ],
       "status": "ACTIVE_OPTIMIZED",
       "activation_duration_seconds": 16.017034530570882,
-      "transmission_power_w": 0.7882920594082599,
-      "energy_for_activation_wh": 0.0035072503154769254,
-      "detection_accuracy_percent": 70.94929921748071,
-      "signal_quality_dbm": -68.57210853874807,
-      "energy_remaining_percent": 81.47819115302714,
-      "quality_score": 0.19030744212949746
+      "transmission_power_w": 2.3040369883796643,
+      "energy_for_activation_wh": 0.010251066667386007,
+      "detection_accuracy_percent": 71.5120760003913,
+      "signal_quality_dbm": -65.18144206728293,
+      "energy_remaining_percent": 7.230763614889699,
+      "quality_score": 0.038690127326742554
     },
     {
-      "node_id": "7232",
+      "node_id": "7507",
       "coordinates": [
-        -0.11497562494874558,
-        0.22344528464551394,
-        -0.13451634269748436
+        -0.16978370116623498,
+        0.011003438344290961,
+        0.01844631969105981
       ],
       "status": "ACTIVE_OPTIMIZED",
       "activation_duration_seconds": 16.017034530570882,
-      "transmission_power_w": 0.6021745648355066,
-      "energy_for_activation_wh": 0.002679180777333834,
-      "detection_accuracy_percent": 82.19970223313457,
-      "signal_quality_dbm": -55.30084116978779,
-      "energy_remaining_percent": 0.23694382386346322,
-      "quality_score": 0.174563637722968
+      "transmission_power_w": 1.0513109451728169,
+      "energy_for_activation_wh": 0.004677467697555588,
+      "detection_accuracy_percent": 79.64051580905469,
+      "signal_quality_dbm": -21.458816657042092,
+      "energy_remaining_percent": 66.8878922351212,
+      "quality_score": 0.4946581533588134
     },
     {
-      "node_id": "7347",
+      "node_id": "7540",
       "coordinates": [
-        -0.08985416802074553,
-        -0.12057364737698484,
-        -0.327469527699473
+        -0.21242798170187893,
+        -0.277647851375437,
+        -0.07427551624574014
       ],
       "status": "ACTIVE_OPTIMIZED",
       "activation_duration_seconds": 16.017034530570882,
-      "transmission_power_w": 2.252888950536354,
-      "energy_for_activation_wh": 0.010023500031745106,
-      "detection_accuracy_percent": 81.74803965068084,
-      "signal_quality_dbm": -26.881727260133978,
-      "energy_remaining_percent": 23.048686412060558,
-      "quality_score": 0.3111269998644502
+      "transmission_power_w": 0.6320568838118736,
+      "energy_for_activation_wh": 0.002812132481472169,
+      "detection_accuracy_percent": 77.34355759071221,
+      "signal_quality_dbm": -52.51893982458261,
+      "energy_remaining_percent": 47.86440282827645,
+      "quality_score": 0.19672954097075007
     },
     {
-      "node_id": "7367",
+      "node_id": "8039",
       "coordinates": [
-        -0.01323821351421961,
-        0.45420868029875927,
-        0.05546990318851419
+        -0.30688094505765173,
+        0.4740796617351797,
+        -0.03829062210053835
       ],
       "status": "ACTIVE_OPTIMIZED",
       "activation_duration_seconds": 16.017034530570882,
-      "transmission_power_w": 0.6571749135570809,
-      "energy_for_activation_wh": 0.0029238870230746386,
-      "detection_accuracy_percent": 69.66256122782981,
-      "signal_quality_dbm": -65.86664583288011,
-      "energy_remaining_percent": 15.626169806099371,
-      "quality_score": 0.0
+      "transmission_power_w": 1.4442640922459515,
+      "energy_for_activation_wh": 0.00642578551021306,
+      "detection_accuracy_percent": 77.23880990261736,
+      "signal_quality_dbm": -21.783224890166334,
+      "energy_remaining_percent": 70.57291012117231,
+      "quality_score": 0.2803528653980901
     },
     {
-      "node_id": "7405",
+      "node_id": "8056",
       "coordinates": [
-        -0.27258653960104373,
-        0.5494922735311496,
-        -0.002629446181049322
+        -0.20451945741617994,
+        0.33479265686102044,
+        -0.33784933698475395
       ],
       "status": "ACTIVE_OPTIMIZED",
       "activation_duration_seconds": 16.017034530570882,
-      "transmission_power_w": 1.9042327296502468,
-      "energy_for_activation_wh": 0.008472267051403125,
-      "detection_accuracy_percent": 85.98178304893467,
-      "signal_quality_dbm": -29.824035230163897,
-      "energy_remaining_percent": 25.051067690453454,
-      "quality_score": 0.3424118060042015
+      "transmission_power_w": 2.274703384886832,
+      "energy_for_activation_wh": 0.010120556295149682,
+      "detection_accuracy_percent": 77.8027991327704,
+      "signal_quality_dbm": -59.73752168117114,
+      "energy_remaining_percent": 19.673573906690432,
+      "quality_score": 0.056249928989405014
     },
     {
-      "node_id": "7625",
+      "node_id": "8069",
       "coordinates": [
-        0.027147666578097418,
-        -0.03176147443822974,
-        0.13918670934302457
+        -0.10151232089198992,
+        0.2994528739916562,
+        0.17796065360621527
       ],
       "status": "ACTIVE_OPTIMIZED",
       "activation_duration_seconds": 16.017034530570882,
-      "transmission_power_w": 0.5227175221887513,
-      "energy_for_activation_wh": 0.0023256623896199115,
-      "detection_accuracy_percent": 81.7197250431011,
-      "signal_quality_dbm": -49.10758922076217,
-      "energy_remaining_percent": 27.31725762154604,
-      "quality_score": 0.1722086103257379
+      "transmission_power_w": 1.4607752416619388,
+      "energy_for_activation_wh": 0.006499246524195083,
+      "detection_accuracy_percent": 75.69987740187035,
+      "signal_quality_dbm": -34.579803220138075,
+      "energy_remaining_percent": 45.53899652782495,
+      "quality_score": 0.20366229782859108
     },
     {
-      "node_id": "7635",
+      "node_id": "8192",
       "coordinates": [
-        0.33507151617448905,
-        -0.08869066019920357,
-        0.05423604958149131
+        -0.209810443129555,
+        0.34120852155083115,
+        -0.04462838332132124
       ],
       "status": "ACTIVE_OPTIMIZED",
       "activation_duration_seconds": 16.017034530570882,
-      "transmission_power_w": 0.1036384676081842,
-      "energy_for_activation_wh": 0.0004611058095488161,
-      "detection_accuracy_percent": 72.7334218683815,
-      "signal_quality_dbm": -49.01130796690671,
-      "energy_remaining_percent": 63.094723465163185,
-      "quality_score": 0.12826574892862314
+      "transmission_power_w": 2.494762138257637,
+      "energy_for_activation_wh": 0.011099636476120396,
+      "detection_accuracy_percent": 80.80533514039516,
+      "signal_quality_dbm": -42.84114680992459,
+      "energy_remaining_percent": 88.51434644264648,
+      "quality_score": 0.31551813559184105
     },
     {
-      "node_id": "7894",
+      "node_id": "8248",
       "coordinates": [
-        -0.11669559129117202,
-        0.25131462407407446,
-        -0.3200844038501285
+        0.18206805890111588,
+        0.12125937905124484,
+        0.2599830761929698
       ],
       "status": "ACTIVE_OPTIMIZED",
       "activation_duration_seconds": 16.017034530570882,
-      "transmission_power_w": 0.2290810921303647,
-      "energy_for_activation_wh": 0.001019222156375817,
-      "detection_accuracy_percent": 76.59681001429888,
-      "signal_quality_dbm": -48.778751761273064,
-      "energy_remaining_percent": 67.76567690187925,
-      "quality_score": 0.34041748317940734
+      "transmission_power_w": 1.4140697380704284,
+      "energy_for_activation_wh": 0.006291445506474826,
+      "detection_accuracy_percent": 77.2035138239685,
+      "signal_quality_dbm": -54.85724765047643,
+      "energy_remaining_percent": 4.251835566404878,
+      "quality_score": 0.14751764563139882
     },
     {
-      "node_id": "7913",
+      "node_id": "8278",
       "coordinates": [
-        0.0752803288210373,
-        0.2195918913943078,
-        0.151765346701628
+        -0.15488325768972866,
+        -0.30789720599093173,
+        0.026868320707022386
       ],
       "status": "ACTIVE_OPTIMIZED",
       "activation_duration_seconds": 16.017034530570882,
-      "transmission_power_w": 1.5525286056239669,
-      "energy_for_activation_wh": 0.006907473412771706,
-      "detection_accuracy_percent": 67.11300801981253,
-      "signal_quality_dbm": -59.63154091589898,
-      "energy_remaining_percent": 25.473360168020285,
-      "quality_score": 0.0
+      "transmission_power_w": 2.344683268462408,
+      "energy_for_activation_wh": 0.010431909131726164,
+      "detection_accuracy_percent": 80.536811653006,
+      "signal_quality_dbm": -50.509345494024146,
+      "energy_remaining_percent": 22.868711729365028,
+      "quality_score": 0.20462452647094004
     },
     {
-      "node_id": "7965",
+      "node_id": "8440",
       "coordinates": [
-        0.19694073633874765,
-        0.07811363305360985,
-        -0.05768895271039376
+        -0.17192773206503897,
+        0.5560191727616111,
+        0.20049275379259535
       ],
       "status": "ACTIVE_OPTIMIZED",
       "activation_duration_seconds": 16.017034530570882,
-      "transmission_power_w": 2.087817728297256,
-      "energy_for_activation_wh": 0.009289069068798667,
-      "detection_accuracy_percent": 86.86833399861658,
-      "signal_quality_dbm": -31.62941003678388,
-      "energy_remaining_percent": 104.9195004368993,
-      "quality_score": 0.5048458136891234
+      "transmission_power_w": 2.464012367855247,
+      "energy_for_activation_wh": 0.010962825327692004,
+      "detection_accuracy_percent": 86.20578180360043,
+      "signal_quality_dbm": -39.88404891963753,
+      "energy_remaining_percent": 166.9420697951818,
+      "quality_score": 0.5639037129031355
     },
     {
-      "node_id": "7994",
+      "node_id": "8479",
       "coordinates": [
-        -0.3701558087694179,
-        0.09044538744838704,
-        -0.2290909090840224
+        0.3076740890970211,
+        0.21541309779597584,
+        0.21726704247532358
       ],
       "status": "ACTIVE_OPTIMIZED",
       "activation_duration_seconds": 16.017034530570882,
-      "transmission_power_w": 1.0718442261043586,
-      "energy_for_activation_wh": 0.004768823883585148,
-      "detection_accuracy_percent": 76.39138416907203,
-      "signal_quality_dbm": -41.0133510091523,
-      "energy_remaining_percent": 21.7360281919789,
-      "quality_score": 0.1122169752207114
+      "transmission_power_w": 0.6138334256463429,
+      "energy_for_activation_wh": 0.002731053104054469,
+      "detection_accuracy_percent": 77.63786563104998,
+      "signal_quality_dbm": -33.340355733655585,
+      "energy_remaining_percent": 61.941480582414,
+      "quality_score": 0.31084202371979175
     },
     {
-      "node_id": "8108",
+      "node_id": "8529",
       "coordinates": [
-        -0.01007535656527514,
-        -0.3735139051250651,
-        -0.18785299278147571
+        0.3604687686358852,
+        0.037917173035532326,
+        0.054247567415859343
       ],
       "status": "ACTIVE_OPTIMIZED",
       "activation_duration_seconds": 16.017034530570882,
-      "transmission_power_w": 1.7116551620229623,
-      "energy_for_activation_wh": 0.007615455509597691,
-      "detection_accuracy_percent": 85.99652033268367,
-      "signal_quality_dbm": -43.61342742313174,
-      "energy_remaining_percent": 106.7235848285532,
-      "quality_score": 0.518295415681861
+      "transmission_power_w": 2.125634483805517,
+      "energy_for_activation_wh": 0.009457322479579216,
+      "detection_accuracy_percent": 84.7169124693733,
+      "signal_quality_dbm": -35.96803890595976,
+      "energy_remaining_percent": 18.995167525355548,
+      "quality_score": 0.3080188643329192
     },
     {
-      "node_id": "8132",
+      "node_id": "8687",
       "coordinates": [
-        0.21747780840253617,
-        -0.1362474591352073,
-        -0.3158174900621047
+        -0.3685303878111076,
+        0.4487358167829303,
+        -0.0007759088323266994
       ],
       "status": "ACTIVE_OPTIMIZED",
       "activation_duration_seconds": 16.017034530570882,
-      "transmission_power_w": 0.5365058233873989,
-      "energy_for_activation_wh": 0.00238700897195787,
-      "detection_accuracy_percent": 82.26045880570007,
-      "signal_quality_dbm": -29.30050469991241,
-      "energy_remaining_percent": 88.48964078737373,
-      "quality_score": 0.3741200981899324
+      "transmission_power_w": 2.476238307610442,
+      "energy_for_activation_wh": 0.01101722068858857,
+      "detection_accuracy_percent": 78.60197944535386,
+      "signal_quality_dbm": -61.537879136077315,
+      "energy_remaining_percent": 79.49198222021262,
+      "quality_score": 0.24408884537340336
     },
     {
-      "node_id": "8268",
+      "node_id": "8735",
       "coordinates": [
-        -0.2696207256825428,
-        0.02843260917192647,
-        -0.41748845410666835
+        -0.22807746035462406,
+        4.20915730574567e-05,
+        -0.29679183538188436
       ],
       "status": "ACTIVE_OPTIMIZED",
       "activation_duration_seconds": 16.017034530570882,
-      "transmission_power_w": 1.9204810131458327,
-      "energy_for_activation_wh": 0.008544558528572931,
-      "detection_accuracy_percent": 77.52904599558543,
-      "signal_quality_dbm": -52.884035849979156,
-      "energy_remaining_percent": 60.47956718211094,
-      "quality_score": 0.252181925532335
-    },
-    {
-      "node_id": "8284",
-      "coordinates": [
-        -0.34107343642154886,
-        -0.048953820117310864,
-        -0.015747206778110256
-      ],
-      "status": "ACTIVE_OPTIMIZED",
-      "activation_duration_seconds": 16.017034530570882,
-      "transmission_power_w": 0.9044799164090838,
-      "energy_for_activation_wh": 0.004024190570370044,
-      "detection_accuracy_percent": 74.22310681380924,
-      "signal_quality_dbm": -70.33426890044578,
-      "energy_remaining_percent": 148.70537779372862,
-      "quality_score": 0.26338597121010465
-    },
-    {
-      "node_id": "8488",
-      "coordinates": [
-        0.028030601431751068,
-        -0.388698158080405,
-        -0.06549397351817488
-      ],
-      "status": "ACTIVE_OPTIMIZED",
-      "activation_duration_seconds": 16.017034530570882,
-      "transmission_power_w": 0.1142958871811895,
-      "energy_for_activation_wh": 0.0005085225476898184,
-      "detection_accuracy_percent": 79.06727808975953,
-      "signal_quality_dbm": -36.36702700164585,
-      "energy_remaining_percent": 22.864426008164582,
-      "quality_score": 0.21444962964648054
-    },
-    {
-      "node_id": "8558",
-      "coordinates": [
-        0.18773744543666382,
-        0.1803899158583817,
-        -0.0029938529639517153
-      ],
-      "status": "ACTIVE_OPTIMIZED",
-      "activation_duration_seconds": 16.017034530570882,
-      "transmission_power_w": 1.9024718733224757,
-      "energy_for_activation_wh": 0.00846443269123499,
-      "detection_accuracy_percent": 70.40612499483693,
-      "signal_quality_dbm": -49.361450849151275,
-      "energy_remaining_percent": 51.01664770881773,
-      "quality_score": 0.060948393072904145
-    },
-    {
-      "node_id": "8737",
-      "coordinates": [
-        -0.21760878834419584,
-        -0.09197348100299285,
-        0.3371406050628787
-      ],
-      "status": "ACTIVE_OPTIMIZED",
-      "activation_duration_seconds": 16.017034530570882,
-      "transmission_power_w": 1.3522620111163872,
-      "energy_for_activation_wh": 0.006016452035119556,
-      "detection_accuracy_percent": 80.9651129810746,
-      "signal_quality_dbm": -26.296729936553227,
-      "energy_remaining_percent": 112.66961592331732,
-      "quality_score": 0.469991080460679
+      "transmission_power_w": 0.1436374674694824,
+      "energy_for_activation_wh": 0.0006390684100951253,
+      "detection_accuracy_percent": 82.1688280542789,
+      "signal_quality_dbm": -43.24625231285826,
+      "energy_remaining_percent": 51.676730751704014,
+      "quality_score": 0.3143177915485876
     },
     {
       "node_id": "8743",
@@ -1157,7 +1159,7 @@
       "detection_accuracy_percent": 76.69260785121499,
       "signal_quality_dbm": -38.9561404517368,
       "energy_remaining_percent": 62.53395184916095,
-      "quality_score": 0.152766637547651
+      "quality_score": 0.1510756512780523
     },
     {
       "node_id": "8848",
@@ -1173,39 +1175,71 @@
       "detection_accuracy_percent": 74.5226643202817,
       "signal_quality_dbm": -60.45993758376465,
       "energy_remaining_percent": 57.82288666376489,
-      "quality_score": 0.038445589678251714
+      "quality_score": 0.03724097705916724
     },
     {
-      "node_id": "8854",
+      "node_id": "8909",
       "coordinates": [
-        0.380024547190265,
-        -0.09718751610733412,
-        -0.20355843662522088
+        0.10775883169971556,
+        0.02670379543294099,
+        0.4344145880175385
       ],
       "status": "ACTIVE_OPTIMIZED",
       "activation_duration_seconds": 16.017034530570882,
-      "transmission_power_w": 0.8364663556671251,
-      "energy_for_activation_wh": 0.0037215862506614246,
-      "detection_accuracy_percent": 79.8401350206959,
-      "signal_quality_dbm": -58.90568588095314,
-      "energy_remaining_percent": 37.909613490555714,
-      "quality_score": 0.31325723988604126
+      "transmission_power_w": 1.7170466108255629,
+      "energy_for_activation_wh": 0.007639443015609096,
+      "detection_accuracy_percent": 77.04542259336382,
+      "signal_quality_dbm": -41.903505254407854,
+      "energy_remaining_percent": 7.6814723968112535,
+      "quality_score": 0.16303400439863133
     },
     {
-      "node_id": "9144",
+      "node_id": "9090",
       "coordinates": [
-        0.02321259565246092,
-        0.11795104162905079,
-        -0.05205772933766473
+        0.22465404947941647,
+        0.5017898573797313,
+        -0.07067888007990675
       ],
       "status": "ACTIVE_OPTIMIZED",
       "activation_duration_seconds": 16.017034530570882,
-      "transmission_power_w": 1.8376110614276275,
-      "energy_for_activation_wh": 0.008175855506845922,
-      "detection_accuracy_percent": 77.4671396406453,
-      "signal_quality_dbm": -60.423101087659404,
-      "energy_remaining_percent": 78.72226142196538,
-      "quality_score": 0.32721193378580316
+      "transmission_power_w": 2.395250587357359,
+      "energy_for_activation_wh": 0.01065689204640917,
+      "detection_accuracy_percent": 75.09155894017846,
+      "signal_quality_dbm": -52.76129944359763,
+      "energy_remaining_percent": 34.89289933096811,
+      "quality_score": 0.2003865018331676
+    },
+    {
+      "node_id": "9100",
+      "coordinates": [
+        -0.2434081616058682,
+        0.3120192625947822,
+        -0.023971887140942005
+      ],
+      "status": "ACTIVE_OPTIMIZED",
+      "activation_duration_seconds": 16.017034530570882,
+      "transmission_power_w": 0.1210978969835483,
+      "energy_for_activation_wh": 0.0005387858882125023,
+      "detection_accuracy_percent": 75.4379991508216,
+      "signal_quality_dbm": -41.65727899944293,
+      "energy_remaining_percent": 5.80703237415745,
+      "quality_score": 0.04909933841128533
+    },
+    {
+      "node_id": "9333",
+      "coordinates": [
+        -0.11736160340500057,
+        0.1821012624995797,
+        -0.22367743816388663
+      ],
+      "status": "ACTIVE_OPTIMIZED",
+      "activation_duration_seconds": 16.017034530570882,
+      "transmission_power_w": 1.020390248676558,
+      "energy_for_activation_wh": 0.0045398960688084,
+      "detection_accuracy_percent": 88.29598361502697,
+      "signal_quality_dbm": -36.19912486569138,
+      "energy_remaining_percent": 57.330066305489346,
+      "quality_score": 0.3903171418984822
     },
     {
       "node_id": "9389",
@@ -1221,7 +1255,7 @@
       "detection_accuracy_percent": 81.51290846002422,
       "signal_quality_dbm": -29.9443045910832,
       "energy_remaining_percent": 76.4913616349543,
-      "quality_score": 0.5480484136191989
+      "quality_score": 0.5457604474140126
     },
     {
       "node_id": "9420",
@@ -1237,103 +1271,39 @@
       "detection_accuracy_percent": 75.30848967959656,
       "signal_quality_dbm": -26.24534825828853,
       "energy_remaining_percent": 4.784691020656093,
-      "quality_score": 0.12992836378151437
+      "quality_score": 0.12817867490604226
     },
     {
-      "node_id": "9526",
+      "node_id": "9649",
       "coordinates": [
-        -0.07838240248342532,
-        0.4825052068878348,
-        -0.06631176965925378
+        0.17999239166592007,
+        0.16799491732175253,
+        -0.01932430648844663
       ],
       "status": "ACTIVE_OPTIMIZED",
       "activation_duration_seconds": 16.017034530570882,
-      "transmission_power_w": 2.353196391897032,
-      "energy_for_activation_wh": 0.010469785518397102,
-      "detection_accuracy_percent": 81.13604496655452,
-      "signal_quality_dbm": -50.88244850988249,
-      "energy_remaining_percent": 133.88981385340483,
-      "quality_score": 0.3551439647947511
+      "transmission_power_w": 1.5023893854449772,
+      "energy_for_activation_wh": 0.006684395184732047,
+      "detection_accuracy_percent": 87.66612070910008,
+      "signal_quality_dbm": -31.460078651013227,
+      "energy_remaining_percent": 16.315814614041617,
+      "quality_score": 0.3703481188698251
     },
     {
-      "node_id": "9589",
+      "node_id": "9733",
       "coordinates": [
-        -0.2885701380281178,
-        0.1439348441814996,
-        -0.2255562988056663
+        -0.060438560746365,
+        -0.0052610378174449135,
+        -0.3112452668643704
       ],
       "status": "ACTIVE_OPTIMIZED",
       "activation_duration_seconds": 16.017034530570882,
-      "transmission_power_w": 0.7675289281931539,
-      "energy_for_activation_wh": 0.0034148714850227237,
-      "detection_accuracy_percent": 72.29641829312543,
-      "signal_quality_dbm": -48.50461436038315,
-      "energy_remaining_percent": 46.235346046897895,
-      "quality_score": 0.1938359780384289
-    },
-    {
-      "node_id": "9655",
-      "coordinates": [
-        0.03917978208728523,
-        0.06969129186248502,
-        0.007117198163402394
-      ],
-      "status": "ACTIVE_OPTIMIZED",
-      "activation_duration_seconds": 16.017034530570882,
-      "transmission_power_w": 0.711710250731707,
-      "energy_for_activation_wh": 0.0031665243504808366,
-      "detection_accuracy_percent": 81.54330861683054,
-      "signal_quality_dbm": -43.232204147945225,
-      "energy_remaining_percent": 82.18427073828146,
-      "quality_score": 0.4548065690560296
-    },
-    {
-      "node_id": "9736",
-      "coordinates": [
-        0.20955772086446167,
-        -0.0007015290375536054,
-        0.2934474569636949
-      ],
-      "status": "ACTIVE_OPTIMIZED",
-      "activation_duration_seconds": 16.017034530570882,
-      "transmission_power_w": 0.4654015392882363,
-      "energy_for_activation_wh": 0.0020706534792668116,
-      "detection_accuracy_percent": 87.21997261489823,
-      "signal_quality_dbm": -29.735249978353682,
-      "energy_remaining_percent": 0.24995405712003183,
-      "quality_score": 0.2943404744617469
-    },
-    {
-      "node_id": "9906",
-      "coordinates": [
-        -0.21683358809360076,
-        -0.13610509508473911,
-        -0.16405294264874282
-      ],
-      "status": "ACTIVE_OPTIMIZED",
-      "activation_duration_seconds": 16.017034530570882,
-      "transmission_power_w": 2.4326423643890016,
-      "energy_for_activation_wh": 0.010823254653041174,
-      "detection_accuracy_percent": 71.67388941251,
-      "signal_quality_dbm": -62.37839268704648,
-      "energy_remaining_percent": 55.89374272446405,
-      "quality_score": 0.19457885242415518
-    },
-    {
-      "node_id": "9914",
-      "coordinates": [
-        0.21315290418699084,
-        -0.2744890553292475,
-        0.16005796519770232
-      ],
-      "status": "ACTIVE_OPTIMIZED",
-      "activation_duration_seconds": 16.017034530570882,
-      "transmission_power_w": 0.2306859712253643,
-      "energy_for_activation_wh": 0.0010263625463430392,
-      "detection_accuracy_percent": 77.14703865962,
-      "signal_quality_dbm": -67.9209652961711,
-      "energy_remaining_percent": 85.13555548732639,
-      "quality_score": 0.17840012679295325
+      "transmission_power_w": 1.0642170986033372,
+      "energy_for_activation_wh": 0.004734889448987114,
+      "detection_accuracy_percent": 82.67377018199103,
+      "signal_quality_dbm": -58.536140365161025,
+      "energy_remaining_percent": 63.898848640381125,
+      "quality_score": 0.44712349904693655
     },
     {
       "node_id": "9953",
@@ -1349,23 +1319,7 @@
       "detection_accuracy_percent": 82.32494231140427,
       "signal_quality_dbm": -24.769758877537793,
       "energy_remaining_percent": 34.573539898933745,
-      "quality_score": 0.349509132640599
-    },
-    {
-      "node_id": "9982",
-      "coordinates": [
-        0.206982668176944,
-        -0.06501719053489252,
-        -0.22423756230941905
-      ],
-      "status": "ACTIVE_OPTIMIZED",
-      "activation_duration_seconds": 16.017034530570882,
-      "transmission_power_w": 1.1738731389256254,
-      "energy_for_activation_wh": 0.00522276850018927,
-      "detection_accuracy_percent": 81.92574872483897,
-      "signal_quality_dbm": -26.05423156833631,
-      "energy_remaining_percent": 17.65476219103239,
-      "quality_score": 0.20592579333413216
+      "quality_score": 0.34678453476059906
     }
   ],
   "limitations": [
@@ -1378,14 +1332,14 @@
   "test_context": {
     "dataset": "data/hospital-movement",
     "sensor_dataset": "data\\Sensor_Energy_Consumption.csv",
-    "day": 6,
-    "time_step": 2537,
+    "day": 2,
+    "time_step": 3470,
     "num_input_nodes": 10000,
     "target_mode": "hcp-centroid",
     "target_station": 12,
     "target_position": [
-      -0.0033713927503210106,
-      0.10572241721080787,
+      -0.10409548733477961,
+      0.19888255967838955,
       0.0
     ],
     "latent_units_note": "x,y are latent coordinates in [-1,1], not meters"

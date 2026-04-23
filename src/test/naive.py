@@ -106,7 +106,8 @@ def main() -> None:
     print(f"Avg energy remaining         : {result['metrics'].get('avg_energy_remaining_percent', 0):.2f}%")
     print(f"Avg signal quality           : {result['metrics'].get('avg_signal_quality_dbm', 0):.2f} dBm")
     print(f"Monitoring coverage          : {result['metrics'].get('monitoring_coverage', 'N/A')}")
-    print(f"Energy efficiency            : {result['metrics'].get('energy_efficiency', 'N/A')}")
+    print(f"Energy efficiency            : {result['metrics'].get('energy_efficiency_percent', 'N/A'):.2f}%")
+    print(f"Avg detection accuracy        : {result['metrics'].get('avg_detection_accuracy_percent', 0):.2f}%")
     print(f"Output JSON                  : {args.output_json.resolve()}")
 
 
