@@ -519,13 +519,6 @@ def probabilistic_spatially_optimized_activation(
         "name": "Probabilistic & Spatially Optimized Activation (1.3.3)",
         "description": "Temporal probability + spatial risk zone + metaheuristic optimization for minimal energy, maximal detection accuracy",
         "metrics": metrics,
-        "risk_zone": risk_zone,
-        "temporal_model": {
-            "gamma_shape_k": gamma_shape_k,
-            "gamma_scale_theta": gamma_scale_theta,
-            "elapsed_time_t": elapsed_time_t,
-            "gamma_t": gamma_t,
-        },
         "activation_plan": activation_plan,
         "limitations": [
             "Requires pre-defined target position for event prediction",
@@ -533,6 +526,5 @@ def probabilistic_spatially_optimized_activation(
             "Temporal model parameters (gamma shape/scale) must be tuned for specific environments",
             "Sensing radius must be known in advance",
             "WOA may not guarantee global optimum (metaheuristic limitation)",
-            "Requires mealpy and scipy libraries",
         ],
     }
