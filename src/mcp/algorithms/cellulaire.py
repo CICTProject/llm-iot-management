@@ -107,6 +107,7 @@ def sequential_zone_activation(
         "avg_nodes_per_zone": avg_zone_size,
         "activation_duration_seconds": activation_duration_seconds,
         "zone_radius_meters": zone_radius_meters,
+        "total_nodes_energy_j": total_nodes_energy,
         "total_cycle_time_seconds": total_cycle_time,
         "total_activation_events": total_activation_events,
         "total_transmission_events": round(total_transmission_events, 2),
