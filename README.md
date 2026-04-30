@@ -1,8 +1,8 @@
-# LLM-Based Intent Orchestration for Medical IoT Environments
+# LLM-Based Intent Orchestration for Medical Internet of Things (IoT) Environments
 
 ## Overview
 
-Modern medical research laboratories increasingly integrate smart workspace environments with diverse IoT devices and services. However, clinicians, nurses, and researchers—typically non-IT specialists—require intuitive mechanisms to express their operational intents without manual device configuration. LLMs offer promising capabilities in reasoning, planning, and task orchestration, enabling seamless automation of data retrieval, analysis, and workflow execution. More details in [CICT Hackathon Presentation]()
+Modern medical research laboratories increasingly integrate smart workspace environments with diverse IoT devices and services. However, clinicians, nurses, and researchers—typically non-IT specialists—require intuitive mechanisms to express their operational intents without manual device configuration. LLMs offer promising capabilities in reasoning, planning, and task orchestration, enabling seamless automation of data retrieval, analysis, and workflow execution. This project aims to the second-round candidation of Concours Innovation Creative Challenge 2026 in the intersection domain between IOT, Intelligence Artificielle (AI) and Edge-Cloud Computing. Our complete work presents in [CICT Hackathon Round 2 Presentation](https://docs.google.com/presentation/d/1wKNIP_Rr-3uXvEWs3CL8ITc8lvj-x6bo/edit?slide=id.g3d121bd3dce_1_14#slide=id.g3d121bd3dce_1_14).
 
 ![Data Auto-Collection in IOT Smart Healthcare Systems](docs/general-architecture/architecture.png)
 

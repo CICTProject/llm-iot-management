@@ -22,26 +22,36 @@ mcp/
 
 ## 1.1 Edge Anomaly Detection Agent
 
+Detects anomalies in sensor data and device health by monitoring metric values against historical patterns and device status thresholds. Generates alerts when deviations exceed normal operating ranges.
+
 ---
 
 ## 1.2 Device Orchestration Agent
 
+Converts medical staff intents into executable orchestration plans by selecting optimal devices, strategies, and activation sequences. Manages resource allocation and validates plans against system constraints.
+
 ---
 
-## 1.3 Plan Validation 
+## 1.3 Plan Validation
+
+Validates deployment plans and sensor activation strategies against system constraints and resource availability. Applies optimization algorithms to minimize energy or maximize coverage.
+
 ### 1.3.1 Naive Sensor Activation (Baseline)
 
-This algorithm ensures continuous monitoring of the environment by keeping all sensor nodes fully active, without prioritization or contextual awareness. This baseline is used as a reference for evaluating optimized strategies.
+Keeps all sensor nodes fully active without prioritization or contextual awareness. Provides maximum coverage with highest energy consumption. Used as reference baseline.
 
 ### 1.3.2 Cellulaire Sequential Clustering Zone-based Activation
 
-This algorithm enables monitoring coverage by activating nodes sequentially across space, reducing simultaneous energy usage.
+Activates sensor nodes sequentially across spatial zones with clustering. Reduces simultaneous energy usage while maintaining monitoring coverage through sequential node activation.
 
 ### 1.3.3 Probabilistic & Spatially Optimized Activation (Energy-Efficient)
 
-This algorithm minimizes energy by activating only necessary devices using the probability γ of patient egress [1] and spatial coverage (x, y, z, r) [7] using Python library.
+Minimizes energy consumption by activating only necessary devices using probability γ of patient egress and spatial coverage (x, y, z, r). Optimal for extended deployments with energy constraints.
 
-> **Note:** More details of algorithm implementation in folder algorithms.
+> **Note:** Detailed algorithm implementation in [algorithms/README.md](algorithms/README.md).
 
 ---
+
 ## 1.4 Deployment Monitoring Agent
+
+Monitors medical sensor deployments in real-time by querying device status, network topology, and health metrics from InfluxDB. Provides comprehensive system visibility and historical data analysis.

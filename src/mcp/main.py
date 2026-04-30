@@ -24,6 +24,19 @@ from .deployment import (
     execute_device_command,
 )
 
+from .orchestration import (
+    create_orchestration_plan,
+    get_orchestration_plan,
+    list_orchestration_plans,
+    cancel_orchestration_plan,
+    activate_devices,
+    deactivate_devices,
+    get_orchestration_status,
+    get_device_orchestration_status,
+    select_activation_strategy,
+    apply_activation_algorithm,
+)
+
 logger = logging.getLogger(__name__)
 
 
@@ -105,17 +118,42 @@ class DeploymentMonitoringTool(BaseMCPTool):
 class DeviceOrchestrationTool(BaseMCPTool):
     """Unified tool for device orchestration agent.
     
-    Sub-tasks for IoT device deployment orchestration.
+    Sub-tasks for IoT device deployment orchestration, activation planning,
+    and resource management.
+    
+    Sub-tasks:
+        Plans: create, get, list, cancel, validate
+        Devices: activate, deactivate, status
+        Strategy: select, apply
+        Resources: allocation, status
     """
     
     name: str = "orchestration"
-    description: str = "Orchestrate IoT device deployment and configuration"
+    description: str = "Orchestrate IoT device deployment, activation, and resource management"
     
     operations: Dict[str, Tuple[Any, Optional[List[str]]]] = {
-        "status": (get_deployment_status, []),
-        "topology": (get_network_topology, []),
+        # Plan management
+        "create_plan": (create_orchestration_plan, ["intent", "target_zone", "required_services", "priority", "duration_minutes"]),
+        "get_plan": (get_orchestration_plan, ["plan_id"]),
+        "list_plans": (list_orchestration_plans, ["status", "zone", "priority"]),
+        "cancel_plan": (cancel_orchestration_plan, ["plan_id", "reason"]),
+        "validate_plan": (validate_orchestration_plan, ["plan_id"]),
+        
+        # Device activation
+        "activate": (activate_devices, ["plan_id", "device_ids", "sequence"]),
+        "deactivate": (deactivate_devices, ["plan_id", "device_ids", "reason"]),
+        "device_status": (get_device_orchestration_status, ["device_id"]),
+        
+        # Orchestration monitoring
+        "orch_status": (get_orchestration_status, ["plan_id"]),
+        "resource_alloc": (get_resource_allocation, ["zone"]),
+        
+        # Strategy and algorithms
+        "select_strategy": (select_activation_strategy, ["target_zone", "required_services", "optimization_goal"]),
+        "apply_algorithm": (apply_activation_algorithm, ["plan_id", "algorithm", "zone", "parameters"]),
+        
+        # Fallback to deployment tools
         "list": (list_medical_devices, ["zone", "device_type", "status"]),
-        "find": (find_available_devices, ["zone", "required_service"]),
         "details": (get_device_details, ["device_id"]),
         "execute": (execute_device_command, ["device_id", "command", "parameters"]),
     }

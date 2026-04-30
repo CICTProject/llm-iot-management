@@ -1,6 +1,7 @@
 # System-related tools for device registry and monitoring.
 from typing import Any, Dict, List, Optional
 from src.db.database import get_db_client
+from src.db.models import DeviceType
 
 import logging
 
@@ -111,3 +112,40 @@ def get_metric_readings(
         logger.error("Error querying readings: %s", e)
     
     return readings
+
+def generate_activation_sequence(devices: List[Dict[str, Any]], services: List[str]) -> List[Dict[str, Any]]:
+    """
+    Generate device activation sequence based on device hierarchy and dependencies.
+    
+    Args:
+        devices: List of devices to activate.
+        services: Required services list.
+    
+    Returns:
+        Ordered activation sequence with timing and dependencies.
+    """
+    sequence = []
+    
+    # Sort devices: gateways first, then edge nodes, then endpoints
+    device_type_order = {
+        DeviceType.GATEWAY.value: 0,
+        DeviceType.EDGE_NODE.value: 1,
+        DeviceType.MEDICAL_SENSOR.value: 2,
+        DeviceType.CAMERA.value: 3,
+    }
+    
+    sorted_devices = sorted(
+        devices,
+        key=lambda d: device_type_order.get(d.get("device_type"), 99)
+    )
+    
+    for idx, device in enumerate(sorted_devices):
+        sequence.append({
+            "order": idx + 1,
+            "device_id": device.get("device_id"),
+            "device_type": device.get("device_type"),
+            "delay_seconds": idx * 2,  # Stagger activation
+            "dependencies": [sorted_devices[i].get("device_id") for i in range(idx)],
+        })
+    
+    return sequence
