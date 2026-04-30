@@ -13,114 +13,102 @@ from src.db.models import DeviceType
 from src.utils.system import (
     get_device_from_registry,
     list_all_devices_from_registry,
-    get_metric_readings
+    get_metric_readings,
+    save_deployment_status,
+    save_device_status,
+    query_deployment_status,
 )
 
 
 logger = logging.getLogger(__name__)
 
 
-# Deployment status and topology
-@mcp_server.tool(name="get_deployment_status")
-async def get_deployment_status() -> Dict[str, Any]:
+@mcp_server.tool(name="create_deployment_status")
+async def create_deployment_status() -> Dict[str, Any]:
     """
-    Get the overall status of the medical sensor deployment.
+    Create and save comprehensive deployment status based on device registry.
     
     Returns:
-        Deployment status including device counts, zones, active services, and alarms.
+        Deployment status object with all device details, metrics, and system health.
     """
-    devices = list_all_devices_from_registry()
-    
-    # Extract zones, filtering None values
-    zones = [d.get("zone") for d in devices if d.get("zone") is not None]
-    
-    return {
-        "timestamp": datetime.now().isoformat(),
-        "deployment_mode": "INFLUXDB_MEDICAL",
-        "total_devices": len(devices),
-        "online": len([d for d in devices if d.get("status") == "online"]),
-        "offline": len([d for d in devices if d.get("status") == "offline"]),
-        "error": len([d for d in devices if d.get("status") == "error"]),
-        "zones": sorted(set(str(z) for z in zones)),
-        "active_alarms": 0,
-        "services": ["heart_rate", "spo2", "ecg", "video_stream", "temperature"],
-    }
-
-
-# Network topology and device registry
-@mcp_server.tool(name="get_network_topology")
-async def get_network_topology() -> Dict[str, Any]:
-    """
-    Get the network topology of the medical sensor deployment.
-    
-    Returns:
-        Topology information with gateway nodes, edge nodes, and medical endpoints.
-    """
-    devices = list_all_devices_from_registry()
-    
-    return {
-        "internet": True,
-        "gateway_nodes": [
-            d for d in devices if d.get("device_type") == DeviceType.GATEWAY.value
-        ],
-        "edge_nodes": [
-            d for d in devices if d.get("device_type") == DeviceType.EDGE_NODE.value
-        ],
-        "medical_endpoints": [
-            d for d in devices 
-            if d.get("device_type") in {DeviceType.MEDICAL_SENSOR.value, DeviceType.CAMERA.value}
-        ],
-    }
-
-
-# Device discovery and querying
-@mcp_server.tool(name="list_medical_devices")
-async def list_medical_devices(
-    zone: Optional[str] = None,
-    device_type: Optional[str] = None,
-    required_service: Optional[str] = None,
-    status: Optional[str] = None,
-) -> List[Dict[str, Any]]:
-    """
-    List medical devices in the deployment with optional filtering.
-    
-    Args:
-        zone: Physical location zone (e.g., corridor, ward_a, icu_room_1).
-        device_type: Device type filter (medical_sensor, camera, gateway, edge_node).
-        required_service: Filter by required service capability (e.g., video_stream, ecg, spo2).
-        status: Device status filter (online, offline, error).
-    
-    Returns:
-        List of devices matching the specified filters.
-    """
-    devices = list_all_devices_from_registry()
-    
-    if zone:
-        devices = [d for d in devices if d.get("zone") == zone]
-    if device_type:
-        devices = [d for d in devices if d.get("device_type") == device_type]
-    if status:
-        devices = [d for d in devices if d.get("status") == status]
-    
-    return devices
-
-# Device discovery by capability
-@mcp_server.tool(name="find_available_devices")
-async def find_available_devices(zone: str, required_service: str) -> List[Dict[str, Any]]:
-    """
-    Find online devices in a specific zone with a required service capability.
-    
-    Useful for natural language queries like "Which devices in the corridor can stream video?"
-    
-    Args:
-        zone: Physical location zone (e.g., corridor, ward_a, icu_room_1).
-        required_service: Required service capability (e.g., video_stream, ecg, spo2, heart_rate).
-    
-    Returns:
-        List of online devices in the zone that support the requested service.
-    """
-    return await list_medical_devices(zone=zone, status="online")
-
+    try:
+        # Get all devices from registry
+        devices = list_all_devices_from_registry()
+        
+        if not devices:
+            logger.warning("No devices found in registry to create deployment status")
+            return {"error": "No devices found in registry"}
+        
+        # Extract unique zones and services from devices
+        zones = set()
+        all_services = set()
+        for device in devices:
+            if device.get("zone"):
+                zones.add(str(device.get("zone")))
+            services = device.get("services", [])
+            if isinstance(services, list):
+                all_services.update(services)
+        
+        # Count device statuses
+        online_count = len([d for d in devices if d.get("status") == "online"])
+        offline_count = len([d for d in devices if d.get("status") == "offline"])
+        error_count = len([d for d in devices if d.get("status") == "error"])
+        
+        # Create comprehensive deployment status
+        deployment_status = {
+            "deployment_id": "global",
+            "timestamp": datetime.now().isoformat(),
+            "deployment_mode": "INFLUXDB_MEDICAL",
+            "total_devices": len(devices),
+            "online": online_count,
+            "offline": offline_count,
+            "error": error_count,
+            "zones": sorted(list(zones)),
+            "services": sorted(list(all_services)),
+            "active_alarms": 0,
+            "active_plans": 0,
+            "devices": [
+                {
+                    "device_id": d.get("device_id"),
+                    "device_type": d.get("device_type"),
+                    "zone": d.get("zone"),
+                    "status": d.get("status"),
+                    "battery_level": d.get("battery_level"),
+                    "services": d.get("services", []),
+                    "location": (d.get("x"), d.get("y"), d.get("z")) if d.get("x") else None,
+                    "ip_address": d.get("ip_address"),
+                    "protocol": d.get("protocol"),
+                    "name": d.get("name"),
+                }
+                for d in devices
+            ],
+        }
+        
+        # Save comprehensive deployment status to InfluxDB
+        save_deployment_status(deployment_status)
+        
+        # Also save individual device status records
+        for device in devices:
+            device_status = {
+                "device_id": device.get("device_id"),
+                "device_type": device.get("device_type"),
+                "zone": device.get("zone"),
+                "status": device.get("status"),
+                "battery_level": device.get("battery_level"),
+                "services": device.get("services", []),
+                "location": (device.get("x"), device.get("y"), device.get("z")) if device.get("x") else None,
+                "ip_address": device.get("ip_address"),
+                "protocol": device.get("protocol"),
+                "name": device.get("name"),
+            }
+            save_device_status(device_status)
+        
+        logger.info(f"Created deployment status with {len(devices)} devices, {online_count} online, {len(zones)} zones")
+        return deployment_status
+        
+    except Exception as e:
+        logger.error(f"Failed to create deployment status: {e}", exc_info=True)
+        return {"error": str(e)}
 
 # Device details and querying
 @mcp_server.tool(name="get_device_details")
@@ -141,21 +129,6 @@ async def get_device_details(device_id: str) -> Dict[str, Any]:
     if not device:
         raise ValueError(f"Device {device_id} not found")
     return device
-
-
-# Device querying by capability
-@mcp_server.tool(name="query_devices_by_capability")
-async def query_devices_by_capability(service_name: str) -> List[Dict[str, Any]]:
-    """
-    Find all online devices supporting a specific capability.
-    
-    Args:
-        service_name: Service/capability name (e.g., video_stream, ecg, spo2, heart_rate).
-    
-    Returns:
-        List of online devices that expose the requested service.
-    """
-    return await list_medical_devices(status="online")
 
 
 # Medical metric retrieval
@@ -232,142 +205,3 @@ async def read_multiple_medical_metrics(
     return results
 
 
-# Metric history and aggregation
-@mcp_server.tool(name="get_metric_history")
-async def get_metric_history(
-    device_id: str,
-    hours: int = 24,
-    metric: Optional[str] = None,
-    aggregation: Optional[str] = None,
-) -> List[Dict[str, Any]]:
-    """
-    Get historical metric readings for a device.
-    
-    Args:
-        device_id: Device identifier.
-        hours: Time window in hours (default 24).
-        metric: Optional specific metric to filter.
-        aggregation: Optional aggregation method (mean, min, max).
-    
-    Returns:
-        Historical data points or aggregated values within the time window.
-    """
-    readings = get_metric_readings(device_id, metric, hours)
-    
-    if not readings:
-        return []
-    
-    if aggregation == "mean":
-        values: List[Any] = []
-        for r in readings:
-            val = r.get("value")
-            if val is not None:
-                values.append(val)
-        if values:
-            return [{
-                "device_id": device_id,
-                "metric": metric or "mixed",
-                "aggregation": "mean",
-                "value": sum(values) / len(values),
-            }]
-    
-    elif aggregation == "max":
-        values: List[Any] = []
-        for r in readings:
-            val = r.get("value")
-            if val is not None:
-                values.append(val)
-        if values:
-            return [{
-                "device_id": device_id,
-                "metric": metric or "mixed",
-                "aggregation": "max",
-                "value": max(values),
-            }]
-    
-    elif aggregation == "min":
-        values: List[Any] = []
-        for r in readings:
-            val = r.get("value")
-            if val is not None:
-                values.append(val)
-        if values:
-            return [{
-                "device_id": device_id,
-                "metric": metric or "mixed",
-                "aggregation": "min",
-                "value": min(values),
-            }]
-    
-    return readings
-
-
-# Alarm management: Future development
-@mcp_server.tool(name="get_active_deployment_alarms")
-async def get_active_deployment_alarms(priority: Optional[str] = None) -> List[Dict[str, Any]]:
-    """
-    Get all active alarms in the medical deployment.
-    
-    Args:
-        priority: Optional priority filter (LOW, MEDIUM, HIGH, CRITICAL).
-    
-    Returns:
-        List of active alarms sorted by priority and timestamp.
-    """
-    return []
-
-
-# Acknowledge and dismiss alarms: Future development
-@mcp_server.tool(name="acknowledge_deployment_alarm")
-async def acknowledge_deployment_alarm(alarm_id: str) -> bool:
-    """
-    Acknowledge and dismiss an active alarm.
-    
-    Args:
-        alarm_id: Alarm identifier to acknowledge.
-    
-    Returns:
-        True if alarm was successfully acknowledged, False if not found.
-    """
-    return False
-
-
-# Device control: Future development 
-@mcp_server.tool(name="execute_device_command")
-async def execute_device_command(
-    device_id: str,
-    command: str,
-    parameters: Optional[Dict[str, Any]] = None,
-) -> Dict[str, Any]:
-    """
-    Execute a control command on a device.
-    
-    Supported commands:
-    - reboot: Restart the device
-    - set_offline: Set device to offline status
-    - start_stream: Begin video streaming
-    - stop_stream: Stop video streaming
-    - set_sampling_rate: Adjust sensor sampling rate (requires sampling_rate_hz parameter)
-    
-    Args:
-        device_id: Device identifier.
-        command: Command to execute.
-        parameters: Optional command parameters (e.g., {"sampling_rate_hz": 10}).
-    
-    Returns:
-        Command execution status and details.
-    
-    Raises:
-        ValueError: If device not found.
-    """
-    device = get_device_from_registry(device_id)
-    if not device:
-        raise ValueError(f"Device {device_id} not found")
-    
-    return {
-        "device_id": device_id,
-        "command": command,
-        "parameters": parameters or {},
-        "status": "executed",
-        "timestamp": datetime.now().isoformat(),
-    }

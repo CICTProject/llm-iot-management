@@ -73,7 +73,7 @@ llm-intent-orchestration/
 
 ```bash
 # Seed database mitigation (Future replacement with real-time iot device data)
-python -m poetry run python src.db.main 
+python -m poetry run -m python src.db.main 
 
 # Uvicorn App
 python -m poetry run uvicorn src.main:app --host 0.0.0.0 --port 8001

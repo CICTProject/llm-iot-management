@@ -7,7 +7,7 @@ import os
 from typing import Optional
 
 from dotenv import load_dotenv
-from influxdb_client.client.write_api import SYNCHRONOUS
+from influxdb_client.client.write_api import SYNCHRONOUS, Point
 from influxdb_client.client.influxdb_client import InfluxDBClient as InfluxClient
 
 logger = logging.getLogger(__name__)
@@ -58,7 +58,7 @@ class InfluxDBClient:
         if not self.client:
             self._connect()
         assert self.client is not None
-        return self.client.write_api(write_options=SYNCHRONOUS)
+        return self.client.write_api(write_options=SYNCHRONOUS, point = Point)
 
     def get_query_client(self):
         """Get query API client."""

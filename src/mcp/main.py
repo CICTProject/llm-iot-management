@@ -11,30 +11,17 @@ from pydantic import ConfigDict
 from crewai.tools import BaseTool
 
 from .deployment import (
-    get_deployment_status,
-    get_network_topology,
-    list_medical_devices,
-    find_available_devices,
     get_device_details,
-    query_devices_by_capability,
     read_medical_metric,
     read_multiple_medical_metrics,
-    get_metric_history,
-    get_active_deployment_alarms,
-    execute_device_command,
 )
 
 from .orchestration import (
     create_orchestration_plan,
-    get_orchestration_plan,
-    list_orchestration_plans,
-    cancel_orchestration_plan,
-    activate_devices,
-    deactivate_devices,
-    get_orchestration_status,
-    get_device_orchestration_status,
-    select_activation_strategy,
-    apply_activation_algorithm,
+)
+
+from .plan_validation import (
+    get_deployment_status,
 )
 
 logger = logging.getLogger(__name__)
@@ -101,16 +88,9 @@ class DeploymentMonitoringTool(BaseMCPTool):
     
     operations: Dict[str, Tuple[Any, Optional[List[str]]]] = {
         "status": (get_deployment_status, []),
-        "topology": (get_network_topology, []),
-        "alarms": (get_active_deployment_alarms, ["priority"]),
-        "list": (list_medical_devices, ["zone", "device_type", "required_service", "status"]),
-        "find": (find_available_devices, ["zone", "required_service"]),
         "details": (get_device_details, ["device_id"]),
-        "query": (query_devices_by_capability, ["service_name"]),
         "read": (read_medical_metric, ["device_id", "metric"]),
         "read_multi": (read_multiple_medical_metrics, ["requests"]),
-        "history": (get_metric_history, ["device_id", "hours", "metric", "aggregation"]),
-        "execute": (execute_device_command, ["device_id", "command", "parameters"]),
     }
 
 
@@ -134,28 +114,9 @@ class DeviceOrchestrationTool(BaseMCPTool):
     operations: Dict[str, Tuple[Any, Optional[List[str]]]] = {
         # Plan management
         "create_plan": (create_orchestration_plan, ["intent", "target_zone", "required_services", "priority", "duration_minutes"]),
-        "get_plan": (get_orchestration_plan, ["plan_id"]),
-        "list_plans": (list_orchestration_plans, ["status", "zone", "priority"]),
-        "cancel_plan": (cancel_orchestration_plan, ["plan_id", "reason"]),
-        "validate_plan": (validate_orchestration_plan, ["plan_id"]),
         
-        # Device activation
-        "activate": (activate_devices, ["plan_id", "device_ids", "sequence"]),
-        "deactivate": (deactivate_devices, ["plan_id", "device_ids", "reason"]),
-        "device_status": (get_device_orchestration_status, ["device_id"]),
-        
-        # Orchestration monitoring
-        "orch_status": (get_orchestration_status, ["plan_id"]),
-        "resource_alloc": (get_resource_allocation, ["zone"]),
-        
-        # Strategy and algorithms
-        "select_strategy": (select_activation_strategy, ["target_zone", "required_services", "optimization_goal"]),
-        "apply_algorithm": (apply_activation_algorithm, ["plan_id", "algorithm", "zone", "parameters"]),
-        
-        # Fallback to deployment tools
-        "list": (list_medical_devices, ["zone", "device_type", "status"]),
+        # Deployment status for orchestration
         "details": (get_device_details, ["device_id"]),
-        "execute": (execute_device_command, ["device_id", "command", "parameters"]),
     }
 
 # Plan Validation Task Tool
@@ -163,17 +124,15 @@ class PlanValidationTool(BaseMCPTool):
     """Unified tool for plan validation agent.
     
     Sub-tasks for validating deployment plans and device configurations.
+    Queries deployment status and executes validation algorithms.
     """
     
     name: str = "plan_validator"
-    description: str = "Validate deployment plans and configurations"
+    description: str = "Validate deployment plans and configurations with constraint-based assurance"
     
     operations: Dict[str, Tuple[Any, Optional[List[str]]]] = {
-        "status": (get_deployment_status, []),
-        "topology": (get_network_topology, []),
-        "list": (list_medical_devices, ["zone", "device_type", "status"]),
-        "details": (get_device_details, ["device_id"]),
-        "query": (query_devices_by_capability, ["service_name"]),
+        # Deployment status for validation
+        "deployment_status": (get_deployment_status, []),
     }
 
 # Edge Anomaly Detection Task Tool
@@ -189,9 +148,6 @@ class EdgeAnomalyDetectionTool(BaseMCPTool):
     operations: Dict[str, Tuple[Any, Optional[List[str]]]] = {
         "read": (read_medical_metric, ["device_id", "metric"]),
         "read_multi": (read_multiple_medical_metrics, ["requests"]),
-        "history": (get_metric_history, ["device_id", "hours", "metric", "aggregation"]),
-        "alarms": (get_active_deployment_alarms, ["priority"]),
-        "list": (list_medical_devices, ["zone", "status"]),
     }
 
 
