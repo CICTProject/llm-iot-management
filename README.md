@@ -55,7 +55,7 @@ llm-intent-orchestration/
 │   ├── main.py              # CLI entry point in FastMCP server with menu interface
 │   ├── crew.py              # Multi-agent orchestration
 │   ├── agents/
-│   │   └── agents.py        # LLM Agent logic (Gemini LLM)
+│   │   └── agents.py        # LLM Agent logic
 │   ├── tasks/               # Task router 
 │   ├── mcp/                 # MCP Server tools
 │   ├── prompts/             # System prompts
@@ -73,12 +73,12 @@ llm-intent-orchestration/
 
 ```bash
 # Seed database mitigation (Future replacement with real-time iot device data)
-python -m poetry run -m python src.db.main 
+python -m poetry run python -m src.db.main 
 
 # Uvicorn App
 python -m poetry run uvicorn src.main:app --host 0.0.0.0 --port 8001
 ```
-
+>[TIPS!] All API documents & functionality tests in http://localhost:8001/docs
 ---
 
 ## References

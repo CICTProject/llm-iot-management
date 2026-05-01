@@ -1,7 +1,9 @@
 """
-MCP Server tools for device orchestration and activation planning.
-Manages sensor/actuator activation strategies, device orchestration plans, and execution coordination.
-Queries InfluxDB for plan storage and deployment status.
+Orchestration: Creates detailed execution plans for IoT sensor network operations based on medical staff intent and system constraints.
+
+Key functionalities:
+- Create orchestration plans based on medical staff intent and system constraints
+- Generate detailed execution plans with device assignments, activation sequence, and resource allocation
 """
 
 import logging
@@ -13,9 +15,7 @@ from . import mcp_server
 from src.db.database import get_db_client
 
 from src.utils.system import (
-    get_device_from_registry,
     list_all_devices_from_registry,
-    generate_activation_sequence,
     query_deployment_status,
     save_orchestration_plan,
 )

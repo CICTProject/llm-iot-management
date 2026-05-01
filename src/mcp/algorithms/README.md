@@ -1,5 +1,5 @@
-# Plan Validation Agent Algorithm for Sensor Control (Section 1.3)
-## Naive Sensor Activation (Baseline - Section 1.3.1)
+# Plan Validation Agent Algorithm for Sensor Control (Section 1.4)
+## Naive Sensor Activation (Baseline - Section 1.4.1)
 
 - Objective: Ensure continuous monitoring of the environment by keeping all sensor nodes fully active, without prioritization or contextual awareness. This baseline is used as a reference for evaluating optimized strategies.
 - Assumptions: Linear corridor deployment; each device has a motion sensor and ESP32 camera; fixed local coverage; no prediction/optimization.
@@ -29,7 +29,7 @@ Limitations:
 - No adaptation to patient behavior or environmental context
 - Poor scalability as the number of devices increases (WSN deployments)
 
-## Cellulaire Sequential Clustering Zone-based Activation (Section 1.3.2)
+## Cellulaire Sequential Clustering Zone-based Activation (Section 1.4.2)
 
 - Objective: Ensure monitoring coverage by activating nodes sequentially across space, reducing simultaneous energy usage [9].
 - Assumptions: Nodes are distributed in 3D space and ordered spatially (clustering in zone-based environment), each has sensing capability, communication module and fixed activation time window with no prediction or learning.

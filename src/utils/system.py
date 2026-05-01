@@ -1,10 +1,17 @@
 # System-related tools for device registry and monitoring.
 from datetime import datetime
 import json
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Tuple
 from src.db.database import get_db_client
 from src.db.models import DeviceType
+
 from influxdb_client.client.write_api import SYNCHRONOUS, Point
+from src.mcp.algorithms import (
+    naive_sensor_activation,
+    sequential_zone_activation,
+    probabilistic_spatially_optimized_activation,
+)
+from src.utils.energy import parse_sensor_nodes_from_influxdb
 
 import logging
 
@@ -29,14 +36,15 @@ def get_device_from_registry(device_id: str) -> Optional[Dict[str, Any]]:
             records = result[0].records
             if records:
                 record = records[0]
+                values = dict(record.values)
                 return {
-                    "device_id": record.values.get("device_id"),
-                    "device_type": record.values.get("device_type"),
-                    "name": record.values.get("name"),
-                    "status": record.values.get("status"),
-                    "ip_address": record.values.get("ip_address"),
-                    "battery_level": record.values.get("battery_level"),
-                    "protocol": record.values.get("protocol"),
+                    "device_id": values.get("device_id"),
+                    "device_type": values.get("device_type"),
+                    "name": values.get("name"),
+                    "status": values.get("status"),
+                    "ip_address": values.get("ip_address"),
+                    "battery_level": values.get("battery_level"),
+                    "protocol": values.get("protocol"),
                 }
         return None
     except Exception as e:
@@ -62,22 +70,22 @@ def list_all_devices_from_registry() -> List[Dict[str, Any]]:
         if result:
             for table in result:
                 for record in table.records:
+                    values = dict(record.values)
                     devices.append({
-                        "device_id": record.values.get("device_id"),
-                        "device_type": record.values.get("device_type"),
-                        "protocol": record.values.get("protocol"),
-                        "zone": record.values.get("zone"),
-                        "name": record.values.get("name"),
-                        "status": record.values.get("status"),
-                        "ip_address": record.values.get("ip_address"),
-                        "battery_level": record.values.get("battery_level"),
-                        "services_count": record.values.get("services_count", 0),
+                        "device_id": values.get("device_id"),
+                        "device_type": values.get("device_type"),
+                        "protocol": values.get("protocol"),
+                        "zone": values.get("zone"),
+                        "name": values.get("name"),
+                        "status": values.get("status"),
+                        "ip_address": values.get("ip_address"),
+                        "battery_level": values.get("battery_level"),
+                        "services_count": values.get("services_count", 0),
                     })
     except Exception as e:
         logger.error("Error querying device registry: %s", e)
     
     return devices
-
 
 def get_metric_readings(
     device_id: str, 
@@ -104,11 +112,12 @@ def get_metric_readings(
         if result:
             for table in result:
                 for record in table.records:
+                    values = dict(record.values)
                     readings.append({
                         "device_id": device_id,
-                        "metric": record.values.get("metric"),
-                        "value": record.values.get("_value"),
-                        "quality": record.values.get("quality"),
+                        "metric": values.get("metric"),
+                        "value": values.get("_value"),
+                        "quality": values.get("quality"),
                         "timestamp": record.get_time().isoformat() if record.get_time() else None,
                     })
     except Exception as e:
@@ -139,7 +148,7 @@ def generate_activation_sequence(devices: List[Dict[str, Any]], services: List[s
     
     sorted_devices = sorted(
         devices,
-        key=lambda d: device_type_order.get(d.get("device_type"), 99)
+        key=lambda d: device_type_order.get(d.get("device_type") or "unknown", 99)
     )
     
     for idx, device in enumerate(sorted_devices):
@@ -177,7 +186,7 @@ def save_deployment_status(deployment_status: Dict[str, Any]) -> None:
     """
     try:
         db_client = get_db_client()
-        write_api = db_client.get_write_api()
+        write_api = db_client.get_write_api(write_points=SYNCHRONOUS)
         
         # Build comprehensive deployment status point with all device information
         point = Point("deployment_state") \
@@ -249,7 +258,7 @@ def save_device_status(device_info: Dict[str, Any]) -> None:
     """
     try:
         db_client = get_db_client()
-        write_api = db_client.get_write_api()
+        write_api = db_client.get_write_api(write_points=SYNCHRONOUS)
         
         point = Point("device_status") \
             .tag("device_id", device_info.get("device_id", "unknown")) \
@@ -310,7 +319,8 @@ def query_deployment_status(hours: int = 1) -> Dict[str, Any]:
         status_list = []
         for table in result:
             for record in table.records:
-                status_json = record.values.get("status_data")
+                values = dict(record.values)
+                status_json = values.get("status_data")
                 if status_json:
                     try:
                         status_dict = json.loads(status_json)
@@ -356,3 +366,109 @@ def save_orchestration_plan(plan: Dict[str, Any]) -> None:
         logger.info(f"Orchestration plan {plan.get('plan_id', 'unknown')} saved to InfluxDB")
     except Exception as e:
         logger.error(f"Failed to save orchestration plan to InfluxDB: {e}")
+
+# Execute orchestration plan and generate HTTP execution actions
+async def execute_algorithm(
+    devices: List[Dict[str, Any]],
+    algorithm: str,
+    # Probabilistic algorithm parameters
+    target_position: Optional[List[float]] = None,
+    elapsed_time_t: float = 30.0,
+    t_base: float = 20.0,
+    r_min: float = 8.0,
+    r_max: float = 35.0,
+    sensing_radius: float = 12.0,
+    num_risk_points: int = 120,
+    epoch: int = 100,
+    pop_size: int = 30,
+    # Sequential algorithm parameters
+    activation_duration_seconds: int = 300,
+    zone_radius_meters: float = 10.0,
+) -> Dict[str, Any]:
+    """Execute selected algorithm on target devices."""
+    try:
+        db_client = get_db_client()
+        query_api = db_client.get_query_client()
+        
+        # Query sensor data
+        query = '''
+        from(bucket: "energy_consumption")
+          |> range(start: -7d)
+          |> filter(fn: (r) => r["_measurement"] == "iot_metrics")
+        '''
+        
+        result = query_api.query(query)
+        nodes = parse_sensor_nodes_from_influxdb(result)
+        
+        if not nodes:
+            logger.warning(f"No sensor nodes found in target position {target_position} for algorithm {algorithm}")
+            return {
+                "error": "No sensor data available",
+                "sequence": [],
+                "selected_nodes": 0,
+            }        
+        # Run algorithm
+        if algorithm == "naive":
+            result = naive_sensor_activation(nodes)
+        elif algorithm == "sequential":
+            result = sequential_zone_activation(nodes, zone_radius_meters=zone_radius_meters, activation_duration_seconds=activation_duration_seconds)
+        elif algorithm == "probabilistic":
+            if target_position is None:
+                target_position_tuple: Tuple[float, float, float] = (50.0, 50.0, 25.0)
+            else:
+                target_position_tuple = (
+                    float(target_position[0]),
+                    float(target_position[1]),
+                    float(target_position[2]),
+                )
+            result = probabilistic_spatially_optimized_activation(
+                nodes,
+                target_position=target_position_tuple,
+                elapsed_time_t=elapsed_time_t,
+                t_base=t_base,
+                r_min=r_min,
+                r_max=r_max,
+                sensing_radius=sensing_radius,
+                num_risk_points=num_risk_points,
+                epoch=epoch,
+                pop_size=pop_size,
+            )
+        else:
+            logger.warning(f"Unknown algorithm {algorithm}, defaulting to naive")
+            result = naive_sensor_activation(nodes)
+        
+        return result
+        
+    except Exception as e:
+        logger.error(f"Algorithm execution failed: {e}")
+        return {"selected_nodes": len(devices), "sequence": []}
+
+
+def generate_http_actions(
+    devices: List[Dict[str, Any]],
+    algorithm_result: Dict[str, Any],
+    algorithm: str,
+) -> List[Dict[str, str]]:
+    """Generate HTTP request execution actions for each device."""
+    actions = []
+    
+    for idx, device in enumerate(devices):
+        action = {
+            "order": idx + 1,
+            "device_id": device.get("device_id"),
+            "http_method": "GET",
+            "endpoint": f"http://{device.get('ip_address', 'localhost')}/stream",
+            "headers": {
+                "Authorization": "Bearer token",
+                "Content-Type": "application/json",
+            },
+            "parameters": {
+                "format": "stream",
+                "quality": "high",
+            },
+        }
+        actions.append(action)
+    
+    return actions
+
+

@@ -4,7 +4,7 @@ from typing import Optional
 
 from src.mcp.main import DeviceOrchestrationTool
 
-# 4.3 Device Orchestration
+# 1.2 Device Orchestration
 def device_router(agent, device_list: Optional[list] = None, rules: Optional[dict] = None):
     """Orchestrate IoT device deployment.
     

@@ -32,26 +32,31 @@ Converts medical staff intents into executable orchestration plans by selecting 
 
 ---
 
-## 1.3 Plan Validation
+## 1.3 Deployment Monitoring Agent
 
-Validates deployment plans and sensor activation strategies against system constraints and resource availability. Applies optimization algorithms to minimize energy or maximize coverage.
+Monitors medical sensor deployments in real-time by querying device status, network topology, and health metrics from InfluxDB. Provides comprehensive system visibility and historical data analysis.
 
-### 1.3.1 Naive Sensor Activation (Baseline)
+---
+## 1.4 Plan Validation
+
+Validates deployment plans and sensor activation strategies against system constraints and resource availability. Applies optimization algorithms to minimize energy or maximize coverage for user recommendations.
+
+### 1.4.1 Naive Sensor Activation (Baseline)
 
 Keeps all sensor nodes fully active without prioritization or contextual awareness. Provides maximum coverage with highest energy consumption. Used as reference baseline.
 
-### 1.3.2 Cellulaire Sequential Clustering Zone-based Activation
+### 1.4.2 Cellulaire Sequential Clustering Zone-based Activation
 
 Activates sensor nodes sequentially across spatial zones with clustering. Reduces simultaneous energy usage while maintaining monitoring coverage through sequential node activation.
 
-### 1.3.3 Probabilistic & Spatially Optimized Activation (Energy-Efficient)
+### 1.4.3 Probabilistic & Spatially Optimized Activation (Energy-Efficient)
 
 Minimizes energy consumption by activating only necessary devices using probability γ of patient egress and spatial coverage (x, y, z, r). Optimal for extended deployments with energy constraints.
 
-> **Note:** Detailed algorithm implementation in [algorithms/README.md](algorithms/README.md).
+> [!TIPS] Detailed algorithm implementation in [algorithms/README.md](algorithms/README.md).
 
 ---
 
-## 1.4 Deployment Monitoring Agent
+## 1.5 Plan Execution
 
-Monitors medical sensor deployments in real-time by querying device status, network topology, and health metrics from InfluxDB. Provides comprehensive system visibility and historical data analysis.
+Translates orchestration plans into HTTP-executable instructions for IoT sensor networks. Asynchronous execution of different activation algorithms based on the orchestration plan and deployment status. Generates detailed execution plans with device details, services, and HTTP request actions for device activation.

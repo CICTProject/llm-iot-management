@@ -68,7 +68,7 @@ def load_sensornodes_from_csv(file_path: Path) -> List[SensorNode]:
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Test Algorithm 1.3.1 Naive Sensor Activation")
+    parser = argparse.ArgumentParser(description="Test Algorithm 1.4.1 Naive Sensor Activation")
     parser.add_argument("--data-root", type=Path, default=Path("data"), help="Root folder containing Sensor_Energy_Consumption.csv")
     parser.add_argument("--seed", type=int, default=42, help="Random seed")
     parser.add_argument("--output-json", type=Path, default=Path("results/algorithms/naive_result.json"))
@@ -87,7 +87,7 @@ def main() -> None:
     result["test_context"] = {
         "sensor_dataset": str(energy_csv),
         "num_input_nodes": len(nodes),
-        "algorithm": "1.3.1_naive",
+        "algorithm": "1.4.1_naive",
         "description": "Baseline: Activate all sensor nodes simultaneously",
     }
 

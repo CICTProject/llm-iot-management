@@ -68,7 +68,7 @@ def load_sensornodes_from_csv(file_path: Path) -> List[SensorNode]:
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Test Algorithm 1.3.2 Sequential Zone-based Activation")
+    parser = argparse.ArgumentParser(description="Test Algorithm 1.4.2 Sequential Zone-based Activation")
     parser.add_argument("--data-root", type=Path, default=Path("data"), help="Root folder containing Sensor_Energy_Consumption.csv")
     parser.add_argument("--activation-duration", type=int, default=300, help="Duration per zone activation in seconds")
     parser.add_argument("--zone-radius", type=float, default=0.2, help="Zone radius in latent coordinate units")
@@ -93,7 +93,7 @@ def main() -> None:
     result["test_context"] = {
         "sensor_dataset": str(energy_csv),
         "num_input_nodes": len(nodes),
-        "algorithm": "1.3.2_cellulaire",
+        "algorithm": "1.4.2_cellulaire",
         "description": "Sequential zone-based: Partition nodes into spatial zones, activate sequentially",
         "zone_radius_latent_units": args.zone_radius,
         "activation_duration_seconds": args.activation_duration,

@@ -110029,7 +110029,7 @@
   "test_context": {
     "sensor_dataset": "data\\Sensor_Energy_Consumption.csv",
     "num_input_nodes": 10000,
-    "algorithm": "1.3.1_naive",
+    "algorithm": "1.4.1_naive",
     "description": "Baseline: Activate all sensor nodes simultaneously"
   }
 }

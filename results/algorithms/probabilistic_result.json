@@ -1,6 +1,6 @@
 {
   "algorithm": "probabilistic_spatially_optimized_activation",
-  "name": "Probabilistic & Spatially Optimized Activation (1.3.3)",
+  "name": "Probabilistic & Spatially Optimized Activation (1.4.3)",
   "description": "Temporal probability + spatial risk zone + metaheuristic optimization for minimal energy, maximal detection accuracy",
   "metrics": {
     "algorithm": "probabilistic_spatially_optimized_activation",

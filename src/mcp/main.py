@@ -22,7 +22,10 @@ from .orchestration import (
 
 from .plan_validation import (
     get_deployment_status,
+    recommend_activation_algorithm,
 )
+
+from .plan_execution import execute_plan
 
 logger = logging.getLogger(__name__)
 
@@ -102,10 +105,7 @@ class DeviceOrchestrationTool(BaseMCPTool):
     and resource management.
     
     Sub-tasks:
-        Plans: create, get, list, cancel, validate
-        Devices: activate, deactivate, status
-        Strategy: select, apply
-        Resources: allocation, status
+        create_plan: Create orchestration plan
     """
     
     name: str = "orchestration"
@@ -133,23 +133,40 @@ class PlanValidationTool(BaseMCPTool):
     operations: Dict[str, Tuple[Any, Optional[List[str]]]] = {
         # Deployment status for validation
         "deployment_status": (get_deployment_status, []),
+
+        # Algorithm recommendation for plan validation
+        "recommend_algorithm": (recommend_activation_algorithm, ["devices", "min_accuracy_percent", "max_energy_percent", "activation_duration_seconds"]),
     }
 
-# Edge Anomaly Detection Task Tool
+# Plan Execution Task Tool
+class PlanExecutionTool(BaseMCPTool):
+    """Unified tool for plan execution agent.
+    
+    Sub-tasks for executing device activation plans and strategies.
+    Executes different activation algorithms based on the orchestration plan.
+    """
+    
+    name: str = "plan_execution"
+    description: str = "Execute device activation plans with various algorithms and strategies"
+    
+    operations: Dict[str, Tuple[Any, Optional[List[str]]]] = {
+        "execute": (execute_plan, ["plan_id", "target_zone", "required_services"]),
+    }
+
+# Edge Anomaly Detection Task Tool (Future work)
 class EdgeAnomalyDetectionTool(BaseMCPTool):
     """Unified tool for edge anomaly detection agent.
     
     Sub-tasks for detecting sensor anomalies and device malfunctions.
     """
     
-    name: str = "edge_anomaly"
+    name: str = "edge_anomaly_detection"
     description: str = "Detect anomalies in sensor data and device health"
     
     operations: Dict[str, Tuple[Any, Optional[List[str]]]] = {
         "read": (read_medical_metric, ["device_id", "metric"]),
         "read_multi": (read_multiple_medical_metrics, ["requests"]),
     }
-
 
 # Factory function to get MCP tool by task type
 def get_mcp_tool(tool_type: str = "deployment") -> BaseMCPTool:
@@ -158,6 +175,7 @@ def get_mcp_tool(tool_type: str = "deployment") -> BaseMCPTool:
         "deployment": DeploymentMonitoringTool(),
         "orchestration": DeviceOrchestrationTool(),
         "validation": PlanValidationTool(),
+        "execution": PlanExecutionTool(),
         "edge": EdgeAnomalyDetectionTool(),
     }
     return tools.get(tool_type, DeploymentMonitoringTool())

@@ -8,7 +8,7 @@ Tests 3 main algorithms (naive, cellulaire, probabilistics) with sensor nodes an
 
 ## Quick Start
 
-### Naive Algorithm (Baseline - Section 1.3.1)
+### Naive Algorithm (Baseline - Section 1.4.1)
 
 ```bash
 python src/test/naive.py --data-root data --seed 42
@@ -19,7 +19,7 @@ python src/test/naive.py --data-root data --seed 42
 - `--seed SEED` - Random seed (default: `42`)
 - `--output-json OUTPUT_JSON` - Output path (default: `results/algorithms/naive_result.json`)
 
-### Cellulaire Algorithm (Zone-based - Section 1.3.2)
+### Cellulaire Algorithm (Zone-based - Section 1.4.2)
 
 ```bash
 python src/test/cellulaire.py --data-root data --zone-radius 0.2 --activation-duration 300 --seed 42
@@ -32,7 +32,7 @@ python src/test/cellulaire.py --data-root data --zone-radius 0.2 --activation-du
 - `--seed SEED` - Random seed (default: `42`)
 - `--output-json OUTPUT_JSON` - Output path (default: `results/algorithms/cellulaire_result.json`)
 
-### Probabilistic Algorithm (Optimized - Section 1.3.3)
+### Probabilistic Algorithm (Optimized - Section 1.4.3)
 
 ```bash
 python src/test/probabilistic.py --data-root data --day 2 --target-mode hcp-centroid --seed 42

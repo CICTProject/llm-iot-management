@@ -6,8 +6,7 @@ Agents module for managing different types of agents within the system.
 """
 import os
 from textwrap import dedent
-from crewai import Agent
-from langchain_google_genai import ChatGoogleGenerativeAI
+from crewai import Agent, LLM
 
 from src.prompts import load_prompt
 from src.mcp import (
@@ -15,22 +14,33 @@ from src.mcp import (
     DeviceOrchestrationTool,
     PlanValidationTool,
     EdgeAnomalyDetectionTool,
+    PlanExecutionTool,
 )
 
 class CustomAgent:
     def __init__(self, name, role):
-        # Use Google Gemini LLM via LangChain
         api_key = os.getenv("MODEL_API_KEY") 
-        model = os.getenv("MODEL_NAME")
+        model_name = os.getenv("MODEL_NAME", "gemini-1.5-flash")
         
-        if not api_key:
-            raise ValueError("MODEL_API_KEY environment variable is not set. Please add your Google API key to the .env file.")
-        
-        self.llm = ChatGoogleGenerativeAI(
-            model=model,
-            google_api_key=api_key,
-            temperature=0.7
-        )
+        if model_name.startswith("gemini/"):
+            if not api_key:
+                raise ValueError("MODEL_API_KEY environment variable is not set. Please add your API key to the .env file.")
+            # Clean up model name prefix
+            if model_name.startswith("models/"):
+                model_name = model_name.replace("models/", "")
+            # LiteLLM backend 
+            self.llm = LLM(
+                model=model_name,
+                api_key=api_key,
+                temperature=0.7
+            )
+        if model_name.startswith("ollama/"):
+            # Ollama backend
+            self.llm = LLM(
+                model=model_name,
+                base_url="http://localhost:11434",
+                temperature=0.7
+            )
         self.name = name
         self.role = role
 
@@ -39,7 +49,7 @@ class CustomAgent:
         self.orchestration_tool = DeviceOrchestrationTool()
         self.validation_tool = PlanValidationTool()
         self.edge_tool = EdgeAnomalyDetectionTool()
-        
+        self.execution_tool = PlanExecutionTool()
     
     # 1.1 Define Edge LLM Agent for sensor data anomaly detection
     def edge_anomaly_detection(self):
@@ -101,3 +111,17 @@ class CustomAgent:
             llm=self.llm,
         )
     
+    # 1.5 Define plan execution agent
+    def plan_execution(self):
+        """Define agent for executing deployment plans."""
+        prompt = load_prompt("system-management", "plan_execution")
+        return Agent(
+            role="Plan Execution Agent",
+            backstory=prompt,
+            goal=dedent("""
+            Execute IoT deployment plans with various activation algorithms to actual device 
+            states through communication protocols."""),
+            tools=[self.execution_tool],
+            verbose=True,
+            llm=self.llm,
+        )

@@ -16,6 +16,9 @@ try:
     HAS_MEALPY = True
 except ImportError:
     HAS_MEALPY = False
+    BinaryVar = None
+    Problem = None
+    WOA = None
 
 from src.utils.energy import SensorNode, create_spatial_zones
 
@@ -247,6 +250,9 @@ class MinimalCoverProblem(Problem):
         if not HAS_MEALPY:
             return float(1e6)
         
+        if self.data is None:
+            return float(1e6)
+        
         decoded = self.decode_solution(x)
         selected = np.array(decoded.get("device_selection", []), dtype=int)
         
@@ -351,13 +357,27 @@ def solve_minimal_cover(
     }
     
     problem = MinimalCoverProblem(
-        bounds=BinaryVar(n_vars=len(candidates), name="device_selection"),
+        bounds=BinaryVar(n_vars=len(candidates), name="device_selection") if BinaryVar else None,
         minmax="min",
         data=data,
         name="Minimal_Cover_RiskZone",
     )
     
-    model = WOA.OriginalWOA(epoch=cfg.get("epoch", 100), pop_size=cfg.get("pop_size", 30))
+    model = WOA.OriginalWOA(epoch=cfg.get("epoch", 100), pop_size=cfg.get("pop_size", 30)) if WOA else None
+    if model is None:
+        logger.warning("mealpy WOA not available, using greedy selection")
+        scores = normalized.get("detection_accuracy_norm", np.ones(len(candidates)))
+        sorted_idx = np.argsort(-scores)
+        selected_binary = np.zeros(len(candidates))
+        selected_binary[sorted_idx[:max(1, len(candidates)//3)]] = 1
+        selected_devices = [c for i, c in enumerate(candidates) if selected_binary[i] == 1]
+        return {
+            "selected_binary": selected_binary,
+            "selected_devices": selected_devices,
+            "best_fitness": 0.0,
+            "coverage_matrix": coverage_matrix,
+        }
+
     g_best = model.solve(problem, seed=cfg.get("seed", 42))
     
     selected_binary = problem.decode_solution(g_best.solution)["device_selection"]
@@ -389,7 +409,7 @@ def probabilistic_spatially_optimized_activation(
     seed: int = 42,
 ) -> Dict[str, Any]:
     """
-    Probabilistic & Spatially Optimized Activation Algorithm (1.3.3).
+    Probabilistic & Spatially Optimized Activation Algorithm (1.4.3).
     
     Adaptive sensor activation using:
     1. Temporal probability model (gamma distribution) for event risk
@@ -415,7 +435,7 @@ def probabilistic_spatially_optimized_activation(
     Returns:
         Dictionary with algorithm results including selected devices and metrics
     """
-    logger.info(f"Running Algorithm 1.3.3 Probabilistic & Spatially Optimized Activation")
+    logger.info(f"Running Algorithm 1.4.3 Probabilistic & Spatially Optimized Activation")
     logger.info(f"Input: {len(nodes)} nodes, Target: {target_position}")
     
     if not nodes:

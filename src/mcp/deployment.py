@@ -1,6 +1,10 @@
 """
-MCP Server tools for monitoring and managing medical sensor deployments.
-Queries InfluxDB for device data, metrics, and alarms.
+Deployment Monitoring: Provides tools for monitoring the overall deployment status, device details, and medical metrics in an IoT sensor network.
+
+Key functionalities:
+- Create comprehensive deployment status based on device registry and InfluxDB data
+- Provide detailed device information and metrics for orchestration and validation agents
+- Batch retrieval of medical metrics for multiple devices and metrics
 """
 
 import logging

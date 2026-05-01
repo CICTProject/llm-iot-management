@@ -45,7 +45,7 @@ class AgentType(str, Enum):
     EDGE_ANOMALY_DETECTION = "edge_anomaly_detection"
     ORCHESTRATION = "orchestration"
     PLAN_VALIDATION = "plan_validation"
-    NETWORK_AUTO_CONFIGURATION = "network_auto_configuration"
+    PLAN_EXECUTION = "plan_execution"
     DEPLOYMENT_MONITORING = "deployment_monitoring"
 
 
@@ -76,7 +76,7 @@ app = FastAPI(
 CREW: Optional[CustomCrew] = None
 CHATGPT_MODEL_ID = "llm-agent-chatgpt"
 OLLAMA_MODEL_ID = "llm-agent-ollama"
-GEMINI_MODEL_ID = "gemini/gemini-flash-latest"
+GEMINI_MODEL_ID = "llm-agent-gemini"
 
 # Execution tracking
 execution_history: Dict[str, CrewExecutionResponse] = {}
@@ -135,10 +135,10 @@ async def execute_crew(request: CrewExecutionRequest, background_tasks: Backgrou
             result = CREW.run_orchestration()
         elif request.agent_type == AgentType.PLAN_VALIDATION:
             result = CREW.run_plan_validation()
-        elif request.agent_type == AgentType.NETWORK_AUTO_CONFIGURATION:
-            result = CREW.run_network_auto_configuration()
         elif request.agent_type == AgentType.DEPLOYMENT_MONITORING:
             result = CREW.run_deployment_monitoring()
+        elif request.agent_type == AgentType.PLAN_EXECUTION:
+            result = CREW.run_plan_execution()
         else:
             raise ValueError(f"Unknown agent type: {request.agent_type}")
         
@@ -223,13 +223,13 @@ async def list_models():
                 "id": OLLAMA_MODEL_ID,
                 "object": "model",
                 "created": now,
-                "owned_by": "local",
+                "owned_by": "external",
             },
             {
                 "id": GEMINI_MODEL_ID,
                 "object": "model",
                 "created": now,
-                "owned_by": "local",
+                "owned_by": "external",
             },
         ],
     }
@@ -274,10 +274,10 @@ async def chat_completions(req: ChatCompletionRequest):
             result = CREW.run_orchestration()
         elif any(keyword in user_lower for keyword in ["validat", "plan", "check", "verify"]):
             result = CREW.run_plan_validation()
-        elif any(keyword in user_lower for keyword in ["network", "flow", "config", "sdn"]):
-            result = CREW.run_network_auto_configuration()
         elif any(keyword in user_lower for keyword in ["status", "deployment", "track"]):
             result = CREW.run_deployment_monitoring()
+        elif any(keyword in user_lower for keyword in ["execute", "run", "activate"]):
+            result = CREW.run_plan_execution()
         else:
             result = CREW.run_all()
         
@@ -357,8 +357,8 @@ async def get_status():
             AgentType.EDGE_ANOMALY_DETECTION.value,
             AgentType.ORCHESTRATION.value,
             AgentType.PLAN_VALIDATION.value,
-            AgentType.NETWORK_AUTO_CONFIGURATION.value,
             AgentType.DEPLOYMENT_MONITORING.value,
+            AgentType.PLAN_EXECUTION.value,
             AgentType.ALL.value,
         ],
         "timestamp": time.time()

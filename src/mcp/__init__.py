@@ -12,6 +12,7 @@ from .main import (
     DeploymentMonitoringTool,
     DeviceOrchestrationTool,
     PlanValidationTool,
+    PlanExecutionTool,
     EdgeAnomalyDetectionTool,
     get_mcp_tool,
 )
@@ -22,5 +23,6 @@ __all__ = [
     "DeviceOrchestrationTool",
     "PlanValidationTool",
     "EdgeAnomalyDetectionTool",
+    "PlanExecutionTool",
     "get_mcp_tool",
 ]

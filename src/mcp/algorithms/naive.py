@@ -1,5 +1,5 @@
 """
-Algorithm 1.3.1: Naive Sensor Activation (Baseline).
+Algorithm 1.4.1: Naive Sensor Activation (Baseline).
 """
 
 import logging
@@ -37,7 +37,7 @@ def naive_sensor_activation(nodes: List[SensorNode]) -> Dict[str, Any]:
     total_initial_energy = 0.0
     
     for node in nodes:
-        node.status = "active"
+        setattr(node, "status", "active")
         activated_nodes.append({
             "node_id": node.node_id,
             "x_coord": node.x_coord,
@@ -49,9 +49,8 @@ def naive_sensor_activation(nodes: List[SensorNode]) -> Dict[str, Any]:
             "signal_quality_dbm": node.signal_strength,
             "detection_accuracy_percent": node.detection_accuracy,
         })
-        if node.status == "active":
-            total_energy_consumed += node.energy_consumption
-            total_initial_energy += node.initial_energy
+        total_energy_consumed += node.energy_consumption
+        total_initial_energy += node.initial_energy
     
     # Calculate statistics
     activation_rate = len(activated_nodes) / len(nodes) * 100 if nodes else 0.0

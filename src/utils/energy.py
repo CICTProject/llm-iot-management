@@ -178,17 +178,17 @@ def evaluate_algorithm(result: Dict[str, Any], algo_type: str) -> Dict[str, floa
     metrics = result.get("metrics", {})
     
     # Extract metrics based on algorithm type
-    if algo_type == "1.3.1_naive":
+    if algo_type == "1.4.1_naive":
         accuracy_percent = 95.0  # Continuous monitoring = high accuracy
         energy_consumed = metrics.get("total_energy_consumed_j", 1000)
         activated_nodes = metrics.get("activated_nodes", 0)
-    elif algo_type == "1.3.2_sequential":
+    elif algo_type == "1.4.2_sequential":
         accuracy_percent = 75.0  # Zone-based = moderate accuracy
         energy_saved = metrics.get("total_energy_saved_j", 0)
         energy_consumed = metrics.get("total_energy_saved_j", 500)
         total_zones = metrics.get("total_zones", 1)
         activated_nodes = metrics.get("total_activation_events", 0)
-    else:  # 1.3.3_probabilistic
+    else:  # 1.4.3_probabilistic
         coverage_efficiency = metrics.get("coverage_selection_efficiency", 50)
         accuracy_percent = min(100, coverage_efficiency * 1.1)
         energy_consumed = metrics.get("total_activation_energy_wh", 300)
@@ -204,7 +204,7 @@ def evaluate_algorithm(result: Dict[str, Any], algo_type: str) -> Dict[str, floa
     return {
         "accuracy_percent": accuracy_percent,
         "energy_percent": energy_normalized,
-        "energy_saved_percent": energy_consumed / 1000 * 100 if algo_type != "1.3.1_naive" else 0,
+        "energy_saved_percent": energy_consumed / 1000 * 100 if algo_type != "1.4.1_naive" else 0,
         "tradeoff_score": tradeoff_score,
         "activated_nodes": activated_nodes,
         "total_zones": metrics.get("total_zones", 1),

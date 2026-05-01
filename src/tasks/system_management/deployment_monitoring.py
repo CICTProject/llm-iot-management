@@ -3,7 +3,7 @@ from typing import Optional
 from crewai import Task
 from src.mcp import DeploymentMonitoringTool
 
-# 4.2 Deployment Monitoring
+# 1.3 Deployment Monitoring
 def deployment_router(agent, device_ip: Optional[str] = None, location: Optional[str] = None):
     """Monitor IoT devices deployment status.
     

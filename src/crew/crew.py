@@ -7,6 +7,7 @@ from src.tasks.system_management import (
     device_router,
     deployment_router,
     validation_router,
+    execution_router,
 )
 from src.tasks.edge_detection import edge_router
 
@@ -46,6 +47,13 @@ class CustomCrew:
         task = edge_router(agent)
         return Crew(agents=[agent], tasks=[task], verbose=True).kickoff()
     
+    # 1.2 Run deployment monitoring agent
+    def run_deployment_monitoring(self):
+        """Run deployment monitoring agent only."""
+        agent = self.agents.deployment_monitoring()
+        task = deployment_router(agent)
+        return Crew(agents=[agent], tasks=[task], verbose=True).kickoff()
+    
     # 1.3 Run device orchestration agent
     def run_orchestration(self):
         """Run device orchestration agent only."""
@@ -60,3 +68,9 @@ class CustomCrew:
         task = validation_router(agent)
         return Crew(agents=[agent], tasks=[task], verbose=True).kickoff()
     
+    # 1.5 Run plan execution agent
+    def run_plan_execution(self):
+        """Run plan execution agent only."""
+        agent = self.agents.plan_execution()
+        task = execution_router(agent)
+        return Crew(agents=[agent], tasks=[task], verbose=True).kickoff()
