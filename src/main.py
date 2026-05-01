@@ -1,11 +1,12 @@
 """FastAPI Server for IoT Orchestration with CrewAI Management."""
+import re
 import time
 import uuid
 import logging
-import json
 import asyncio
 from typing import Any, List, Dict, Optional
 from enum import Enum
+import json
 
 from fastapi import FastAPI, HTTPException, BackgroundTasks
 from fastapi.responses import StreamingResponse
@@ -21,9 +22,7 @@ load_dotenv()
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-
 # Data models for API requests and responses
-
 class ChatMessage(BaseModel):
     """Chat message model."""
     role: str
@@ -264,25 +263,90 @@ async def chat_completions(req: ChatCompletionRequest):
         raise HTTPException(status_code=400, detail="No user message in request")
     
     try:
-        # Process message and get response
-        # Determine which agent to use based on message content
+        # Determine which agent to use based on message content with expanded keywords
         user_lower = user_text.lower()
         
-        if any(keyword in user_lower for keyword in ["anomaly", "detect", "fall", "abnormal"]):
+        # Edge Anomaly Detection: sensor data, vital signs, health metrics, anomalies
+        edge_keywords = ["anomaly", "detect", "fall", "abnormal", "alert", "heart rate", 
+                        "blood pressure", "temperature", "vital", "sensor data", "malfunction",
+                        "spo2", "respiration", "glucose", "health metric", "reading"]
+        
+        # Deployment Monitoring: device status, availability, health, network
+        monitoring_keywords = ["status", "deployment", "track", "device", "available", 
+                              "online", "offline", "health", "battery", "connection", 
+                              "network", "topology", "monitor", "how many", "which devices",
+                              "device location", "device list"]
+        
+        # Orchestration: activate, configure, deploy devices, select devices
+        orchestration_keywords = ["orchestrate", "deploy", "configure", "activate", "setup",
+                                 "video", "stream", "camera", "sensor", "device select",
+                                 "device activation", "plan device", "service"]
+        
+        # Plan Validation: validate, optimize, verify plan
+        validation_keywords = ["validate", "plan", "check", "verify", "optimize", 
+                              "algorithm", "energy", "resource", "constraint", "accuracy"]
+        
+        # Plan Execution: execute, run, start, launch
+        execution_keywords = ["execute", "run", "start", "begin", "launch", "activate plan",
+                             "execute plan", "http action", "deployment action"]
+        
+        # Match keywords
+        if any(keyword in user_lower for keyword in edge_keywords):
             result = CREW.run_edge_anomaly_detection()
-        elif any(keyword in user_lower for keyword in ["orchestrat", "deploy", "configure"]):
+            logger.info(f"Edge Anomaly Detection Agent selected for: {user_text[:50]}...")
+        elif any(keyword in user_lower for keyword in orchestration_keywords):
             result = CREW.run_orchestration()
-        elif any(keyword in user_lower for keyword in ["validat", "plan", "check", "verify"]):
+            logger.info(f"Orchestration Agent selected for: {user_text[:50]}...")
+        elif any(keyword in user_lower for keyword in validation_keywords):
             result = CREW.run_plan_validation()
-        elif any(keyword in user_lower for keyword in ["status", "deployment", "track"]):
-            result = CREW.run_deployment_monitoring()
-        elif any(keyword in user_lower for keyword in ["execute", "run", "activate"]):
+            logger.info(f"Plan Validation Agent selected for: {user_text[:50]}...")
+        elif any(keyword in user_lower for keyword in execution_keywords):
             result = CREW.run_plan_execution()
+            logger.info(f"Plan Execution Agent selected for: {user_text[:50]}...")
+        elif any(keyword in user_lower for keyword in monitoring_keywords):
+            result = CREW.run_deployment_monitoring()
+            logger.info(f"Deployment Monitoring Agent selected for: {user_text[:50]}...")
         else:
-            result = CREW.run_all()
+            # Default to deployment monitoring for general queries
+            logger.warning(f"No specific keyword matched, defaulting to Deployment Monitoring for: {user_text[:50]}...")
+            result = CREW.run_deployment_monitoring()
+
+        # Process message and get response with formatting
+        if hasattr(result, 'raw'):
+            raw_answer = result.raw if isinstance(result.raw, str) else str(result.raw)
+        else:
+            raw_answer = str(result)
         
-        answer = str(result)
+        # Parse response to extract clean JSON object
+        answer = None
         
+        # First try to parse the entire response as JSON
+        try:
+            answer = json.loads(raw_answer)
+        except json.JSONDecodeError:
+            pass
+        
+        # If still no valid JSON, reformat the raw answer into a JSON structure
+        if answer is None:
+            answer = raw_answer.strip()
+            # Extract key-value pairs if possible
+            kv_pattern = re.compile(r"(\w+):\s*(.+)")
+            kv_matches = kv_pattern.findall(answer)
+            if kv_matches:
+                answer_dict = {k: v for k, v in kv_matches}
+                answer = answer_dict
+            # Split all double line breaks into a list if it looks like multiple items
+            elif "\n\n" in answer:
+                items = [item.strip() for item in answer.split("\n\n") if item.strip()]
+                answer = items
+        else:
+            # If we got a valid JSON, but it's a string, try to parse it again
+            if isinstance(answer, str):
+                try:
+                    answer = json.loads(answer)
+                except json.JSONDecodeError:
+                    pass
+    
     except Exception as e:
         logger.error(f"Chat completion error: {e}")
         raise HTTPException(status_code=500, detail=str(e))
@@ -326,7 +390,10 @@ async def chat_completions(req: ChatCompletionRequest):
         "choices": [
             {
                 "index": 0,
-                "message": {"role": "assistant", "content": answer},
+                "message": {
+                    "role": "assistant", 
+                    "content": answer
+                },
                 "finish_reason": "stop",
             }
         ],
@@ -335,7 +402,6 @@ async def chat_completions(req: ChatCompletionRequest):
 
 
 # API endpoints for health and status
-
 @app.get("/v1/health")
 async def health_check():
     """Health check endpoint."""

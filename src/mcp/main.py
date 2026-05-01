@@ -49,7 +49,7 @@ class BaseMCPTool(BaseTool):
     def _run(self, query: str) -> str:
         try:
             # Parse JSON query or default to empty task
-            params = json.loads(query) if query.startswith("{") else {"task": "default"}
+            params = json.loads(query) if query.startswith("{") else {"task": "default", "args": {}}
             task = params.get("task", "default")
             args = params.get("args", {})
             
@@ -113,7 +113,7 @@ class DeviceOrchestrationTool(BaseMCPTool):
     
     operations: Dict[str, Tuple[Any, Optional[List[str]]]] = {
         # Plan management
-        "create_plan": (create_orchestration_plan, ["intent", "target_zone", "required_services", "priority", "duration_minutes"]),
+        "create_plan": (create_orchestration_plan, ["intent", "target_zone", "required_services", "priority", "duration_minutes", "algorithm"]),
         
         # Deployment status for orchestration
         "details": (get_device_details, ["device_id"]),
@@ -150,7 +150,7 @@ class PlanExecutionTool(BaseMCPTool):
     description: str = "Execute device activation plans with various algorithms and strategies"
     
     operations: Dict[str, Tuple[Any, Optional[List[str]]]] = {
-        "execute": (execute_plan, ["plan_id", "target_zone", "required_services"]),
+        "execute": (execute_plan, ["plan_id", "target_zone", "required_services", "algorithm"]),
     }
 
 # Edge Anomaly Detection Task Tool (Future work)

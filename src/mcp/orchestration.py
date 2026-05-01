@@ -27,11 +27,11 @@ logger = logging.getLogger(__name__)
 @mcp_server.tool(name="create_orchestration_plan")
 async def create_orchestration_plan(
     intent: str,
-    algorithm: str,
     target_zone: str,
     required_services: List[str],
     priority: str = "normal",
     duration_minutes: int = 60,
+    algorithm: str = "naive",
 ) -> Dict[str, Any]:
     """
     Create an orchestration plan based on medical staff intent and system constraints.
@@ -49,6 +49,9 @@ async def create_orchestration_plan(
         Orchestration plan with device assignments, activation sequence, timeline, resource allocation, and validation status.
     """
     try:
+        if not algorithm:
+            algorithm = "naive"
+
         # Get deployment status from database
         deployment_status = query_deployment_status()
         

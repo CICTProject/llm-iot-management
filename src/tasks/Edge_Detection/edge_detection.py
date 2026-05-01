@@ -7,8 +7,10 @@ def edge_router(agent, sensor_id: Optional[str] = None, threshold: Optional[floa
     """
     Edge LLM anomaly detection task.
     """
+    sensor_desc = sensor_id or "environmental"
+    threshold_desc = threshold or "predefined"
     return Task(
-        description=f"Detect anomalies in sensor {sensor_id} data with threshold {threshold}.",
+        description=f"Detect anomalies in sensor {sensor_desc} data with threshold {threshold_desc}.",
         expected_output="Anomaly detection report with alerts.",
         agent=agent
     )
