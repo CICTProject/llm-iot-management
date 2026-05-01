@@ -4,12 +4,9 @@
 
 Modern medical research laboratories increasingly integrate smart workspace environments with diverse IoT devices and services. However, clinicians, nurses, and researchers—typically non-IT specialists—require intuitive mechanisms to express their operational intents without manual device configuration. LLMs offer promising capabilities in reasoning, planning, and task orchestration, enabling seamless automation of data retrieval, analysis, and workflow execution. This project aims to the second-round candidation of Concours Innovation Creative Challenge 2026 in the intersection domain between IOT, Intelligence Artificielle (AI) and Edge-Cloud Computing. Our complete work presents in [CICT Hackathon Round 2 Presentation](https://docs.google.com/presentation/d/1wKNIP_Rr-3uXvEWs3CL8ITc8lvj-x6bo/edit?slide=id.g3d121bd3dce_1_14#slide=id.g3d121bd3dce_1_14).
 
-[![LLM Intent Orchestration Demo](https://img.youtube.com/vi/Og8NFQ0c9E4/maxresdefault.jpg)](https://youtu.be/Og8NFQ0c9E4)
-*Prototype Alpha v1.0.1: Workflow Demo in IOT device orchestration scenario*
+![Data Auto-Collection in IOT Smart Healthcare Systems](docs/general-architecture/architecture.png)
 
 ## Application Scenarios
-
-![Data Auto-Collection in IOT Smart Healthcare Systems](docs/general-architecture/architecture.png)
 
 ### Scenario 1: Real-Time Physiological Monitoring
 Wearable and implantable sensors continuously monitor vital signs (blood pressure, heart rate) with anomaly detection and immediate caregiver alerts.
@@ -18,6 +15,9 @@ Wearable and implantable sensors continuously monitor vital signs (blood pressur
 
 ### Scenario 2: Smart Hospital BioIOT Management 
 Camera-based monitoring systems detect resident falls, autonomous medical IOT sensors/actuators management, enhancing safety, performance, energy-awareness while reducing staff workload.
+
+[![LLM Intent Orchestration Demo](https://img.youtube.com/vi/Og8NFQ0c9E4/maxresdefault.jpg)](https://youtu.be/Og8NFQ0c9E4)
+*Prototype Alpha v1.0.1: Workflow Demo in IOT device orchestration scenario*
 
 **Research Direction:** Generative AI multi-agent for task orchestration, deployment, auto-configuration, plan validation and execution.
 
