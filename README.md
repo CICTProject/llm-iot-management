@@ -82,7 +82,8 @@ python -m poetry run python -m src.db.main
 # Uvicorn App
 python -m poetry run uvicorn src.main:app --host 0.0.0.0 --port 8001
 ```
-> [!TIP] All API documents & functionality tests in http://localhost:8001/docs, with current APIs endpoints including crew execution (**POST** `/v1/crew/execute`, **GET** `/v1/crew/execution/{execution_id}`, **GET** `/v1/crew/executions`), chat completions supports 3 LLM models (**GET** `/v1/models`, **POST** `/v1/chat/completions`) and system status (**GET** `/v1/health`, **GET** `/v1/status`).
+> [!TIP]
+> All API documents & functionality tests in http://localhost:8001/docs, with current APIs endpoints including crew execution (**POST** `/v1/crew/execute`, **GET** `/v1/crew/execution/{execution_id}`, **GET** `/v1/crew/executions`), chat completions supports 3 LLM models (**GET** `/v1/models`, **POST** `/v1/chat/completions`) and system status (**GET** `/v1/health`, **GET** `/v1/status`).
 
 ---
 
