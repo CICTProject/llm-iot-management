@@ -307,7 +307,7 @@ async def chat_completions(req: ChatCompletionRequest):
             result = CREW.run_deployment_monitoring()
             logger.info(f"Deployment Monitoring Agent selected for: {user_text[:50]}...")
         else:
-            # Default to deployment monitoring for general queries
+            # Default option (deployment monitoring is a common fallback for general queries about device status)
             logger.warning(f"No specific keyword matched, defaulting to Deployment Monitoring for: {user_text[:50]}...")
             result = CREW.run_deployment_monitoring()
 
@@ -317,16 +317,15 @@ async def chat_completions(req: ChatCompletionRequest):
         else:
             raw_answer = str(result)
         
-        # Parse response to extract clean JSON object
         answer = None
         
-        # First try to parse the entire response as JSON
+        # Parse response into JSON formate
         try:
             answer = json.loads(raw_answer)
         except json.JSONDecodeError:
             pass
         
-        # If still no valid JSON, reformat the raw answer into a JSON structure
+        # Reformat into JSON structure
         if answer is None:
             answer = raw_answer.strip()
             # Extract key-value pairs if possible
@@ -335,7 +334,7 @@ async def chat_completions(req: ChatCompletionRequest):
             if kv_matches:
                 answer_dict = {k: v for k, v in kv_matches}
                 answer = answer_dict
-            # Split all double line breaks into a list if it looks like multiple items
+            # Split all double line breaks
             elif "\n\n" in answer:
                 items = [item.strip() for item in answer.split("\n\n") if item.strip()]
                 answer = items

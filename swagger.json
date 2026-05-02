@@ -1,0 +1,136 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "API for LLM Intent Management System",
+        "version": "1.0.2",
+        "title": "LLM Intent Management API"
+    },
+    "host": "localhost:8000",
+    "basePath": "/api",
+    "schemes": [
+        "http"
+    ],
+    "consumes": [
+        "application/json"
+    ],
+    "produces": [
+        "application/json"
+    ],
+    "securityDefinitions": {
+        "basicAuth": {
+            "type": "basic"
+        }
+    },
+    "security": [
+        {
+            "basicAuth": []
+        }
+    ],
+    "paths": {
+        "/v1/crew/execute": {
+            "post": {
+                "summary": "Execute a crew task",
+                "description": "Execute a crew task with the specified parameters",
+                "parameters": [
+                    {
+                        "name": "task",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/Task"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    }
+                }
+            }
+        },
+        "/v1/crew/execution/{execution_id}": {
+            "get": {
+                "summary": "Get execution status",
+                "description": "Retrieve the status of a specific crew execution",
+                "parameters": [
+                    {
+                        "name": "execution_id",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    }
+                }
+            }
+        },
+        "/v1/crew/executions": {
+            "get": {
+                "summary": "List all executions",
+                "description": "Retrieve a list of all crew executions",
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    }
+                }
+            }
+        },
+        "/v1/models": {
+            "get": {
+                "summary": "List available models",
+                "description": "Retrieve a list of all available models for crew tasks",
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    }
+                }
+            }
+        },
+        "/v1/chat/completions": {
+            "post": {
+                "summary": "Generate chat completions",
+                "description": "Generate chat completions using the specified model and input",
+                "parameters": [
+                    {
+                        "name": "input",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/ChatInput"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    }
+                }
+            }
+        },
+        "/v1/health": {
+            "get": {
+                "summary": "Get health status",
+                "description": "Retrieve the health status of the API",
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    }
+                }
+            }
+        },
+        "/v1/status": {
+            "get": {
+                "summary": "Get agent status in the crew",
+                "description": "Retrieve the status of all agents in the crew",
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    }
+                }
+            }
+        }
+    }
+}
