@@ -1,7 +1,4 @@
-Using Edge AI for health anomalies detection.
-
-## Scenario:
-- Alert patient's health anomalies to nurse/doctors computers
+## Scenario: Alert patient's health anomalies to nurse/doctors computers
 
 We have health sensors distributed in room that check patients's health constantly, these health sensors containing blood pressure, temperature, cardinal... (health information). When it detects health risks, the sensor will alert to the nurses and doctors its predictions, using EdgeAI and LLM.
 
@@ -32,6 +29,7 @@ Spec:
 
 ## Running the Application
 ```bash
-python -m poetry run uvicorn edge.edge_inference.py:app --host 0.0.0.0 --port 8001
+cd src/tasks/edge_detection/edge
+python -m poetry run uvicorn edge_inference.py:app --host 0.0.0.0 --port 8001
 
 ```
