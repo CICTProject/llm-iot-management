@@ -8,13 +8,13 @@ Modern medical research laboratories increasingly integrate smart workspace envi
 
 ## Application Scenarios
 
-### Scenario 1: Real-Time Physiological Monitoring
-Wearable and implantable sensors continuously monitor vital signs (blood pressure, heart rate) with anomaly detection and immediate caregiver alerts.
+### Scenario 1: Edge-based Real-Time Physiological Monitoring
+Wearable and implantable sensors continuously monitor vital signs (blood pressure, heart rate) with anomaly detection and able to run in ressource-constrainted IOT edge devices.
 
 **Research Direction:** Edge-based lightweight patient prediction models (distillation) running directly on sensor devices.
 
-### Scenario 2: Smart Hospital BioIOT Management 
-Camera-based monitoring systems detect resident falls, autonomous medical IOT sensors/actuators management, enhancing safety, performance, energy-awareness while reducing staff workload.
+### Scenario 2: Cloud-based Smart Hospital BioIOT Management 
+Camera-based monitoring systems detect resident falls, autonomous medical IOT sensors/actuators management, enhancing safety, performance, energy-awareness while reducing staff workload in cloud-based ressources.
 
 [![LLM Intent Orchestration Demo](https://img.youtube.com/vi/Og8NFQ0c9E4/maxresdefault.jpg)](https://youtu.be/Og8NFQ0c9E4)
 *Prototype Alpha v1.0.1: Workflow Demo in IOT device orchestration scenario*
