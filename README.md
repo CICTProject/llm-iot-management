@@ -11,6 +11,8 @@ Modern medical research laboratories increasingly integrate smart workspace envi
 ### Scenario 1: Edge-based Real-Time Physiological Monitoring
 Wearable and implantable sensors continuously monitor vital signs (blood pressure, heart rate) with anomaly detection and able to run in ressource-constrainted IOT edge devices.
 
+[![Edge AI Anomalies Detection Demo](https://img.youtube.com/vi/oNLIGfIMiiE/maxresdefault.jpg)](https://youtu.be/oNLIGfIMiiE)
+
 **Research Direction:** Edge-based lightweight patient prediction models (distillation) running directly on sensor devices.
 
 ### Scenario 2: Cloud-based Smart Hospital BioIOT Management 
