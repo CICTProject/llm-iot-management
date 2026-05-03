@@ -53,7 +53,8 @@ Activates sensor nodes sequentially across spatial zones with clustering. Reduce
 
 Minimizes energy consumption by activating only necessary devices using probability γ of patient egress and spatial coverage (x, y, z, r). Optimal for extended deployments with energy constraints.
 
-> [!TIPS] Detailed algorithm implementation in [algorithms/README.md](algorithms/README.md).
+> [!NOTE]
+> Detailed algorithm implementation in [algorithms/README.md](algorithms/README.md).
 
 ---
 
