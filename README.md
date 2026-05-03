@@ -63,8 +63,6 @@ python -m poetry install (--verbose)
 
 # Check virtual environment
 poetry env list
-
-# Activate environment (Poetry 2.x)
 source $(poetry env info --path)/bin/activate
 
 # Or for Poetry 1.x

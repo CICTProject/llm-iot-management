@@ -3,9 +3,10 @@ import json, time, os
 import numpy as np
 import pandas as pd
 import joblib
-from sklearn.pipeline import Pipeline
 from dataclasses import dataclass, asdict
-from fastapi import FastAPI
+from fastapi import FastAPI, Body
+from pydantic import BaseModel, ConfigDict
+from typing import List
 
 from typing import Optional
 # from sklearn.ensemble import RandomForestClassifier
@@ -14,7 +15,7 @@ SCALER_PATH = "../cloud/cloud_model.1.0.1/standard_scaler.pkl"
 METADATA_PATH = "../cloud/cloud_model.1.0.1/metadata_cloud_model.json"
 
 @dataclass
-class SensorReading:
+class SensorReading(BaseModel):
     """Raw vitals captured from a patient's bedside sensor."""
     patient_id              : str
     device_id               : str
@@ -26,9 +27,28 @@ class SensorReading:
     temperature             : float
     timestamp              : Optional[float] = None
 
+    model_config = ConfigDict(
+        json_schema_extra={
+            "example": {
+                "patient_id": "P-001",
+                "device_id": "esp-01",
+                "respiratory_rate": 28,
+                "oxygen_saturation": 92,
+                "systolic_bp": 116,
+                "heart_rate": 151,
+                "temperature": 38.5
+            }
+        }
+    )
+
     def __post_init__(self):
         if self.timestamp is None:
             self.timestamp = time.time()
+
+class PredictionResponse(BaseModel):
+    patient_id: str
+    is_anomaly: bool
+    triggered_vitals: List[str]
 
 @dataclass
 class AnomalyAlert:
@@ -148,8 +168,38 @@ class EdgeAIInference:
 app = FastAPI()
 engine = EdgeAIInference()
 print("Model loaded.")
-@app.post("/predict")
-def predict(reading: SensorReading):
+@app.post("/predict", response_model=PredictionResponse)
+def predict(
+    reading: SensorReading = Body(
+        ...,
+        openapi_examples={
+            "anomaly_case": {
+                "summary": "Abnormal vitals",
+                "value": {
+                    "patient_id": "P-001",
+                    "device_id": "esp-01",
+                    "respiratory_rate": 28,
+                    "oxygen_saturation": 92,
+                    "systolic_bp": 116,
+                    "heart_rate": 151,
+                    "temperature": 38.5
+                },
+            },
+            "normal_case": {
+                "summary": "Normal vitals",
+                "value": {
+                    "patient_id": "P-002",
+                    "device_id": "esp-02",
+                    "respiratory_rate": 15,
+                    "oxygen_saturation": 98.5,
+                    "systolic_bp": 120,
+                    "heart_rate": 70,
+                    "temperature": 36.8
+                },
+            },
+        },
+    )
+    ):
     alert = engine.predict(reading)
 
     return {
