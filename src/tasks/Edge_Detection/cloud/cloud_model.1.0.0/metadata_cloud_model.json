@@ -1,0 +1,46 @@
+{
+  "model_version": "1.0.0",
+  "model_type": "MLPRegressor",
+  "feature_columns": [
+    "heart rate",
+    "respiratory rate",
+    "body temperature",
+    "oxygen saturation",
+    "systolic blood pressure",
+    "diastolic blood pressure"
+  ],
+  "target_column": "anomaly",
+  "normal_ranges": {
+    "systolic_bp": {
+      "min": 90,
+      "max": 139
+    },
+    "heart_rate": {
+      "min": 55,
+      "max": 100
+    },
+    "temperature": {
+      "min": 36.0,
+      "max": 37.5
+    },
+    "oxygen_saturation": {
+      "min": 95,
+      "max": 100
+    },
+    "respiratory_rate": {
+      "min": 12,
+      "max": 25
+    }
+  },
+  "performance": {
+    "roc_auc": 0.7182,
+    "f1_score": 0.6188,
+    "cv_f1_mean": 0.6009,
+    "cv_f1_std": 0.0026
+  },
+  "edge_deployment": {
+    "target_device": " esp32",
+    "inference_format": "sklearn Pipeline (.pkl)",
+    "real_device_export": "Convert via tf.lite or onnxmltools for hardware"
+  }
+}
