@@ -22,11 +22,6 @@ tasks/
 
 Detects health anomalies in sensor readings using on-device AI models. Analyzes vital signs (blood pressure, heart rate, temperature) and alerts medical staff when readings exceed normal ranges. Preserves privacy by running inference locally on sensors and only transmitting alerts.
 
-**Key Components:**
-- Edge ML model (trained on healthcare datasets)
-- Local inference on IoT sensors  
-- Real-time anomaly alerts to staff
-
 ---
 
 ## 1.2 Deployment Monitoring Task
@@ -53,7 +48,7 @@ Translates validated orchestration plans into HTTP-executable instructions for I
 
 ---
 
-## Integration
+## Integration: Multiple AI Agent Management 
 
 Each task returns a CrewAI `Task` object configured with:
 - Description of the task objective
@@ -63,4 +58,5 @@ Each task returns a CrewAI `Task` object configured with:
 
 Tasks are invoked via router functions that accept agent and optional parameters (plan_id, requirements, device filters).
 
-See [mcp/README.md](../mcp/README.md) for detailed tool documentation.
+> [!NOTE]
+> See [mcp/README.md](../mcp/README.md) for detailed tool documentation.
