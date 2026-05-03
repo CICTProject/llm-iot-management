@@ -8,10 +8,15 @@ Modern medical research laboratories increasingly integrate smart workspace envi
 
 ## Application Scenarios
 
+| Demo | Version | Workflow Video   | Description |
+|------|---------|------------------|-------------|
+| Round 1 | v1.0.1            | [![Thumbnail](https://img.youtube.com/vi/ad-wvToCBss/maxresdefault.jpg)](https://youtu.be/ad-wvToCBss) | Initial project demo in two main scenarios. |
+
 ### Scenario 1: Edge-based Real-Time Physiological Monitoring
 Wearable and implantable sensors continuously monitor vital signs (blood pressure, heart rate) with anomaly detection and able to run in ressource-constrainted IOT edge devices.
 
 [![Edge AI Anomalies Detection Demo](https://img.youtube.com/vi/SEqdKKrjr5g/maxresdefault.jpg)](https://youtu.be/SEqdKKrjr5g)
+*Prototype Alpha v1.0.1: Workflow Demo in Edge Anomaly Detection scenario*
 
 **Research Direction:** Edge-based lightweight patient prediction models (distillation) running directly on sensor devices.
 
