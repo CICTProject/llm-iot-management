@@ -2,16 +2,25 @@
 
 ## Overview
 
-Modern medical research laboratories increasingly integrate smart workspace environments with diverse IoT devices and services. However, clinicians, nurses, and researchers—typically non-IT specialists—require intuitive mechanisms to express their operational intents without manual device configuration. LLMs offer promising capabilities in reasoning, planning, and task orchestration, enabling seamless automation of data retrieval, analysis, and workflow execution. This project aims to the second-round candidation of Concours Innovation Creative Challenge 2026 in the intersection domain between IOT, Intelligence Artificielle (AI) and Edge-Cloud Computing. Our complete work presents in [CICT Hackathon Round 2 Presentation](https://docs.google.com/presentation/d/1wKNIP_Rr-3uXvEWs3CL8ITc8lvj-x6bo/edit?slide=id.g3d121bd3dce_1_14#slide=id.g3d121bd3dce_1_14).
+Modern medical research laboratories increasingly integrate smart workspace environments with diverse IoT devices and services. However, clinicians, nurses, and researchers—typically non-IT specialists—require intuitive mechanisms to express their operational intents without manual device configuration. LLMs offer promising capabilities in reasoning, planning, and task orchestration, enabling seamless automation of data retrieval, analysis, and workflow execution. Nevertheless, relying only on cloud-based intelligence may introduce latency and limit immediate responsiveness in emergency situations, especially when rapid decisions are required for IoT device monitoring and alerting. To address this limitation, our proposed IEEE 802.15.11 intent-based wireless BioAI-powered edge-cloud healthcare IoT system integrates an Edge Anomaly Detection model, implemented as a lightweight distilled student AI model deployed at the edge layer. This model continuously monitors sensor data and device health metrics by comparing real-time values with historical patterns and predefined device-status thresholds. When deviations exceed normal operating ranges, the edge model immediately detects anomalies and generates alerts locally, enabling fast emergency response without waiting for cloud-side reasoning.
+
+At the cloud layer, the system relies on multiple AI agents and LLM-based orchestration to support higher-level reasoning, planning, and deployment decisions. The LLM-driven deployment engine enables clinicians to interact with medical datasets, IoT-connected sequencing devices, AI models, and physical IoT devices through natural language queries. The system further supports intelligent recommendations for activating, configuring, and allocating multiple IoT devices by considering energy resources, device status, patient behavior, and monitoring priorities. This allows the platform to maximize patient monitoring coverage while maintaining energy efficiency. 
+
+At the edge layer, the proposed architecture (Figure 1) combines low-latency edge intelligence for anomaly detection with cloud-based multi-agent LLM orchestration for adaptive deployment, recommendation, and workflow automation in medical research laboratory environments.This project aims to the second-round candidation of Concours Innovation Creative Challenge 2026 in the intersection domain between IOT, Intelligence Artificielle (AI) and Edge-Cloud Computing. Our complete work presents in [CICT Hackathon Round 2 Presentation](https://docs.google.com/presentation/d/1wKNIP_Rr-3uXvEWs3CL8ITc8lvj-x6bo/edit?slide=id.g3d121bd3dce_1_14#slide=id.g3d121bd3dce_1_14).
 
 ![Data Auto-Collection in IOT Smart Healthcare Systems](docs/general-architecture/architecture.png)
-
+*Figure 1: Conceptual Architecture in IOT Smart Healthcare Systems*
 ## Application Scenarios
+
+| Demo | Version | Workflow Video   | Description |
+|---------|---------|---------------|----------------|
+| Round 1 | v1.0.1  | [![Thumbnail](https://img.youtube.com/vi/ad-wvToCBss/maxresdefault.jpg)](https://youtu.be/ad-wvToCBss) | Initial project demo in two main scenarios. |
 
 ### Scenario 1: Edge-based Real-Time Physiological Monitoring
 Wearable and implantable sensors continuously monitor vital signs (blood pressure, heart rate) with anomaly detection and able to run in ressource-constrainted IOT edge devices.
 
 [![Edge AI Anomalies Detection Demo](https://img.youtube.com/vi/SEqdKKrjr5g/maxresdefault.jpg)](https://youtu.be/SEqdKKrjr5g)
+*Prototype Alpha v1.0.1: Workflow Demo in Edge Anomaly Detection scenario*
 
 **Research Direction:** Edge-based lightweight patient prediction models (distillation) running directly on sensor devices.
 
