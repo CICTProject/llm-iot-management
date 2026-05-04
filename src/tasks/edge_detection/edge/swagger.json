@@ -1,0 +1,43 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "API for Anomalies Detection",
+        "version": "1.0.2",
+        "title": "Edge AI Anomalies Detection API"
+    },
+    "host": "localhost:8001",
+    "basePath": "/api",
+    "schemes": [
+        "http"
+    ],
+    "consumes": [
+        "application/json"
+    ],
+    "produces": [
+        "application/json"
+    ],
+    "securityDefinitions": {
+        "basicAuth": {
+            "type": "basic"
+        }
+    },
+    "security": [
+        {
+            "basicAuth": []
+        }
+    ],
+    "paths": {
+        "/predict": {
+            "post": {
+                "summary": "Execute an anomalies detection",
+                "description": "Execute a anomalies detection with the specified parameters",
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    }
+                }
+            }
+        }
+    }
+        
+}
